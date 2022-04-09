@@ -21,7 +21,7 @@ export default {
 
   'layouts.usermenu.dialog.title': '信息',
   'layouts.usermenu.dialog.content': '您确定要注销吗？',
-  'layouts.userLayout.title': 'Ant Design 是西湖区最具影响力的 Web 设计规范',
+  'layouts.userLayout.title': 'AI视唱练耳是专为中央民族大学音乐学院设计打造的音乐知识学习平台',
   ...components,
   ...global,
   ...menu,

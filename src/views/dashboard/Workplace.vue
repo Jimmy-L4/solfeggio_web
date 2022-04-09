@@ -230,7 +230,6 @@ export default {
   mounted () {
     this.getProjects()
     this.getActivity()
-    this.getTeams()
     this.initRadar()
   },
   methods: {

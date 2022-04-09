@@ -1,14 +1,14 @@
 import Mock from 'mockjs2'
 import { builder } from '../util'
 
-const info = options => {
+const info = (options) => {
   console.log('options', options)
   const userInfo = {
     id: '4291d7da9005377ec9aec4a71ea837f',
-    name: '天野远子',
+    name: '李崇明',
     username: 'admin',
     password: '',
-    avatar: '/avatar2.jpg',
+    avatar: '/avatar.png',
     status: 1,
     telephone: '',
     lastLoginIp: '27.154.74.117',
@@ -18,7 +18,7 @@ const info = options => {
     merchantCode: 'TLif2btpzg079h15bk',
     deleted: 0,
     roleId: 'admin',
-    role: {}
+    role: {},
   }
   // role
   const roleObj = {
@@ -40,31 +40,31 @@ const info = options => {
           {
             action: 'add',
             describe: '新增',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'query',
             describe: '查询',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'get',
             describe: '详情',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'update',
             describe: '修改',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'delete',
             describe: '删除',
-            defaultCheck: false
-          }
+            defaultCheck: false,
+          },
         ],
         actionList: null,
-        dataAccess: null
+        dataAccess: null,
       },
       {
         roleId: 'admin',
@@ -76,31 +76,31 @@ const info = options => {
           {
             action: 'add',
             describe: '新增',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'query',
             describe: '查询',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'get',
             describe: '详情',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'update',
             describe: '修改',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'delete',
             describe: '删除',
-            defaultCheck: false
-          }
+            defaultCheck: false,
+          },
         ],
         actionList: null,
-        dataAccess: null
+        dataAccess: null,
       },
       {
         roleId: 'admin',
@@ -112,31 +112,31 @@ const info = options => {
           {
             action: 'add',
             describe: '新增',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'query',
             describe: '查询',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'get',
             describe: '详情',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'update',
             describe: '修改',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'delete',
             describe: '删除',
-            defaultCheck: false
-          }
+            defaultCheck: false,
+          },
         ],
         actionList: null,
-        dataAccess: null
+        dataAccess: null,
       },
       {
         roleId: 'admin',
@@ -148,31 +148,31 @@ const info = options => {
           {
             action: 'add',
             describe: '新增',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'query',
             describe: '查询',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'get',
             describe: '详情',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'update',
             describe: '修改',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'delete',
             describe: '删除',
-            defaultCheck: false
-          }
+            defaultCheck: false,
+          },
         ],
         actionList: null,
-        dataAccess: null
+        dataAccess: null,
       },
       {
         roleId: 'admin',
@@ -184,26 +184,26 @@ const info = options => {
           {
             action: 'add',
             describe: '新增',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'import',
             describe: '导入',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'get',
             describe: '详情',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'update',
             describe: '修改',
-            defaultCheck: false
-          }
+            defaultCheck: false,
+          },
         ],
         actionList: null,
-        dataAccess: null
+        dataAccess: null,
       },
       {
         roleId: 'admin',
@@ -215,31 +215,31 @@ const info = options => {
           {
             action: 'add',
             describe: '新增',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'get',
             describe: '详情',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'query',
             describe: '查询',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'update',
             describe: '修改',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'delete',
             describe: '删除',
-            defaultCheck: false
-          }
+            defaultCheck: false,
+          },
         ],
         actionList: null,
-        dataAccess: null
+        dataAccess: null,
       },
       {
         roleId: 'admin',
@@ -251,31 +251,31 @@ const info = options => {
           {
             action: 'add',
             describe: '新增',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'query',
             describe: '查询',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'get',
             describe: '详情',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'update',
             describe: '修改',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'delete',
             describe: '删除',
-            defaultCheck: false
-          }
+            defaultCheck: false,
+          },
         ],
         actionList: null,
-        dataAccess: null
+        dataAccess: null,
       },
       {
         roleId: 'admin',
@@ -287,26 +287,26 @@ const info = options => {
           {
             action: 'add',
             describe: '新增',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'get',
             describe: '详情',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'update',
             describe: '修改',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'delete',
             describe: '删除',
-            defaultCheck: false
-          }
+            defaultCheck: false,
+          },
         ],
         actionList: null,
-        dataAccess: null
+        dataAccess: null,
       },
       {
         roleId: 'admin',
@@ -318,26 +318,26 @@ const info = options => {
           {
             action: 'add',
             describe: '新增',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'get',
             describe: '详情',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'update',
             describe: '修改',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'delete',
             describe: '删除',
-            defaultCheck: false
-          }
+            defaultCheck: false,
+          },
         ],
         actionList: null,
-        dataAccess: null
+        dataAccess: null,
       },
       {
         roleId: 'admin',
@@ -349,31 +349,31 @@ const info = options => {
           {
             action: 'add',
             describe: '新增',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'get',
             describe: '详情',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'query',
             describe: '查询',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'update',
             describe: '修改',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'delete',
             describe: '删除',
-            defaultCheck: false
-          }
+            defaultCheck: false,
+          },
         ],
         actionList: null,
-        dataAccess: null
+        dataAccess: null,
       },
       {
         roleId: 'admin',
@@ -385,38 +385,38 @@ const info = options => {
           {
             action: 'add',
             describe: '新增',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'import',
             describe: '导入',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'get',
             describe: '详情',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'update',
             describe: '修改',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'delete',
             describe: '删除',
-            defaultCheck: false
+            defaultCheck: false,
           },
           {
             action: 'export',
             describe: '导出',
-            defaultCheck: false
-          }
+            defaultCheck: false,
+          },
         ],
         actionList: null,
-        dataAccess: null
-      }
-    ]
+        dataAccess: null,
+      },
+    ],
   }
 
   roleObj.permissions.push({
@@ -429,36 +429,36 @@ const info = options => {
       {
         action: 'add',
         describe: '新增',
-        defaultCheck: false
+        defaultCheck: false,
       },
       {
         action: 'import',
         describe: '导入',
-        defaultCheck: false
+        defaultCheck: false,
       },
       {
         action: 'get',
         describe: '详情',
-        defaultCheck: false
+        defaultCheck: false,
       },
       {
         action: 'update',
         describe: '修改',
-        defaultCheck: false
+        defaultCheck: false,
       },
       {
         action: 'delete',
         describe: '删除',
-        defaultCheck: false
+        defaultCheck: false,
       },
       {
         action: 'export',
         describe: '导出',
-        defaultCheck: false
-      }
+        defaultCheck: false,
+      },
     ],
     actionList: null,
-    dataAccess: null
+    dataAccess: null,
   })
 
   userInfo.role = roleObj
@@ -472,7 +472,7 @@ const info = options => {
  * @param {*} options
  * @returns
  */
-const userNav = options => {
+const userNav = (options) => {
   const nav = [
     // dashboard
     {
@@ -482,10 +482,10 @@ const userNav = options => {
       meta: {
         icon: 'dashboard',
         title: '仪表盘',
-        show: true
+        show: true,
       },
       component: 'RouteView',
-      redirect: '/dashboard/workplace'
+      redirect: '/dashboard/workplace',
     },
     {
       name: 'workplace',
@@ -493,9 +493,9 @@ const userNav = options => {
       id: 7,
       meta: {
         title: '工作台',
-        show: true
+        show: true,
       },
-      component: 'Workplace'
+      component: 'Workplace',
     },
     {
       name: 'monitor',
@@ -505,8 +505,8 @@ const userNav = options => {
       meta: {
         title: '监控页（外部）',
         target: '_blank',
-        show: true
-      }
+        show: true,
+      },
     },
     {
       name: 'Analysis',
@@ -514,10 +514,10 @@ const userNav = options => {
       id: 2,
       meta: {
         title: '分析页',
-        show: true
+        show: true,
       },
       component: 'Analysis',
-      path: '/dashboard/analysis'
+      path: '/dashboard/analysis',
     },
 
     // form
@@ -527,37 +527,37 @@ const userNav = options => {
       id: 10,
       meta: {
         icon: 'form',
-        title: '表单页'
+        title: '表单页',
       },
       redirect: '/form/base-form',
-      component: 'RouteView'
+      component: 'RouteView',
     },
     {
       name: 'basic-form',
       parentId: 10,
       id: 6,
       meta: {
-        title: '基础表单'
+        title: '基础表单',
       },
-      component: 'BasicForm'
+      component: 'BasicForm',
     },
     {
       name: 'step-form',
       parentId: 10,
       id: 5,
       meta: {
-        title: '分步表单'
+        title: '分步表单',
       },
-      component: 'StepForm'
+      component: 'StepForm',
     },
     {
       name: 'advanced-form',
       parentId: 10,
       id: 4,
       meta: {
-        title: '高级表单'
+        title: '高级表单',
       },
-      component: 'AdvanceForm'
+      component: 'AdvanceForm',
     },
 
     // list
@@ -568,10 +568,10 @@ const userNav = options => {
       meta: {
         icon: 'table',
         title: '列表页',
-        show: true
+        show: true,
       },
       redirect: '/list/table-list',
-      component: 'RouteView'
+      component: 'RouteView',
     },
     {
       name: 'table-list',
@@ -580,9 +580,9 @@ const userNav = options => {
       path: '/list/table-list/:pageNo([1-9]\\d*)?',
       meta: {
         title: '查询表格',
-        show: true
+        show: true,
       },
-      component: 'TableList'
+      component: 'TableList',
     },
     {
       name: 'basic-list',
@@ -590,9 +590,9 @@ const userNav = options => {
       id: 10012,
       meta: {
         title: '标准列表',
-        show: true
+        show: true,
       },
-      component: 'StandardList'
+      component: 'StandardList',
     },
     {
       name: 'card',
@@ -600,9 +600,9 @@ const userNav = options => {
       id: 10013,
       meta: {
         title: '卡片列表',
-        show: true
+        show: true,
       },
-      component: 'CardList'
+      component: 'CardList',
     },
     {
       name: 'search',
@@ -610,10 +610,10 @@ const userNav = options => {
       id: 10014,
       meta: {
         title: '搜索列表',
-        show: true
+        show: true,
       },
       redirect: '/list/search/article',
-      component: 'SearchLayout'
+      component: 'SearchLayout',
     },
     {
       name: 'article',
@@ -621,9 +621,9 @@ const userNav = options => {
       id: 10015,
       meta: {
         title: '搜索列表（文章）',
-        show: true
+        show: true,
       },
-      component: 'SearchArticles'
+      component: 'SearchArticles',
     },
     {
       name: 'project',
@@ -631,9 +631,9 @@ const userNav = options => {
       id: 10016,
       meta: {
         title: '搜索列表（项目）',
-        show: true
+        show: true,
       },
-      component: 'SearchProjects'
+      component: 'SearchProjects',
     },
     {
       name: 'application',
@@ -641,9 +641,9 @@ const userNav = options => {
       id: 10017,
       meta: {
         title: '搜索列表（应用）',
-        show: true
+        show: true,
       },
-      component: 'SearchApplications'
+      component: 'SearchApplications',
     },
 
     // profile
@@ -654,10 +654,10 @@ const userNav = options => {
       meta: {
         title: '详情页',
         icon: 'profile',
-        show: true
+        show: true,
       },
       redirect: '/profile/basic',
-      component: 'RouteView'
+      component: 'RouteView',
     },
     {
       name: 'basic',
@@ -665,9 +665,9 @@ const userNav = options => {
       id: 10019,
       meta: {
         title: '基础详情页',
-        show: true
+        show: true,
       },
-      component: 'ProfileBasic'
+      component: 'ProfileBasic',
     },
     {
       name: 'advanced',
@@ -675,9 +675,9 @@ const userNav = options => {
       id: 10020,
       meta: {
         title: '高级详情页',
-        show: true
+        show: true,
       },
-      component: 'ProfileAdvanced'
+      component: 'ProfileAdvanced',
     },
 
     // result
@@ -688,10 +688,10 @@ const userNav = options => {
       meta: {
         title: '结果页',
         icon: 'check-circle-o',
-        show: true
+        show: true,
       },
       redirect: '/result/success',
-      component: 'PageView'
+      component: 'PageView',
     },
     {
       name: 'success',
@@ -700,9 +700,9 @@ const userNav = options => {
       meta: {
         title: '成功',
         hiddenHeaderContent: true,
-        show: true
+        show: true,
       },
-      component: 'ResultSuccess'
+      component: 'ResultSuccess',
     },
     {
       name: 'fail',
@@ -711,9 +711,9 @@ const userNav = options => {
       meta: {
         title: '失败',
         hiddenHeaderContent: true,
-        show: true
+        show: true,
       },
-      component: 'ResultFail'
+      component: 'ResultFail',
     },
 
     // Exception
@@ -724,10 +724,10 @@ const userNav = options => {
       meta: {
         title: '异常页',
         icon: 'warning',
-        show: true
+        show: true,
       },
       redirect: '/exception/403',
-      component: 'RouteView'
+      component: 'RouteView',
     },
     {
       name: '403',
@@ -735,9 +735,9 @@ const userNav = options => {
       id: 10025,
       meta: {
         title: '403',
-        show: true
+        show: true,
       },
-      component: 'Exception403'
+      component: 'Exception403',
     },
     {
       name: '404',
@@ -745,9 +745,9 @@ const userNav = options => {
       id: 10026,
       meta: {
         title: '404',
-        show: true
+        show: true,
       },
-      component: 'Exception404'
+      component: 'Exception404',
     },
     {
       name: '500',
@@ -755,9 +755,9 @@ const userNav = options => {
       id: 10027,
       meta: {
         title: '500',
-        show: true
+        show: true,
       },
-      component: 'Exception500'
+      component: 'Exception500',
     },
 
     // account
@@ -768,10 +768,10 @@ const userNav = options => {
       meta: {
         title: '个人页',
         icon: 'user',
-        show: true
+        show: true,
       },
       redirect: '/account/center',
-      component: 'RouteView'
+      component: 'RouteView',
     },
     {
       name: 'center',
@@ -779,9 +779,9 @@ const userNav = options => {
       id: 10029,
       meta: {
         title: '个人中心',
-        show: true
+        show: true,
       },
-      component: 'AccountCenter'
+      component: 'AccountCenter',
     },
     // 特殊三级菜单
     {
@@ -792,10 +792,10 @@ const userNav = options => {
         title: '个人设置',
         hideHeader: true,
         hideChildren: true,
-        show: true
+        show: true,
       },
       redirect: '/account/settings/basic',
-      component: 'AccountSettings'
+      component: 'AccountSettings',
     },
     {
       name: 'BasicSettings',
@@ -804,9 +804,9 @@ const userNav = options => {
       id: 10031,
       meta: {
         title: '基本设置',
-        show: false
+        show: false,
       },
-      component: 'BasicSetting'
+      component: 'BasicSetting',
     },
     {
       name: 'SecuritySettings',
@@ -815,9 +815,9 @@ const userNav = options => {
       id: 10032,
       meta: {
         title: '安全设置',
-        show: false
+        show: false,
       },
-      component: 'SecuritySettings'
+      component: 'SecuritySettings',
     },
     {
       name: 'CustomSettings',
@@ -826,20 +826,9 @@ const userNav = options => {
       id: 10033,
       meta: {
         title: '个性化设置',
-        show: false
+        show: false,
       },
-      component: 'CustomSettings'
-    },
-    {
-      name: 'BindingSettings',
-      path: '/account/settings/binding',
-      parentId: 10030,
-      id: 10034,
-      meta: {
-        title: '账户绑定',
-        show: false
-      },
-      component: 'BindingSettings'
+      component: 'CustomSettings',
     },
     {
       name: 'NotificationSettings',
@@ -848,10 +837,10 @@ const userNav = options => {
       id: 10034,
       meta: {
         title: '新消息通知',
-        show: false
+        show: false,
       },
-      component: 'NotificationSettings'
-    }
+      component: 'NotificationSettings',
+    },
   ]
   const json = builder(nav)
   console.log('json', json)

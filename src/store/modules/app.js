@@ -3,6 +3,7 @@ import {
   SIDEBAR_TYPE,
   TOGGLE_MOBILE_TYPE,
   TOGGLE_NAV_THEME,
+  TOGGLE_METRONOME,
   TOGGLE_LAYOUT,
   TOGGLE_FIXED_HEADER,
   TOGGLE_FIXED_SIDEBAR,
@@ -21,6 +22,8 @@ const app = {
     sideCollapsed: false,
     isMobile: false,
     theme: 'dark',
+    // 练耳选择题节拍器开关
+    metronome:false,
     layout: '',
     contentWidth: '',
     fixedHeader: false,
@@ -43,6 +46,10 @@ const app = {
     [TOGGLE_NAV_THEME]: (state, theme) => {
       state.theme = theme
       storage.set(TOGGLE_NAV_THEME, theme)
+    },
+    [TOGGLE_METRONOME]: (state, mode) => {
+      state.metronome = mode
+      storage.set(TOGGLE_METRONOME, mode)
     },
     [TOGGLE_LAYOUT]: (state, mode) => {
       state.layout = mode

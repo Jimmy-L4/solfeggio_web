@@ -14,7 +14,7 @@ import account from './en-US/account'
 const components = {
   antLocale: antdEnUS,
   momentName: 'eu',
-  momentLocale: momentEU
+  momentLocale: momentEU,
 }
 
 export default {
@@ -22,7 +22,8 @@ export default {
 
   'layouts.usermenu.dialog.title': 'Message',
   'layouts.usermenu.dialog.content': 'Are you sure you would like to logout?',
-  'layouts.userLayout.title': 'Ant Design is the most influential web design specification in Xihu district',
+  'layouts.userLayout.title':
+    'AI solfeggio is a music knowledge learning platform specially designed for the School of Music, Minzu University of China',
   ...components,
   ...global,
   ...menu,
@@ -31,5 +32,5 @@ export default {
   ...dashboard,
   ...form,
   ...result,
-  ...account
+  ...account,
 }
