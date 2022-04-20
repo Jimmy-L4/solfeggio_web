@@ -15,9 +15,12 @@ if (process.env.NODE_ENV !== 'production' || process.env.VUE_APP_PREVIEW === 'tr
   require('./services/other')
   require('./services/tagCloud')
   require('./services/article')
+  require('./services/sightsingList')
+  require('./services/choiceList')
+  require('./services/dictationList')
 
   Mock.setup({
-    timeout: 800 // setter delay time
+    timeout: 800, // setter delay time
   })
   console.log('[antd-pro] mock mounted')
 }

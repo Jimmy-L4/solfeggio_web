@@ -1,5 +1,5 @@
-import AppPage from './App'
-import ArticlePage from './Article'
-import ProjectPage from './Project'
+import SightsingList from './SightsingList'
+import ChoiceList from './ChoiceList'
+import DictationList from './DictationList'
 
-export { AppPage, ArticlePage, ProjectPage }
+export { SightsingList, ChoiceList, DictationList }

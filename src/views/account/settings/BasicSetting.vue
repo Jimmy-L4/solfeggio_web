@@ -21,7 +21,7 @@
               <a-switch
                 checkedChildren="开启"
                 unCheckedChildren="关闭"
-                :defaultChecked="(metronomeSwitch === 'true' && true) || false"
+                :defaultChecked="metronomeSwitch"
                 @change="onChange"
               />
             </template>
@@ -88,8 +88,11 @@ export default {
         fixed: true,
         fixedNumber: [1, 1],
       },
-      metronomeSwitch: this.$store.metronome,
+      metronomeSwitch: this.$store.getters.metronome,
     }
+  },
+  mounted() {
+    
   },
   methods: {
     setavatar(url) {
@@ -98,10 +101,7 @@ export default {
     onChange(checked) {
       this.$store.commit(TOGGLE_METRONOME, checked)
     },
-    validate(){
-
-
-    },
+    validate() {},
   },
 }
 </script>

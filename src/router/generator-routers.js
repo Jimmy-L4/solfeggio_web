@@ -10,10 +10,24 @@ const constantRouterComponents = {
   BlankLayout: BlankLayout,
   RouteView: RouteView,
   PageView: PageView,
-  '403': () => import(/* webpackChunkName: "error" */ '@/views/exception/403'),
-  '404': () => import(/* webpackChunkName: "error" */ '@/views/exception/404'),
-  '500': () => import(/* webpackChunkName: "error" */ '@/views/exception/500'),
+  403: () => import(/* webpackChunkName: "error" */ '@/views/exception/403'),
+  404: () => import(/* webpackChunkName: "error" */ '@/views/exception/404'),
+  500: () => import(/* webpackChunkName: "error" */ '@/views/exception/500'),
 
+  // home
+  MyWorkplace: () => import('@/views/home/MyWorkplace'),
+
+  // 学习空间
+  StudyLayout: () => import('@/views/study/StudyLayout'),
+  SightsingList: () => import('@/views/study/SightsingList'),
+  DictationList: () => import('@/views/study/DictationList'),
+  ChoiceList: () => import('@/views/study/ChoiceList'),
+
+  // 学生管理
+  StudentList: () => import('@/views/management/StudentList'),
+
+  // 作业批改
+  Workbench: () => import('@/views/marking/Workbench'),
   // 你需要动态引入的页面组件
   Workplace: () => import('@/views/dashboard/Workplace'),
   Analysis: () => import('@/views/dashboard/Analysis'),
@@ -49,16 +63,14 @@ const constantRouterComponents = {
   BasicSetting: () => import('@/views/account/settings/BasicSetting'),
   SecuritySettings: () => import('@/views/account/settings/Security'),
   CustomSettings: () => import('@/views/account/settings/Custom'),
-  NotificationSettings: () => import('@/views/account/settings/Notification')
-
-  // 'TestWork': () => import(/* webpackChunkName: "TestWork" */ '@/views/dashboard/TestWork')
+  NotificationSettings: () => import('@/views/account/settings/Notification'),
 }
 
 // 前端未找到页面路由（固定不用改）
 const notFoundRouter = {
   path: '*',
   redirect: '/404',
-  hidden: true
+  hidden: true,
 }
 
 // 根级菜单
@@ -67,11 +79,11 @@ const rootRouter = {
   name: 'index',
   path: '',
   component: 'BasicLayout',
-  redirect: '/dashboard',
+  redirect: '/home',
   meta: {
-    title: '首页'
+    title: '首页',
   },
-  children: []
+  children: [],
 }
 
 /**
@@ -79,11 +91,11 @@ const rootRouter = {
  * @param token
  * @returns {Promise<Router>}
  */
-export const generatorDynamicRouter = token => {
+export const generatorDynamicRouter = (token) => {
   return new Promise((resolve, reject) => {
     loginService
       .getCurrentUserNav(token)
-      .then(res => {
+      .then((res) => {
         console.log('generatorDynamicRouter response:', res)
         const { result } = res
         const menuNav = []
@@ -98,7 +110,7 @@ export const generatorDynamicRouter = token => {
         console.log('routers', routers)
         resolve(routers)
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err)
       })
   })
@@ -112,7 +124,7 @@ export const generatorDynamicRouter = token => {
  * @returns {*}
  */
 export const generator = (routerMap, parent) => {
-  return routerMap.map(item => {
+  return routerMap.map((item) => {
     const { title, show, hideChildren, hiddenHeaderContent, target, icon } = item.meta || {}
     const currentRouter = {
       // 如果路由设置了 path，则作为默认 path，否则 路由地址 动态拼接生成如 /dashboard/workplace
@@ -130,8 +142,8 @@ export const generator = (routerMap, parent) => {
         icon: icon || undefined,
         hiddenHeaderContent: hiddenHeaderContent,
         target: target,
-        permission: item.name
-      }
+        permission: item.name,
+      },
     }
     // 是否设置了隐藏菜单
     if (show === false) {
@@ -163,13 +175,13 @@ export const generator = (routerMap, parent) => {
  * @param parentId 父ID
  */
 const listToTree = (list, tree, parentId) => {
-  list.forEach(item => {
+  list.forEach((item) => {
     // 判断是否为父级菜单
     if (item.parentId === parentId) {
       const child = {
         ...item,
         key: item.key || item.name,
-        children: []
+        children: [],
       }
       // 迭代 list， 找到当前菜单相符合的所有子菜单
       listToTree(list, child.children, item.id)

@@ -25,9 +25,9 @@
           :activeTabKey="noTitleKey"
           @tabChange="(key) => handleTabChange(key, 'noTitleKey')"
         >
-          <article-page v-if="noTitleKey === 'article'"></article-page>
-          <app-page v-else-if="noTitleKey === 'app'"></app-page>
-          <project-page v-else-if="noTitleKey === 'project'"></project-page>
+          <sightsing-list v-if="noTitleKey === 'sightsing'"></sightsing-list>
+          <choice-list v-else-if="noTitleKey === 'choice'"></choice-list>
+          <dictation-list v-else-if="noTitleKey === 'dictation'"></dictation-list>
         </a-card>
       </a-col>
     </a-row>
@@ -36,7 +36,7 @@
 
 <script>
 import { PageView, RouteView } from '@/layouts'
-import { AppPage, ArticlePage, ProjectPage } from './page'
+import { SightsingList, ChoiceList, DictationList } from './page'
 
 import { mapGetters } from 'vuex'
 
@@ -44,27 +44,27 @@ export default {
   components: {
     RouteView,
     PageView,
-    AppPage,
-    ArticlePage,
-    ProjectPage,
+    SightsingList,
+    ChoiceList,
+    DictationList,
   },
   data() {
     return {
       tabListNoTitle: [
         {
-          key: 'article',
+          key: 'sightsing',
           tab: '视唱',
         },
         {
-          key: 'app',
+          key: 'choice',
           tab: '练耳选择题',
         },
         {
-          key: 'project',
+          key: 'dictation',
           tab: '练耳听写题',
         },
       ],
-      noTitleKey: 'article',
+      noTitleKey: 'sightsing',
     }
   },
   computed: {

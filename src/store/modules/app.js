@@ -4,6 +4,7 @@ import {
   TOGGLE_MOBILE_TYPE,
   TOGGLE_NAV_THEME,
   TOGGLE_METRONOME,
+  TOGGLE_LESSON_No,
   TOGGLE_LAYOUT,
   TOGGLE_FIXED_HEADER,
   TOGGLE_FIXED_SIDEBAR,
@@ -13,7 +14,7 @@ import {
   TOGGLE_WEAK,
   TOGGLE_MULTI_TAB,
   // i18n
-  APP_LANGUAGE
+  APP_LANGUAGE,
 } from '@/store/mutation-types'
 import { loadLanguageAsync } from '@/locales'
 
@@ -23,7 +24,9 @@ const app = {
     isMobile: false,
     theme: 'dark',
     // 练耳选择题节拍器开关
-    metronome:false,
+    metronome: false,
+    // 课次
+    lesson_No: '2',
     layout: '',
     contentWidth: '',
     fixedHeader: false,
@@ -33,7 +36,7 @@ const app = {
     weak: false,
     multiTab: true,
     lang: 'en-US',
-    _antLocale: {}
+    _antLocale: {},
   },
   mutations: {
     [SIDEBAR_TYPE]: (state, type) => {
@@ -50,6 +53,10 @@ const app = {
     [TOGGLE_METRONOME]: (state, mode) => {
       state.metronome = mode
       storage.set(TOGGLE_METRONOME, mode)
+    },
+    [TOGGLE_LESSON_No]: (state, mode) => {
+      state.lesson_No = mode
+      storage.set(TOGGLE_LESSON_No, mode)
     },
     [TOGGLE_LAYOUT]: (state, mode) => {
       state.layout = mode
@@ -87,20 +94,22 @@ const app = {
     [TOGGLE_MULTI_TAB]: (state, bool) => {
       storage.set(TOGGLE_MULTI_TAB, bool)
       state.multiTab = bool
-    }
+    },
   },
   actions: {
-    setLang ({ commit }, lang) {
+    setLang({ commit }, lang) {
       return new Promise((resolve, reject) => {
         commit(APP_LANGUAGE, lang)
-        loadLanguageAsync(lang).then(() => {
-          resolve()
-        }).catch((e) => {
-          reject(e)
-        })
+        loadLanguageAsync(lang)
+          .then(() => {
+            resolve()
+          })
+          .catch((e) => {
+            reject(e)
+          })
       })
-    }
-  }
+    },
+  },
 }
 
 export default app

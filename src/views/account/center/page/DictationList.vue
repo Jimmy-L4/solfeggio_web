@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="ant-pro-pages-list-projects-cardList">
-      <a-list :loading="loading" :data-source="data" :grid="{ gutter: 24, xl: 4, lg: 3, md: 3, sm: 2, xs: 1 }">
+      <a-list :loading="loading" :data-source="itemList" :grid="{ gutter: 24, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }">
         <a-list-item slot="renderItem" slot-scope="item">
           <a-card class="ant-pro-pages-list-projects-card" hoverable>
             <img slot="cover" :src="item.cover" :alt="item.title" />
@@ -10,19 +10,6 @@
                 <ellipsis :length="50">{{ item.description }}</ellipsis>
               </template>
             </a-card-meta>
-            <div class="cardItemContent">
-              <span>{{ item.updatedAt | fromNow }}</span>
-              <div class="avatarList">
-                <avatar-list size="small" :max-length="2">
-                  <avatar-list-item
-                    v-for="(member, i) in item.members"
-                    :key="`${item.id}-avatar-${i}`"
-                    :src="member.avatar"
-                    :tips="member.name"
-                  />
-                </avatar-list>
-              </div>
-            </div>
           </a-card>
         </a-list-item>
       </a-list>
@@ -32,19 +19,21 @@
 
 <script>
 import moment from 'moment'
-import { AvatarList } from '@/components'
+import { AvatarList, Ellipsis } from '@/components'
 const AvatarListItem = AvatarList.Item
 
 export default {
   components: {
     AvatarList,
+    Ellipsis,
     AvatarListItem,
   },
   data() {
     return {
-      data: [],
+      itemList: [],
       form: this.$form.createForm(this),
       loading: true,
+      lesson_No: this.$store.getters.lesson_No,
     }
   },
   filters: {
@@ -53,16 +42,24 @@ export default {
     },
   },
   mounted() {
+    if (this.$route.params.lesson_No) {
+      this.lesson_No = this.$route.params.lesson_No
+    }
     this.getList()
   },
   methods: {
     handleChange(value) {
       console.log(`selected ${value}`)
     },
-    getList() {
-      this.$http.get('/list/article', { params: { count: 8 } }).then((res) => {
+    getList(lesson_No) {
+      if (lesson_No) {
+        this.lesson_No = lesson_No
+      }
+      this.loading = true
+      console.log('练耳听写题列表获取')
+      this.$http.get('/study/dictationList', { params: { lesson_No: this.lesson_No } }).then((res) => {
         console.log('res', res)
-        this.data = res.result
+        this.itemList = res.result
         this.loading = false
       })
     },

@@ -2,24 +2,21 @@
   <page-header-wrapper
     :tab-list="tabList"
     :tab-active-key="tabActiveKey"
-    :tab-change="(key) => {
-      this.tabActiveKey = key
-    }"
+    :tab-change="
+      (key) => {
+        this.tabActiveKey = key
+      }
+    "
     content="段落示意：蚂蚁金服务设计平台 ant.design，用最小的工作量，无缝接入蚂蚁金服生态， 提供跨越设计与开发的体验解决方案。"
   >
     <template v-slot:extraContent>
-      <div style="width: 155px; margin-top: -20px;"><img style="width: 100%" :src="extraImage" /></div>
+      <div style="width: 155px; margin-top: -20px"><img style="width: 100%" :src="extraImage" /></div>
     </template>
-    <a-list
-      rowKey="id"
-      :grid="{gutter: 24, lg: 3, md: 2, sm: 1, xs: 1}"
-      :dataSource="dataSource"
-      class="card-list"
-    >
+    <a-list rowKey="id" :grid="{ gutter: 24, lg: 3, md: 2, sm: 1, xs: 1 }" :dataSource="dataSource" class="card-list">
       <a-list-item slot="renderItem" slot-scope="item">
         <template v-if="!item || item.id === undefined">
           <a-button class="new-btn" type="dashed">
-            <a-icon type="plus"/>
+            <a-icon type="plus" />
             新增产品
           </a-button>
         </template>
@@ -27,7 +24,7 @@
           <a-card :hoverable="true">
             <a-card-meta>
               <a slot="title">{{ item.title }}</a>
-              <a-avatar class="card-avatar" slot="avatar" :src="item.avatar" size="large"/>
+              <a-avatar class="card-avatar" slot="avatar" :src="item.avatar" size="large" />
               <div class="meta-content" slot="description">{{ item.content }}</div>
             </a-card-meta>
             <template class="ant-card-actions" slot="actions">
@@ -59,8 +56,6 @@ export default {
   data () {
     this.tabList = [
       { key: 'tab1', tab: '快速开始' },
-      { key: 'tab2', tab: '产品简介' },
-      { key: 'tab3', tab: '产品文档' }
     ]
     return {
       tabActiveKey: 'tab1',
@@ -78,75 +73,74 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  @import "~@/components/index.less";
+@import '~@/components/index.less';
 
-  .card-list {
-    /deep/ .ant-card-body:hover {
-      .ant-card-meta-title>a {
+.card-list {
+  /deep/ .ant-card-body:hover {
+    .ant-card-meta-title > a {
+      color: @primary-color;
+    }
+  }
+
+  /deep/ .ant-card-meta-title {
+    margin-bottom: 12px;
+
+    & > a {
+      display: inline-block;
+      max-width: 100%;
+      color: rgba(0, 0, 0, 0.85);
+    }
+  }
+
+  /deep/ .meta-content {
+    position: relative;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    height: 64px;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+
+    margin-bottom: 1em;
+  }
+}
+
+.card-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 48px;
+}
+
+.ant-card-actions {
+  background: #f7f9fa;
+
+  li {
+    float: left;
+    text-align: center;
+    margin: 12px 0;
+    color: rgba(0, 0, 0, 0.45);
+    width: 50%;
+
+    &:not(:last-child) {
+      border-right: 1px solid #e8e8e8;
+    }
+
+    a {
+      color: rgba(0, 0, 0, 0.45);
+      line-height: 22px;
+      display: inline-block;
+      width: 100%;
+      &:hover {
         color: @primary-color;
       }
     }
-
-    /deep/ .ant-card-meta-title {
-      margin-bottom: 12px;
-
-      &>a {
-        display: inline-block;
-        max-width: 100%;
-        color: rgba(0,0,0,.85);
-      }
-    }
-
-    /deep/ .meta-content {
-      position: relative;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      height: 64px;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-
-      margin-bottom: 1em;
-    }
   }
+}
 
-  .card-avatar {
-    width: 48px;
-    height: 48px;
-    border-radius: 48px;
-  }
-
-  .ant-card-actions {
-    background: #f7f9fa;
-
-    li {
-      float: left;
-      text-align: center;
-      margin: 12px 0;
-      color: rgba(0, 0, 0, 0.45);
-      width: 50%;
-
-      &:not(:last-child) {
-        border-right: 1px solid #e8e8e8;
-      }
-
-      a {
-        color: rgba(0, 0, 0, .45);
-        line-height: 22px;
-        display: inline-block;
-        width: 100%;
-        &:hover {
-          color: @primary-color;
-        }
-      }
-    }
-  }
-
-  .new-btn {
-    background-color: #fff;
-    border-radius: 2px;
-    width: 100%;
-    height: 188px;
-  }
-
+.new-btn {
+  background-color: #fff;
+  border-radius: 2px;
+  width: 100%;
+  height: 188px;
+}
 </style>

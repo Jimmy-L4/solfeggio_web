@@ -474,6 +474,85 @@ const info = (options) => {
  */
 const userNav = (options) => {
   const nav = [
+    // home
+    {
+      name: 'home',
+      parentId: 0,
+      id: 100,
+      meta: {
+        icon: 'home',
+        title: '主页',
+        show: true,
+      },
+      component: 'MyWorkplace',
+    },
+    // 学习空间
+    {
+      name: 'study',
+      parentId: 0,
+      id: 200,
+      meta: {
+        icon: 'book',
+        title: '学习页',
+        show: true,
+      },
+      redirect: '/study/sightsing-list',
+      component: 'StudyLayout',
+    },
+    {
+      name: 'sightsing-list',
+      parentId: 200,
+      id: 201,
+      meta: {
+        title: '视唱题目',
+        show: true,
+      },
+      component: 'SightsingList',
+    },
+    {
+      name: 'choice-list',
+      parentId: 200,
+      id: 202,
+      meta: {
+        title: '练耳选择题',
+        show: true,
+      },
+      component: 'ChoiceList',
+    },
+    {
+      name: 'dictation-list',
+      parentId: 200,
+      id: 203,
+      meta: {
+        title: '练耳听写题',
+        show: true,
+      },
+      component: 'DictationList',
+    },
+    // 学生管理
+    {
+      name: 'management',
+      parentId: 0,
+      id: 300,
+      meta: {
+        icon: 'team',
+        title: '学生管理',
+        show: true,
+      },
+      component: 'StudentList',
+    },
+    // 作业批改
+    {
+      name: 'marking',
+      parentId: 0,
+      id: 400,
+      meta: {
+        icon: 'form',
+        title: '作业批改',
+        show: true,
+      },
+      component: 'Workbench',
+    },
     // dashboard
     {
       name: 'dashboard',

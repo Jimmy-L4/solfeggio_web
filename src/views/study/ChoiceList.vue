@@ -3,46 +3,23 @@
     <div class="ant-pro-pages-list-applications-filterCardList">
       <a-list
         :loading="loading"
-        :data-source="data"
+        :data-source="itemList"
         :grid="{ gutter: 24, xl: 4, lg: 3, md: 3, sm: 2, xs: 1 }"
         style="margin-top: 24px"
       >
         <a-list-item slot="renderItem" slot-scope="item">
           <a-card :body-style="{ paddingBottom: 20 }" hoverable>
-            <a-card-meta :title="item.title">
-              <template slot="avatar">
-                <a-avatar size="small" :src="item.avatar" />
-              </template>
-            </a-card-meta>
+            <a-card-meta :title="item.title"> </a-card-meta>
             <template slot="actions">
-              <a-tooltip title="下载">
-                <a-icon type="download" />
-              </a-tooltip>
-              <a-tooltip title="编辑">
+              <a-tooltip title="作答">
                 <a-icon type="edit" />
               </a-tooltip>
-              <a-tooltip title="分享">
-                <a-icon type="share-alt" />
+              <a-tooltip :title="item.stateText">
+                <a-icon :type="item.stateType" />
               </a-tooltip>
-              <a-dropdown>
-                <a class="ant-dropdown-link">
-                  <a-icon type="ellipsis" />
-                </a>
-                <a-menu slot="overlay">
-                  <a-menu-item>
-                    <a href="javascript:;">1st menu item</a>
-                  </a-menu-item>
-                  <a-menu-item>
-                    <a href="javascript:;">2nd menu item</a>
-                  </a-menu-item>
-                  <a-menu-item>
-                    <a href="javascript:;">3rd menu item</a>
-                  </a-menu-item>
-                </a-menu>
-              </a-dropdown>
             </template>
             <div class="">
-              <card-info active-user="100" new-user="999"></card-info>
+              <card-info :qusNum="item.qusNum" :score="item.score"></card-info>
             </div>
           </a-card>
         </a-list-item>
@@ -65,9 +42,10 @@ export default {
   },
   data() {
     return {
-      data: [],
+      itemList: [],
       form: this.$form.createForm(this),
       loading: true,
+      lesson_No: this.$store.getters.lesson_No,
     }
   },
   filters: {
@@ -76,16 +54,24 @@ export default {
     },
   },
   mounted() {
+    if (this.$route.params.lesson_No) {
+      this.lesson_No = this.$route.params.lesson_No
+    }
     this.getList()
   },
   methods: {
     handleChange(value) {
       console.log(`selected ${value}`)
     },
-    getList() {
-      this.$http.get('/list/article', { params: { count: 8 } }).then((res) => {
+    getList(lesson_No) {
+      if (lesson_No) {
+        this.lesson_No = lesson_No
+      }
+      this.loading = true
+      console.log('练耳选择题列表获取')
+      this.$http.get('/study/choiceList', { params: { lesson_No: this.lesson_No } }).then((res) => {
         console.log('res', res)
-        this.data = res.result
+        this.itemList = res.result
         this.loading = false
       })
     },

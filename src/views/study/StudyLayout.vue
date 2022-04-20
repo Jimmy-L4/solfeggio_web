@@ -9,10 +9,10 @@
     </template>
 
     <a-card :bordered="false" class="ant-pro-components-tag-select">
-      <a-form :form="form" layout="inline">
-        <standard-form-row title="所属课次" style="padding-bottom: 11px">
+      <a-form layout="inline">
+        <standard-form-row title="选择课次" :last="true" style="padding-bottom: 0px">
           <a-form-item>
-            <a-radio-group v-model:value="lesson_No">
+            <a-radio-group :defaultValue="lesson_No" v-model:value="lesson_No" @change="lessonChange">
               <a-radio-button value="1">课次一</a-radio-button>
               <a-radio-button value="2">课次二</a-radio-button>
               <a-radio-button value="3">课次三</a-radio-button>
@@ -27,7 +27,7 @@
       </a-form>
     </a-card>
 
-    <router-view />
+    <router-view ref="Childmain" />
   </page-header-wrapper>
 </template>
 
@@ -36,11 +36,11 @@ import { TagSelect, StandardFormRow } from '@/components'
 const TagSelectOption = TagSelect.Option
 const getActiveKey = (path) => {
   switch (path) {
-    case '/list/search/article':
+    case '/study/sightsing-list':
       return '1'
-    case '/list/search/project':
+    case '/study/choice-list':
       return '2'
-    case '/list/search/application':
+    case '/study/dictation-list':
       return '3'
     default:
       return '1'
@@ -56,18 +56,17 @@ export default {
   data() {
     return {
       tabList: [
-        { key: '1', tab: '文章' },
-        { key: '2', tab: '项目' },
-        { key: '3', tab: '应用' },
+        { key: '1', tab: '视唱题目' },
+        { key: '2', tab: '练耳选择题' },
+        { key: '3', tab: '练耳听写题' },
       ],
       tabActiveKey: '1',
       search: true,
-      lesson_No: 1,
+      lesson_No: this.$store.getters.lesson_No,
     }
   },
   created() {
     this.tabActiveKey = getActiveKey(this.$route.path)
-
     this.$watch('$route', (val) => {
       this.tabActiveKey = getActiveKey(val.path)
     })
@@ -77,17 +76,20 @@ export default {
       this.tabActiveKey = key
       switch (key) {
         case '1':
-          this.$router.push('/list/search/article')
+          this.$router.push({ name: 'sightsing-list', params: { lesson_No: this.lesson_No } })
           break
         case '2':
-          this.$router.push('/list/search/project')
+          this.$router.push({ name: 'choice-list', params: { lesson_No: this.lesson_No } })
           break
         case '3':
-          this.$router.push('/list/search/application')
+          this.$router.push({ name: 'dictation-list', params: { lesson_No: this.lesson_No } })
           break
         default:
-          this.$router.push('/workplace')
+          this.$router.push('/home')
       }
+    },
+    lessonChange(e) {
+      this.$refs['Childmain'].getList(this.lesson_No)
     },
   },
 }
