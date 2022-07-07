@@ -7,6 +7,8 @@ const info = (options) => {
     id: '4291d7da9005377ec9aec4a71ea837f',
     name: '李崇明',
     username: 'admin',
+    className: '2021级管乐班',
+    curriculumName: '视唱练耳基础理论',
     password: '',
     avatar: '/avatar.png',
     status: 1,
@@ -493,7 +495,7 @@ const userNav = (options) => {
       id: 200,
       meta: {
         icon: 'book',
-        title: '学习页',
+        title: '学习空间',
         show: true,
       },
       redirect: '/study/sightsing-list',
@@ -541,17 +543,142 @@ const userNav = (options) => {
       },
       component: 'StudentList',
     },
-    // 作业批改
+    // 作业空间
     {
-      name: 'marking',
+      name: 'workbench',
       parentId: 0,
       id: 400,
       meta: {
         icon: 'form',
-        title: '作业批改',
+        title: '作业空间',
         show: true,
       },
       component: 'Workbench',
+    },
+    // 通知管理
+    {
+      name: 'bulletinboard',
+      parentId: 0,
+      id: 500,
+      meta: {
+        icon: 'notification',
+        title: '通知管理',
+        show: true,
+      },
+      component: 'BulletinBoard',
+    },
+    // 个人空间
+    {
+      name: 'account',
+      parentId: 0,
+      id: 600,
+      meta: {
+        title: '个人页面',
+        icon: 'user',
+        show: true,
+      },
+      redirect: '/account/center',
+      component: 'RouteView',
+    },
+    {
+      name: 'center',
+      parentId: 600,
+      id: 601,
+      meta: {
+        title: '个人中心',
+        show: true,
+      },
+      component: 'AccountCenter',
+    },
+    {
+      name: 'settings',
+      parentId: 600,
+      id: 602,
+      meta: {
+        title: '个人设置',
+        hideHeader: true,
+        hideChildren: true,
+        show: true,
+      },
+      redirect: '/account/settings/basic',
+      component: 'AccountSettings',
+    },
+    {
+      name: 'BasicSettings',
+      path: '/account/settings/basic',
+      parentId: 602,
+      id: 6021,
+      meta: {
+        title: '基本设置',
+        show: false,
+      },
+      component: 'BasicSetting',
+    },
+    {
+      name: 'NotificationSettings',
+      path: '/account/settings/notification',
+      parentId: 602,
+      id: 6023,
+      meta: {
+        title: '新消息通知',
+        show: false,
+      },
+      component: 'NotificationSettings',
+    },
+    // 答题空间
+    {
+      name: 'answer',
+      parentId: 0,
+      id: 700,
+      meta: {
+        title: '答题空间',
+        icon: 'book',
+        show: false,
+      },
+      redirect: '/answer/choice-layout',
+      component: 'RouteView',
+    },
+    {
+      name: 'choice',
+      parentId: 700,
+      id: 701,
+      meta: {
+        title: '选择题答题卡',
+        show: false,
+      },
+      component: 'ChoiceLayout',
+    },
+    {
+      name: 'sightsing',
+      parentId: 700,
+      id: 702,
+      meta: {
+        title: '视唱答题卡',
+        show: false,
+      },
+      component: 'SightsingLayout',
+    },
+    {
+      name: 'dictation',
+      parentId: 700,
+      id: 703,
+      meta: {
+        title: '听写题答题卡',
+        show: false,
+      },
+      component: 'DictationLayout',
+    },
+    // 批改作业
+    {
+      name: 'correcting',
+      parentId: 0,
+      id: 800,
+      meta: {
+        title: '批改作业',
+        icon: 'form',
+        show: false,
+      },
+      component: 'Correcting',
     },
     // dashboard
     {
@@ -561,7 +688,7 @@ const userNav = (options) => {
       meta: {
         icon: 'dashboard',
         title: '仪表盘',
-        show: true,
+        show: false,
       },
       component: 'RouteView',
       redirect: '/dashboard/workplace',
@@ -572,7 +699,7 @@ const userNav = (options) => {
       id: 7,
       meta: {
         title: '工作台',
-        show: true,
+        show: false,
       },
       component: 'Workplace',
     },
@@ -584,7 +711,7 @@ const userNav = (options) => {
       meta: {
         title: '监控页（外部）',
         target: '_blank',
-        show: true,
+        show: false,
       },
     },
     {
@@ -593,7 +720,7 @@ const userNav = (options) => {
       id: 2,
       meta: {
         title: '分析页',
-        show: true,
+        show: false,
       },
       component: 'Analysis',
       path: '/dashboard/analysis',
@@ -607,6 +734,7 @@ const userNav = (options) => {
       meta: {
         icon: 'form',
         title: '表单页',
+        show: false,
       },
       redirect: '/form/base-form',
       component: 'RouteView',
@@ -617,6 +745,7 @@ const userNav = (options) => {
       id: 6,
       meta: {
         title: '基础表单',
+        show: false,
       },
       component: 'BasicForm',
     },
@@ -626,6 +755,7 @@ const userNav = (options) => {
       id: 5,
       meta: {
         title: '分步表单',
+        show: false,
       },
       component: 'StepForm',
     },
@@ -635,6 +765,7 @@ const userNav = (options) => {
       id: 4,
       meta: {
         title: '高级表单',
+        show: false,
       },
       component: 'AdvanceForm',
     },
@@ -647,7 +778,7 @@ const userNav = (options) => {
       meta: {
         icon: 'table',
         title: '列表页',
-        show: true,
+        show: false,
       },
       redirect: '/list/table-list',
       component: 'RouteView',
@@ -659,7 +790,7 @@ const userNav = (options) => {
       path: '/list/table-list/:pageNo([1-9]\\d*)?',
       meta: {
         title: '查询表格',
-        show: true,
+        show: false,
       },
       component: 'TableList',
     },
@@ -669,7 +800,7 @@ const userNav = (options) => {
       id: 10012,
       meta: {
         title: '标准列表',
-        show: true,
+        show: false,
       },
       component: 'StandardList',
     },
@@ -679,7 +810,7 @@ const userNav = (options) => {
       id: 10013,
       meta: {
         title: '卡片列表',
-        show: true,
+        show: false,
       },
       component: 'CardList',
     },
@@ -689,7 +820,7 @@ const userNav = (options) => {
       id: 10014,
       meta: {
         title: '搜索列表',
-        show: true,
+        show: false,
       },
       redirect: '/list/search/article',
       component: 'SearchLayout',
@@ -700,7 +831,7 @@ const userNav = (options) => {
       id: 10015,
       meta: {
         title: '搜索列表（文章）',
-        show: true,
+        show: false,
       },
       component: 'SearchArticles',
     },
@@ -710,7 +841,7 @@ const userNav = (options) => {
       id: 10016,
       meta: {
         title: '搜索列表（项目）',
-        show: true,
+        show: false,
       },
       component: 'SearchProjects',
     },
@@ -720,7 +851,7 @@ const userNav = (options) => {
       id: 10017,
       meta: {
         title: '搜索列表（应用）',
-        show: true,
+        show: false,
       },
       component: 'SearchApplications',
     },
@@ -733,7 +864,7 @@ const userNav = (options) => {
       meta: {
         title: '详情页',
         icon: 'profile',
-        show: true,
+        show: false,
       },
       redirect: '/profile/basic',
       component: 'RouteView',
@@ -744,7 +875,7 @@ const userNav = (options) => {
       id: 10019,
       meta: {
         title: '基础详情页',
-        show: true,
+        show: false,
       },
       component: 'ProfileBasic',
     },
@@ -754,7 +885,7 @@ const userNav = (options) => {
       id: 10020,
       meta: {
         title: '高级详情页',
-        show: true,
+        show: false,
       },
       component: 'ProfileAdvanced',
     },
@@ -765,9 +896,9 @@ const userNav = (options) => {
       parentId: 0,
       id: 10021,
       meta: {
-        title: '结果页',
+        title: '功能测试页面',
         icon: 'check-circle-o',
-        show: true,
+        show: false,
       },
       redirect: '/result/success',
       component: 'PageView',
@@ -777,23 +908,23 @@ const userNav = (options) => {
       parentId: 10021,
       id: 10022,
       meta: {
-        title: '成功',
+        title: '测试',
         hiddenHeaderContent: true,
-        show: true,
+        show: false,
       },
       component: 'ResultSuccess',
     },
-    {
-      name: 'fail',
-      parentId: 10021,
-      id: 10023,
-      meta: {
-        title: '失败',
-        hiddenHeaderContent: true,
-        show: true,
-      },
-      component: 'ResultFail',
-    },
+    // {
+    //   name: 'fail',
+    //   parentId: 10021,
+    //   id: 10023,
+    //   meta: {
+    //     title: '失败',
+    //     hiddenHeaderContent: true,
+    //     show: false,
+    //   },
+    //   component: 'ResultFail',
+    // },
 
     // Exception
     {
@@ -803,7 +934,7 @@ const userNav = (options) => {
       meta: {
         title: '异常页',
         icon: 'warning',
-        show: true,
+        show: false,
       },
       redirect: '/exception/403',
       component: 'RouteView',
@@ -814,7 +945,7 @@ const userNav = (options) => {
       id: 10025,
       meta: {
         title: '403',
-        show: true,
+        show: false,
       },
       component: 'Exception403',
     },
@@ -824,7 +955,7 @@ const userNav = (options) => {
       id: 10026,
       meta: {
         title: '404',
-        show: true,
+        show: false,
       },
       component: 'Exception404',
     },
@@ -834,91 +965,9 @@ const userNav = (options) => {
       id: 10027,
       meta: {
         title: '500',
-        show: true,
+        show: false,
       },
       component: 'Exception500',
-    },
-
-    // account
-    {
-      name: 'account',
-      parentId: 0,
-      id: 10028,
-      meta: {
-        title: '个人页',
-        icon: 'user',
-        show: true,
-      },
-      redirect: '/account/center',
-      component: 'RouteView',
-    },
-    {
-      name: 'center',
-      parentId: 10028,
-      id: 10029,
-      meta: {
-        title: '个人中心',
-        show: true,
-      },
-      component: 'AccountCenter',
-    },
-    // 特殊三级菜单
-    {
-      name: 'settings',
-      parentId: 10028,
-      id: 10030,
-      meta: {
-        title: '个人设置',
-        hideHeader: true,
-        hideChildren: true,
-        show: true,
-      },
-      redirect: '/account/settings/basic',
-      component: 'AccountSettings',
-    },
-    {
-      name: 'BasicSettings',
-      path: '/account/settings/basic',
-      parentId: 10030,
-      id: 10031,
-      meta: {
-        title: '基本设置',
-        show: false,
-      },
-      component: 'BasicSetting',
-    },
-    {
-      name: 'SecuritySettings',
-      path: '/account/settings/security',
-      parentId: 10030,
-      id: 10032,
-      meta: {
-        title: '安全设置',
-        show: false,
-      },
-      component: 'SecuritySettings',
-    },
-    {
-      name: 'CustomSettings',
-      path: '/account/settings/custom',
-      parentId: 10030,
-      id: 10033,
-      meta: {
-        title: '个性化设置',
-        show: false,
-      },
-      component: 'CustomSettings',
-    },
-    {
-      name: 'NotificationSettings',
-      path: '/account/settings/notification',
-      parentId: 10030,
-      id: 10034,
-      meta: {
-        title: '新消息通知',
-        show: false,
-      },
-      component: 'NotificationSettings',
     },
   ]
   const json = builder(nav)

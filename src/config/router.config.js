@@ -51,6 +51,37 @@ export const asyncRouterMap = [
           },
         ],
       },
+      // 答题空间
+      {
+        path: '/answer',
+        name: 'AnswerSheet',
+        component: RouteView,
+        redirect: '/answer/choice-layout',
+        meta: { title: '答题空间', keepAlive: true, permission: ['home'] },
+        children: [
+          {
+            path: '/answer/choice-layout',
+            name: 'ChoiceLayout',
+            // hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
+            component: () => import('@/views/study/choice/ChoiceLayout'),
+            meta: { title: '选择题答题页', keepAlive: true, permission: ['home'] },
+          },
+          {
+            path: '/answer/sightsing-layout',
+            name: 'SightsingLayout',
+            // hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
+            component: () => import('@/views/study/sightsing/SightsingLayout'),
+            meta: { title: '练耳题答题页', keepAlive: true, permission: ['home'] },
+          },
+          {
+            path: '/answer/dictation-layout',
+            name: 'DictationLayout',
+            // hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
+            component: () => import('@/views/study/dictation/DictationLayout'),
+            meta: { title: '听写题答题页', keepAlive: true, permission: ['home'] },
+          },
+        ],
+      },
       // 学生管理
       {
         path: '/management',
@@ -59,13 +90,71 @@ export const asyncRouterMap = [
         meta: { title: '学生管理', keepAlive: true, icon: bxAnaalyse, permission: ['home'] },
         children: [],
       },
-      // 作业批改
+      // 作业空间
       {
-        path: '/marking',
-        name: 'marking',
-        component: () => import('@/views/marking/Workbench'),
-        meta: { title: '作业批改', keepAlive: true, icon: bxAnaalyse, permission: ['home'] },
+        path: '/workbench',
+        name: 'workbench',
+        component: () => import('@/views/workbench/Workbench'),
+        meta: { title: '作业空间', keepAlive: true, icon: bxAnaalyse, permission: ['home'] },
         children: [],
+      },
+      {
+        path: '/correcting',
+        name: 'correcting',
+        // hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
+        component: () => import('@/views/workbench/Correcting'),
+        meta: { title: '作业批改页面', keepAlive: true, permission: ['home'] },
+      },
+      // 通知管理
+      {
+        path: '/bulletinboard',
+        name: 'bulletinboard',
+        component: () => import('@/views/bulletinboard/BulletinBoard'),
+        meta: { title: '通知管理', keepAlive: true, icon: bxAnaalyse, permission: ['home'] },
+        children: [],
+      },
+      // account
+      {
+        path: '/account',
+        component: RouteView,
+        redirect: '/account/center',
+        name: 'account',
+        meta: { title: 'menu.account', icon: 'user', keepAlive: true, permission: ['user'] },
+        children: [
+          {
+            path: '/account/center',
+            name: 'center',
+            component: () => import('@/views/account/center'),
+            meta: { title: 'menu.account.center', keepAlive: true, permission: ['user'] },
+          },
+          {
+            path: '/account/settings',
+            name: 'settings',
+            component: () => import('@/views/account/settings/Index'),
+            meta: { title: 'menu.account.settings', hideHeader: true, permission: ['user'] },
+            redirect: '/account/settings/basic',
+            hideChildrenInMenu: true,
+            children: [
+              {
+                path: '/account/settings/basic',
+                name: 'BasicSettings',
+                component: () => import('@/views/account/settings/BasicSetting'),
+                meta: { title: 'account.settings.menuMap.basic', hidden: true, permission: ['user'] },
+              },
+              {
+                path: '/account/settings/notification',
+                name: 'NotificationSettings',
+                component: () => import('@/views/account/settings/Notification'),
+                meta: {
+                  title: 'account.settings.menuMap.notification',
+                  hidden: true,
+                  keepAlive: true,
+                  permission: ['user'],
+                },
+              },
+            ],
+          },
+        ],
       },
       // dashboard
       {
@@ -244,67 +333,6 @@ export const asyncRouterMap = [
             name: 'Exception500',
             component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/500'),
             meta: { title: 'menu.exception.server-error', permission: ['exception'] },
-          },
-        ],
-      },
-
-      // account
-      {
-        path: '/account',
-        component: RouteView,
-        redirect: '/account/center',
-        name: 'account',
-        meta: { title: 'menu.account', icon: 'user', keepAlive: true, permission: ['user'] },
-        children: [
-          {
-            path: '/account/center',
-            name: 'center',
-            component: () => import('@/views/account/center'),
-            meta: { title: 'menu.account.center', keepAlive: true, permission: ['user'] },
-          },
-          {
-            path: '/account/settings',
-            name: 'settings',
-            component: () => import('@/views/account/settings/Index'),
-            meta: { title: 'menu.account.settings', hideHeader: true, permission: ['user'] },
-            redirect: '/account/settings/basic',
-            hideChildrenInMenu: true,
-            children: [
-              {
-                path: '/account/settings/basic',
-                name: 'BasicSettings',
-                component: () => import('@/views/account/settings/BasicSetting'),
-                meta: { title: 'account.settings.menuMap.basic', hidden: true, permission: ['user'] },
-              },
-              {
-                path: '/account/settings/security',
-                name: 'SecuritySettings',
-                component: () => import('@/views/account/settings/Security'),
-                meta: {
-                  title: 'account.settings.menuMap.security',
-                  hidden: true,
-                  keepAlive: true,
-                  permission: ['user'],
-                },
-              },
-              {
-                path: '/account/settings/custom',
-                name: 'CustomSettings',
-                component: () => import('@/views/account/settings/Custom'),
-                meta: { title: 'account.settings.menuMap.custom', hidden: true, keepAlive: true, permission: ['user'] },
-              },
-              {
-                path: '/account/settings/notification',
-                name: 'NotificationSettings',
-                component: () => import('@/views/account/settings/Notification'),
-                meta: {
-                  title: 'account.settings.menuMap.notification',
-                  hidden: true,
-                  keepAlive: true,
-                  permission: ['user'],
-                },
-              },
-            ],
           },
         ],
       },

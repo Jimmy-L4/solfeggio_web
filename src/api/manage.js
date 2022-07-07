@@ -8,6 +8,8 @@ const api = {
   permissionNoPager: '/permission/no-pager',
   orgTree: '/org/tree',
   studentList: '/manage/studentList',
+  commitList: '/manage/commitList',
+  noticeList: '/api/article/notice/',
 }
 
 export default api
@@ -73,6 +75,21 @@ export function saveSub(sub) {
 export function getStudentList(parameter) {
   return request({
     url: api.studentList,
+    method: 'get',
+    params: parameter,
+  })
+}
+export function getCommitList(parameter) {
+  return request({
+    url: api.commitList,
+    method: 'get',
+    params: parameter,
+  })
+}
+
+export function getNoticeList(parameter) {
+  return request({
+    url: api.noticeList,
     method: 'get',
     params: parameter,
   })

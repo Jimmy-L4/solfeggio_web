@@ -82,7 +82,8 @@ const orgTree = () => {
 
 const role = () => {
   return builder({
-    'data': [{
+    'data': [
+      {
       'id': 'admin',
       'name': '管理员',
       'describe': '拥有所有权限',
@@ -90,7 +91,8 @@ const role = () => {
       'creatorId': 'system',
       'createTime': 1497160610259,
       'deleted': 0,
-      'permissions': [{
+      'permissions': [
+        {
         'roleId': 'admin',
         'permissionId': 'comment',
         'permissionName': '评论管理',
@@ -336,7 +338,8 @@ const role = () => {
       'creatorId': 'system',
       'createTime': 1532417744846,
       'deleted': 0,
-      'permissions': [{
+      'permissions': [
+        {
         'roleId': 'admin',
         'permissionId': 'comment',
         'permissionName': '评论管理',
@@ -543,7 +546,8 @@ const role = () => {
       'creatorId': 'system',
       'createTime': 1497160610259,
       'deleted': 0,
-      'permissions': [{
+      'permissions': [
+        {
         'roleId': 'user',
         'permissionId': 'comment',
         'permissionName': '评论管理',
@@ -668,7 +672,8 @@ const role = () => {
 }
 
 const permissionNoPager = () => {
-  return builder([{
+  return builder([
+    {
     'id': 'marketing',
     'name': '营销管理',
     'describe': null,
@@ -816,7 +821,8 @@ const permissionNoPager = () => {
 
 const permissions = () => {
   return builder({
-    'data': [{
+    'data': [
+      {
       'id': 'marketing',
       'name': '营销管理',
       'describe': null,

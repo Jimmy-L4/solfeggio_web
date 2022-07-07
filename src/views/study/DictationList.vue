@@ -5,7 +5,7 @@
         <a-list-item slot="renderItem" slot-scope="item">
           <a-card class="ant-pro-pages-list-projects-card" hoverable>
             <img slot="cover" :src="item.cover" :alt="item.title" />
-            <a-card-meta :title="item.title">
+            <a-card-meta :title="item.title" @click="handleEdit()">
               <template slot="description">
                 <ellipsis :length="50">{{ item.description }}</ellipsis>
               </template>
@@ -50,6 +50,10 @@ export default {
   methods: {
     handleChange(value) {
       console.log(`selected ${value}`)
+    },
+    // 跳转至对应听写题页面
+    handleEdit() {
+      this.$router.push({ name: 'dictation', params: {} })
     },
     getList(lesson_No) {
       if (lesson_No) {

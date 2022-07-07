@@ -7,9 +7,9 @@
         </div>
         <div class="content">
           <div class="content-title">
-            {{ timeFix }}，{{ user.name }}<span class="welcome-text">，{{ welcome }}</span>
+            {{ timeFix }}! {{ user.name }}<span class="welcome-text">, {{ welcome }}</span>
           </div>
-          <div>视唱练耳基础理论 | 2021级管乐班</div>
+          <div>{{ user.curriculumName }} | {{ user.className }}</div>
         </div>
       </div>
     </template>
@@ -25,7 +25,6 @@
             title="进行中的项目"
             :body-style="{ padding: 0 }"
           >
-            <a slot="extra">全部项目</a>
             <div>
               <a-card-grid class="project-card-grid" :key="i" v-for="(item, i) in projects">
                 <a-card :bordered="false" :body-style="{ padding: 0 }">
@@ -72,14 +71,14 @@
             :body-style="{ padding: 0 }"
           >
             <div class="item-group">
-              <a>课次一</a>
-              <a>课次二</a>
-              <a>课次三</a>
-              <a>课次四</a>
-              <a>课次五</a>
-              <a>课次六</a>
-              <a>课次七</a>
-              <a>课次八</a>
+              <a @click="handleTabChange('1')">课次一</a>
+              <a @click="handleTabChange('2')">课次二</a>
+              <a @click="handleTabChange('3')">课次三</a>
+              <a @click="handleTabChange('4')">课次四</a>
+              <a @click="handleTabChange('5')">课次五</a>
+              <a @click="handleTabChange('6')">课次六</a>
+              <a @click="handleTabChange('7')">课次七</a>
+              <a @click="handleTabChange('8')">课次八</a>
             </div>
           </a-card>
           <a-card
@@ -89,14 +88,17 @@
             :bordered="false"
             :body-style="{ padding: 10 }"
           >
-            <div style="min-height: 400px">
+            <div>
+              <a-empty v-if="!notices.length" description="暂无通知" />
               <a-list-item :key="index" v-for="(item, index) in notices">
-                <a-list-item-meta>
-                  <a-avatar slot="avatar" size="small" :src="item.user.avatar" />
+                <a-list-item-meta :description="item.startAt">
+                  <a-avatar slot="avatar" size="large" :src="item.user.avatar" />
+                  <div slot="title">
+                    {{ item.project.title }}
+                  </div>
                   <div slot="title">
                     {{ item.project.content }}
                   </div>
-                  <div slot="description">{{ item.time }}</div>
                 </a-list-item-meta>
               </a-list-item>
             </div>
@@ -113,7 +115,9 @@ import { mapState } from 'vuex'
 import { PageHeaderWrapper } from '@ant-design-vue/pro-layout'
 import { Radar } from '@/components'
 
-import { getRoleList, getServiceList } from '@/api/manage'
+import { getRoleList, getServiceList, getNoticeList } from '@/api/manage'
+
+import { TOGGLE_LESSON_No } from '@/store/mutation-types'
 
 const DataSet = require('@antv/data-set')
 
@@ -134,6 +138,7 @@ export default {
       noteLoading: true,
       activities: [],
       notices: [],
+      queryParam: {},
 
       // data
       axis1Opts: {
@@ -208,6 +213,11 @@ export default {
     this.getNotices()
   },
   methods: {
+    // 切换课次并跳转至对应视唱
+    handleTabChange(key) {
+      this.$store.commit(TOGGLE_LESSON_No, key)
+      this.$router.push({ name: 'sightsing-list', params: { lesson_No: key } })
+    },
     getProjects() {
       this.$http.get('/list/search/projects').then((res) => {
         this.projects = res.result && res.result.data
@@ -220,11 +230,13 @@ export default {
       })
     },
     getNotices() {
-      this.$http.get('/workplace/notice').then((res) => {
-        this.notices = res.result
+      getNoticeList(this.parameter).then((res) => {
+        this.notices = res.filter(
+          (item) => item.project.class == this.user.className || item.project.class == '所有班级'
+        )
         this.noteLoading = false
+        console.log('通知列表', this.notices)
       })
-      console.log(this.notices)
     },
   },
 }

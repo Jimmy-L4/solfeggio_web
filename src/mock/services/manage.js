@@ -69,6 +69,37 @@ const studentList = (options) => {
   })
 }
 
+const commitList = (options) => {
+  const parameters = getQueryParameters(options)
+
+  const result = []
+  const pageNo = parseInt(parameters.pageNo)
+  const pageSize = parseInt(parameters.pageSize)
+  const totalPage = Math.ceil(totalCount / pageSize)
+  const key = (pageNo - 1) * pageSize
+  const next = (pageNo >= totalPage ? totalCount % pageSize : pageSize) + 1
+
+  for (let i = 1; i < next; i++) {
+    const tmpKey = key + i
+    result.push({
+      key: tmpKey,
+      studentId: tmpKey,
+      studentName: '张三' + tmpKey,
+      AIscore: Mock.mock('@integer(0, 100)'),
+      score: Mock.mock('@integer(0, 100)'),
+      updatedAt: Mock.mock('@datetime'),
+    })
+  }
+
+  return builder({
+    pageSize: pageSize,
+    pageNo: pageNo,
+    totalCount: totalCount,
+    totalPage: totalPage,
+    data: result,
+  })
+}
+
 const projects = () => {
   return builder({
     data: [
@@ -288,17 +319,62 @@ const notice = () => {
         avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
       },
       project: {
-        name: '课次一',
-        content: '请同学们按时提价作业，逾期提交可能会影响作业成绩!',
-        event: '',
+        title: '课次一',
+        content:
+          '城镇中有那么多的酒馆，她却偏偏走进了我的酒馆,城镇中有那么多的酒馆，她却偏偏走进了我的酒馆，城镇中有那么多的酒馆，她却偏偏走进了我的酒馆',
+        class: '所有班级',
+        type: 1,
       },
-      time: '2018-08-23 14:47:00',
+      startAt: '2018-08-23 14:47:00',
+    },
+    {
+      id: 2,
+      user: {
+        nickname: 'jimmy',
+        avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
+      },
+      project: {
+        title: '课次一',
+        content: '那是一种内在的东西， 他们到达不了，也无法触及的',
+        class: '2021级管乐班',
+        type: 1,
+      },
+      startAt: '2018-08-23 14:47:00',
+    },
+    {
+      id: 3,
+      user: {
+        nickname: 'jimmy',
+        avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
+      },
+      project: {
+        title: '课次一',
+        content: '希望是一个好东西，也许是最好的，好东西是不会消亡的',
+        class: '21级管乐班',
+        type: 1,
+      },
+      startAt: '2018-08-23 14:47:00',
+    },
+    {
+      id: 4,
+      user: {
+        nickname: 'jimmy',
+        avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
+      },
+      project: {
+        title: '课次一',
+        content: '生命就像一盒巧克力，结果往往出人意料',
+        class: '21级作曲班',
+        type: 0,
+      },
+      startAt: '2018-08-23 14:47:00',
     },
   ])
 }
 
 Mock.mock(/\/service/, 'get', serverList)
 Mock.mock(/\/manage\/studentList/, 'get', studentList)
+Mock.mock(/\/manage\/commitList/, 'get', commitList)
 Mock.mock(/\/list\/search\/projects/, 'get', projects)
 Mock.mock(/\/workplace\/activity/, 'get', activity)
 Mock.mock(/\/workplace\/teams/, 'get', teams)

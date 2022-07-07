@@ -22,12 +22,26 @@ const constantRouterComponents = {
   SightsingList: () => import('@/views/study/SightsingList'),
   DictationList: () => import('@/views/study/DictationList'),
   ChoiceList: () => import('@/views/study/ChoiceList'),
+  ChoiceLayout: () => import('@/views/study/choice/ChoiceLayout'),
+  SightsingLayout: () => import('@/views/study/sightsing/SightsingLayout'),
+  DictationLayout: () => import('@/views/study/dictation/DictationLayout'),
 
   // 学生管理
   StudentList: () => import('@/views/management/StudentList'),
 
-  // 作业批改
-  Workbench: () => import('@/views/marking/Workbench'),
+  // 作业空间
+  Workbench: () => import('@/views/workbench/Workbench'),
+  Correcting: () => import('@/views/workbench/Correcting'),
+
+  // 通知管理
+  BulletinBoard: () => import('@/views/bulletinboard/BulletinBoard'),
+
+  // 个人页面
+  AccountCenter: () => import('@/views/account/center'),
+  AccountSettings: () => import('@/views/account/settings/Index'),
+  BasicSetting: () => import('@/views/account/settings/BasicSetting'),
+  NotificationSettings: () => import('@/views/account/settings/Notification'),
+
   // 你需要动态引入的页面组件
   Workplace: () => import('@/views/dashboard/Workplace'),
   Analysis: () => import('@/views/dashboard/Analysis'),
@@ -56,14 +70,6 @@ const constantRouterComponents = {
   Exception403: () => import(/* webpackChunkName: "fail" */ '@/views/exception/403'),
   Exception404: () => import(/* webpackChunkName: "fail" */ '@/views/exception/404'),
   Exception500: () => import(/* webpackChunkName: "fail" */ '@/views/exception/500'),
-
-  // account
-  AccountCenter: () => import('@/views/account/center'),
-  AccountSettings: () => import('@/views/account/settings/Index'),
-  BasicSetting: () => import('@/views/account/settings/BasicSetting'),
-  SecuritySettings: () => import('@/views/account/settings/Security'),
-  CustomSettings: () => import('@/views/account/settings/Custom'),
-  NotificationSettings: () => import('@/views/account/settings/Notification'),
 }
 
 // 前端未找到页面路由（固定不用改）

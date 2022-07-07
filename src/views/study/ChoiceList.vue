@@ -9,7 +9,7 @@
       >
         <a-list-item slot="renderItem" slot-scope="item">
           <a-card :body-style="{ paddingBottom: 20 }" hoverable>
-            <a-card-meta :title="item.title"> </a-card-meta>
+            <a-card-meta :title="item.title" @click="handleEdit()"> </a-card-meta>
             <template slot="actions">
               <a-tooltip title="作答">
                 <a-icon type="edit" />
@@ -62,6 +62,10 @@ export default {
   methods: {
     handleChange(value) {
       console.log(`selected ${value}`)
+    },
+    // 跳转至对应练耳页面
+    handleEdit() {
+      this.$router.push({ name: 'choice', params: {} })
     },
     getList(lesson_No) {
       if (lesson_No) {

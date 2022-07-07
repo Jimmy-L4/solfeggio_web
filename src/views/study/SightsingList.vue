@@ -9,7 +9,7 @@
             <icon-text :type="item.stateType" :text="item.stateText" />
           </template>
           <a-list-item-meta>
-            <a slot="title" href="https://vue.ant.design/">{{ item.title }}</a>
+            <a slot="title" @click="handleEdit()">{{ item.title }}</a>
             <template slot="description">
               <span>
                 <a-tag v-if="item.instrument">{{ item.instrument }}</a-tag>
@@ -56,6 +56,10 @@ export default {
   methods: {
     handleChange(value) {
       console.log(`selected ${value}`)
+    },
+    // 跳转至对应练耳页面
+    handleEdit() {
+      this.$router.push({ name: 'sightsing', params: {} })
     },
     getList(lesson_No) {
       if (lesson_No) {

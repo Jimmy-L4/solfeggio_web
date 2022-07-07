@@ -2,7 +2,7 @@ export default {
   theme: [
     {
       key: 'dark',
-      fileName: 'dark.css',
+      fileName: '.darkcss',
       theme: 'dark'
     },
     {

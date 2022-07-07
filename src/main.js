@@ -21,6 +21,10 @@ import './permission' // permission control
 import './utils/filter' // global filter
 import './global.less' // global style
 
+import AudioRecorder from 'vue-audio-recorder'
+// 音频录制播放器
+Vue.use(AudioRecorder)
+
 Vue.config.productionTip = false
 
 // mount axios to `Vue.$http` and `this.$http`
