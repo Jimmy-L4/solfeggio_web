@@ -8,11 +8,11 @@
               <img :src="avatar" />
             </div>
             <div class="username">{{ nickname }}</div>
-            <div class="bio">2021111708</div>
+            <div class="bio">{{ userInfo.id }}</div>
           </div>
           <div class="account-center-detail">
-            <p><i class="title"></i>视唱练耳基础</p>
-            <p><i class="group"></i>民族乐器班</p>
+            <p><i class="title"></i>{{ userInfo.curriculumName }}</p>
+            <p><i class="group"></i>{{ userInfo.className }}</p>
             <p><i class="address"></i>周一上午1-2节</p>
           </div>
         </a-card>
@@ -68,9 +68,11 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['nickname', 'avatar']),
+    ...mapGetters(['nickname', 'avatar', 'userInfo']),
   },
-  mounted() {},
+  created() {
+    console.log(avatar)
+  },
   methods: {
     handleTabChange(key, type) {
       this[type] = key

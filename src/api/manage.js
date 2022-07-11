@@ -9,7 +9,8 @@ const api = {
   orgTree: '/org/tree',
   studentList: '/manage/studentList',
   commitList: '/manage/commitList',
-  noticeList: '/api/article/notice/',
+  noticeList: '/api/notice/',
+  ChoiceQuesList: '/api/question/choice/',
 }
 
 export default api
@@ -90,6 +91,14 @@ export function getCommitList(parameter) {
 export function getNoticeList(parameter) {
   return request({
     url: api.noticeList,
+    method: 'get',
+    params: parameter,
+  })
+}
+
+export function getChoiceQuesList(parameter) {
+  return request({
+    url: api.ChoiceQuesList,
     method: 'get',
     params: parameter,
   })

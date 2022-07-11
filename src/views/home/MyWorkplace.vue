@@ -3,7 +3,7 @@
     <template v-slot:content>
       <div class="page-header-content">
         <div class="avatar">
-          <a-avatar size="large" :src="currentUser.avatar" />
+          <a-avatar size="large" :src="avatar" />
         </div>
         <div class="content">
           <div class="content-title">
@@ -27,21 +27,23 @@
           >
             <div>
               <a-card-grid class="project-card-grid" :key="i" v-for="(item, i) in projects">
-                <a-card :bordered="false" :body-style="{ padding: 0 }">
-                  <a-card-meta>
-                    <div slot="title" class="card-title">
-                      <a-avatar size="small" :src="item.cover" />
-                      <a>{{ item.title }}</a>
+                <a href="/#/">
+                  <a-card :bordered="false" :body-style="{ padding: 0 }">
+                    <a-card-meta>
+                      <div slot="title" class="card-title">
+                        <a-avatar size="small" :src="item.cover" />
+                        <a>{{ item.title }}</a>
+                      </div>
+                      <div slot="description" class="card-description">
+                        {{ item.description }}
+                      </div>
+                    </a-card-meta>
+                    <div class="project-item">
+                      <a href="/##/">{{ item.lesson_No }}</a>
+                      <span class="datetime">9小时前</span>
                     </div>
-                    <div slot="description" class="card-description">
-                      {{ item.description }}
-                    </div>
-                  </a-card-meta>
-                  <div class="project-item">
-                    <a href="/#/">{{ item.lesson_No }}</a>
-                    <span class="datetime">9小时前</span>
-                  </div>
-                </a-card>
+                  </a-card>
+                </a>
               </a-card-grid>
             </div>
           </a-card>
@@ -115,7 +117,7 @@ import { mapState } from 'vuex'
 import { PageHeaderWrapper } from '@ant-design-vue/pro-layout'
 import { Radar } from '@/components'
 
-import { getRoleList, getServiceList, getNoticeList } from '@/api/manage'
+import { getNoticeList } from '@/api/manage'
 
 import { TOGGLE_LESSON_No } from '@/store/mutation-types'
 
@@ -138,59 +140,12 @@ export default {
       noteLoading: true,
       activities: [],
       notices: [],
-      queryParam: {},
-
-      // data
-      axis1Opts: {
-        dataKey: 'item',
-        line: null,
-        tickLine: null,
-        grid: {
-          lineStyle: {
-            lineDash: null,
-          },
-          hideFirstLine: false,
-        },
-      },
-      axis2Opts: {
-        dataKey: 'score',
-        line: null,
-        tickLine: null,
-        grid: {
-          type: 'polygon',
-          lineStyle: {
-            lineDash: null,
-          },
-        },
-      },
-      scale: [
-        {
-          dataKey: 'score',
-          min: 0,
-          max: 80,
-        },
-      ],
-      axisData: [
-        { item: '引用', a: 70, b: 30, c: 40 },
-        { item: '口碑', a: 60, b: 70, c: 40 },
-        { item: '产量', a: 50, b: 60, c: 40 },
-        { item: '贡献', a: 40, b: 50, c: 40 },
-        { item: '热度', a: 60, b: 70, c: 40 },
-        { item: '引用', a: 70, b: 50, c: 40 },
-      ],
     }
   },
   computed: {
     ...mapState({
-      nickname: (state) => state.user.nickname,
       welcome: (state) => state.user.welcome,
     }),
-    currentUser() {
-      return {
-        name: 'Serati Ma',
-        avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
-      }
-    },
     userInfo() {
       return this.$store.getters.userInfo
     },
@@ -198,14 +153,6 @@ export default {
   created() {
     this.user = this.userInfo
     this.avatar = this.userInfo.avatar
-
-    getRoleList().then((res) => {
-      // console.log('workplace -> call getRoleList()', res)
-    })
-
-    getServiceList().then((res) => {
-      // console.log('workplace -> call getServiceList()', res)
-    })
   },
   mounted() {
     this.getProjects()
@@ -230,7 +177,8 @@ export default {
       })
     },
     getNotices() {
-      getNoticeList(this.parameter).then((res) => {
+      const parameter = { display: 'true' }
+      getNoticeList(parameter).then((res) => {
         this.notices = res.filter(
           (item) => item.project.class == this.user.className || item.project.class == '所有班级'
         )

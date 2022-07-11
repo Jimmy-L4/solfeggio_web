@@ -26,14 +26,17 @@
             <my-recorder
               ref="content"
               :class="dragToggle ? 'staticRecorder' : 'fiedRecorder'"
-              upload-url="http://127.0.0.1:8000/api/router/audio/"
+              upload-url="/api/router/audio/"
               :attempts="5"
               :time="2"
+              :headers="headers"
+              :part_id="part_id"
+              :user_id="user_id"
               :start-record="callback"
               :stop-record="callback"
               :start-upload="callback"
-              :successful-upload="callback"
-              :failed-upload="callback"
+              :successful-upload="uploadResult"
+              :failed-upload="uploadResult"
               :dragToggle="toggle"
             />
           </div>
@@ -44,16 +47,7 @@
 </template>
 
 <script>
-// import opensheetmusicdisplay from 'opensheetmusicdisplay'
-// var osmd = new opensheetmusicdisplay.OpenSheetMusicDisplay('osmdContainer')
-// osmd.setOptions({
-//   backend: 'svg',
-//   drawTitle: true,
-//   // drawingParameters: "compacttight" // don't display title, composer etc., smaller margins
-// })
-// osmd.load('http://downloads2.makemusic.com/musicxml/MozaVeilSample.xml').then(function () {
-//   osmd.render()
-// })
+import notification from 'ant-design-vue/es/notification'
 export default {
   name: 'SightsingLayout',
   components: {},
@@ -62,6 +56,12 @@ export default {
       global_url: 'https://musicmuc.chimusic.net/solfeggio/',
       loading: false,
       dragToggle: true,
+      headers: {
+        Authorization:
+          'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjU3Mzg5MTE2LCJpYXQiOjE2NTczMDI3MTYsImp0aSI6IjRkYTI0YWNlMmJhODQ4M2Q5YTU5MTk1NzM0Y2U5MTdjIiwidXNlcl9pZCI6MX0.NAyqmJNv5ZJUPmV8VbQAiQqVLtAIgzpinWvddKgxOF0',
+      },
+      part_id: '301000000000000010106',
+      user_id: 2,
     }
   },
   mounted() {
@@ -78,6 +78,13 @@ export default {
     },
     handleChange(e) {
       console.log(this.questionList)
+    },
+    uploadResult(msg) {
+      console.log('uploadResult: ', msg)
+      notification.error({
+        message: '音频上传成功',
+        description: msg.content,
+      })
     },
     callback(msg) {
       console.log('Event: ', msg)

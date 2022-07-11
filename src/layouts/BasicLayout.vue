@@ -48,7 +48,13 @@
       <div style="margin: 12px 0">This is SettingDrawer custom footer content.</div>
     </setting-drawer>
     <template v-slot:rightContentRender>
-      <right-content :top-menu="settings.layout === 'topmenu'" :is-mobile="isMobile" :theme="settings.theme" />
+      <right-content
+        :top-menu="settings.layout === 'topmenu'"
+        :is-mobile="isMobile"
+        :theme="settings.theme"
+        :name="nickname"
+        :avatar="avatar"
+      />
     </template>
     <!-- custom footer / 自定义Footer -->
     <template v-slot:footerRender>
@@ -61,7 +67,7 @@
 <script>
 import { SettingDrawer, updateTheme } from '@ant-design-vue/pro-layout'
 import { i18nRender } from '@/locales'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { CONTENT_WIDTH_TYPE, SIDEBAR_TYPE, TOGGLE_MOBILE_TYPE } from '@/store/mutation-types'
 
 import defaultSettings from '@/config/defaultSettings'
@@ -118,6 +124,8 @@ export default {
     ...mapState({
       // 动态主路由
       mainMenu: (state) => state.permission.addRouters,
+      nickname: (state) => state.user.name,
+      avatar: (state) => state.user.avatar,
     }),
   },
   created() {

@@ -1,6 +1,6 @@
 <template>
   <div :class="wrpCls">
-    <avatar-dropdown :menu="showMenu" :current-user="currentUser" :class="prefixCls" />
+    <avatar-dropdown :menu="showMenu" :current-user="currentUser" :class="prefixCls" :avatar="avatar" />
     <!-- 取消主页面语言切换按钮 -->
     <!-- <select-lang :class="prefixCls" /> -->
   </div>
@@ -33,6 +33,14 @@ export default {
       type: String,
       required: true,
     },
+    name: {
+      type: String,
+      required: true,
+    },
+    avatar: {
+      type: String,
+      required: true,
+    },
   },
   data() {
     return {
@@ -51,7 +59,7 @@ export default {
   mounted() {
     setTimeout(() => {
       this.currentUser = {
-        name: 'Jimmy',
+        name: this.name,
       }
     }, 1500)
   },

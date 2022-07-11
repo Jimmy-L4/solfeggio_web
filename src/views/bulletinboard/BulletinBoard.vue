@@ -169,7 +169,8 @@ export default {
     },
     getNotices() {
       this.iconLoading = true
-      getNoticeList(this.parameter).then((res) => {
+      const parameter = { display: 'false' }
+      getNoticeList(parameter).then((res) => {
         console.log(res)
         this.noticeList = res
         this.iconLoading = false
