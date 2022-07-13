@@ -1,25 +1,20 @@
 <template>
-  <page-header-wrapper title="选择题页面" content="选择题页面">
+  <page-header-wrapper title="视唱题目页面" content="请根据要求录制对应曲目">
     <a-card :body-style="{ padding: '24px 32px' }" :bordered="false">
       <a-card :bordered="false" :title="false">
         <a-descriptions title="基础信息">
-          <a-descriptions-item label="歌曲名称">《除草歌》</a-descriptions-item>
-          <a-descriptions-item label="演奏者">叶春雨</a-descriptions-item>
+          <a-descriptions-item label="歌曲名称">{{ quesDetail.audio_detail.audio_name }}</a-descriptions-item>
+          <a-descriptions-item label="演奏者">{{ quesDetail.audio_detail.audio_player }}</a-descriptions-item>
           <a-descriptions-item></a-descriptions-item>
-          <a-descriptions-item label="乐器">声乐</a-descriptions-item>
-          <a-descriptions-item label="名族">高山族</a-descriptions-item>
+          <a-descriptions-item label="乐器">{{ quesDetail.audio_detail.audio_instrument }}</a-descriptions-item>
+          <a-descriptions-item label="名族">{{ quesDetail.audio_detail.audio_nation }}</a-descriptions-item>
           <a-descriptions-item></a-descriptions-item>
           <a-descriptions-item label="范例音"> </a-descriptions-item>
         </a-descriptions>
-        <audio-player
-          src="https://musicmuc.chimusic.net/solfeggio/library/All_audio_test/lv4_/lesson_4/sing/RRRR4SR_104.mp3"
-        />
+        <audio-player :src="global_url + quesDetail.audio_path" />
 
         <a-card type="inner" title="曲谱信息" style="margin-top: 24px">
-          <img
-            :width="800"
-            src="https://musicmuc.chimusic.net/solfeggio/library/Autumn_semester_2024/13_%E8%AF%BE%E6%AC%A12_1_12_74.png"
-          />
+          <img :width="800" :src="global_url + quesDetail.pic_path" />
         </a-card>
         <a-card>
           <div style="min-height: 250px">
@@ -30,13 +25,13 @@
               :attempts="5"
               :time="2"
               :headers="headers"
-              :part_id="part_id"
-              :user_id="user_id"
+              :part_id="quesDetail.part_id"
+              :user_id="userInfo.user"
               :start-record="callback"
               :stop-record="callback"
               :start-upload="callback"
-              :successful-upload="uploadResult"
-              :failed-upload="uploadResult"
+              :successful-upload="successUpload"
+              :failed-upload="failedUpload"
               :dragToggle="toggle"
             />
           </div>
@@ -56,12 +51,29 @@ export default {
       global_url: 'https://musicmuc.chimusic.net/solfeggio/',
       loading: false,
       dragToggle: true,
-      headers: {
-        Authorization:
-          'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjU3Mzg5MTE2LCJpYXQiOjE2NTczMDI3MTYsImp0aSI6IjRkYTI0YWNlMmJhODQ4M2Q5YTU5MTk1NzM0Y2U5MTdjIiwidXNlcl9pZCI6MX0.NAyqmJNv5ZJUPmV8VbQAiQqVLtAIgzpinWvddKgxOF0',
-      },
-      part_id: '301000000000000010106',
-      user_id: 2,
+      token: this.$store.getters.token,
+      userInfo: this.$store.getters.userInfo,
+      quesDetail: {},
+    }
+  },
+  computed: {
+    headers() {
+      return {
+        Authorization: 'Bearer ' + this.token,
+      }
+    },
+  },
+  beforeCreate() {
+    if (!this.$route.params.quesDetail) {
+      this.$router.push({ name: 'home', replace: true })
+    }
+  },
+  beforeMount() {
+    if (this.$route.params.quesDetail) {
+      this.quesDetail = this.$route.params.quesDetail
+      console.log('题目信息：', this.quesDetail)
+    } else {
+      this.$router.push({ name: 'home', replace: true })
     }
   },
   mounted() {
@@ -79,9 +91,16 @@ export default {
     handleChange(e) {
       console.log(this.questionList)
     },
-    uploadResult(msg) {
+    failedUpload(msg) {
       console.log('uploadResult: ', msg)
       notification.error({
+        message: '音频上传失败',
+        description: msg.content,
+      })
+    },
+    successUpload(msg) {
+      console.log('uploadResult: ', msg)
+      notification.success({
         message: '音频上传成功',
         description: msg.content,
       })

@@ -5,8 +5,8 @@
       <p>{{ qusNum }}</p>
     </div>
     <div>
-      <p>题目分数</p>
-      <p>{{ score }}</p>
+      <p>题目得分/总分</p>
+      <p>{{ score }}/{{ sumScore }}</p>
     </div>
   </div>
 </template>
@@ -17,22 +17,25 @@ export default {
   props: {
     qusNum: {
       type: [String, Number],
-      default: 0
+      default: 0,
     },
     score: {
       type: [String, Number],
-      default: 0
-    }
-  }
+      default: 0,
+    },
+    sumScore: {
+      type: [String, Number],
+      default: 0,
+    },
+  },
 }
 </script>
 
 <style lang="less" scoped>
-@import "~@/components/index.less";
-@import "~@/utils/utils.less";
+@import '~@/components/index.less';
+@import '~@/utils/utils.less';
 
 .cardInfo {
-
   .clearfix();
 
   margin-top: 16px;
@@ -50,7 +53,7 @@ export default {
     p:first-child {
       margin-bottom: 4px;
       color: @text-color-secondary;
-      font-size: 12px;
+      font-size: 14px;
       line-height: 20px;
     }
   }

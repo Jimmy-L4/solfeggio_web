@@ -9,7 +9,7 @@
           <div class="content-title">
             {{ timeFix }}! {{ user.name }}<span class="welcome-text">, {{ welcome }}</span>
           </div>
-          <div>{{ user.curriculumName }} | {{ user.className }}</div>
+          <div>{{ user.course.name }} | {{ user.className }}</div>
         </div>
       </div>
     </template>
@@ -22,7 +22,7 @@
             :loading="loading"
             style="margin-bottom: 24px"
             :bordered="false"
-            title="进行中的项目"
+            title="当前课次题目"
             :body-style="{ padding: 0 }"
           >
             <div>

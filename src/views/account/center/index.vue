@@ -11,9 +11,9 @@
             <div class="bio">{{ userInfo.id }}</div>
           </div>
           <div class="account-center-detail">
-            <p><i class="title"></i>{{ userInfo.curriculumName }}</p>
+            <p><i class="title"></i>{{ userInfo.course.name }}</p>
             <p><i class="group"></i>{{ userInfo.className }}</p>
-            <p><i class="address"></i>周一上午1-2节</p>
+            <p><i class="address"></i>{{ userInfo.course.classroom }}</p>
           </div>
         </a-card>
       </a-col>

@@ -6,7 +6,7 @@
       </slot>
     </div>
     <div class="extra">
-      由 <a :href="href">{{ player }}</a> 演唱的 <a :href="href">{{ audioName }}</a>
+      由 <a>{{ player }}</a> 演唱的 <a>{{ audioName }}</a>
     </div>
   </div>
 </template>
@@ -24,10 +24,6 @@ export default {
       default: '',
     },
     player: {
-      type: String,
-      required: true,
-    },
-    href: {
       type: String,
       required: true,
     },

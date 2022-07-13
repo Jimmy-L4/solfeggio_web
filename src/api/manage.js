@@ -11,6 +11,8 @@ const api = {
   commitList: '/manage/commitList',
   noticeList: '/api/notice/',
   ChoiceQuesList: '/api/question/choice/',
+  SightsingingList: '/api/question/sightsinging_list/',
+  ChoiceList: '/api/question/choice_list/',
 }
 
 export default api
@@ -99,6 +101,21 @@ export function getNoticeList(parameter) {
 export function getChoiceQuesList(parameter) {
   return request({
     url: api.ChoiceQuesList,
+    method: 'get',
+    params: parameter,
+  })
+}
+
+export function getSightsingingList(parameter) {
+  return request({
+    url: api.SightsingingList,
+    method: 'get',
+    params: parameter,
+  })
+}
+export function getChoiceList(parameter) {
+  return request({
+    url: api.ChoiceList,
     method: 'get',
     params: parameter,
   })

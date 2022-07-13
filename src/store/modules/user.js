@@ -1,6 +1,6 @@
 import storage from 'store'
 import { login, getInfo, logout } from '@/api/login'
-import { ACCESS_TOKEN } from '@/store/mutation-types'
+import { ACCESS_TOKEN, TOGGLE_METRONOME, TOGGLE_LESSON_No } from '@/store/mutation-types'
 import { welcome } from '@/utils/util'
 
 const user = {
@@ -11,6 +11,10 @@ const user = {
     avatar: '',
     roles: [],
     info: {},
+    // 练耳选择题节拍器开关
+    metronome: false,
+    // 课次
+    lesson_No: '2',
   },
 
   mutations: {
@@ -29,6 +33,12 @@ const user = {
     },
     SET_INFO: (state, info) => {
       state.info = info
+    },
+    [TOGGLE_METRONOME]: (state, mode) => {
+      state.metronome = mode
+    },
+    [TOGGLE_LESSON_No]: (state, mode) => {
+      state.lesson_No = mode
     },
   },
 
@@ -78,6 +88,8 @@ const user = {
 
             commit('SET_NAME', { name: result.name, welcome: welcome() })
             commit('SET_AVATAR', result.avatar)
+            commit(TOGGLE_LESSON_No, result.lesson_No)
+            commit(TOGGLE_METRONOME, result.metronome)
 
             resolve(response)
           })

@@ -8,18 +8,20 @@
         style="margin-top: 24px"
       >
         <a-list-item slot="renderItem" slot-scope="item">
-          <a-card :body-style="{ paddingBottom: 20 }" hoverable>
-            <a-card-meta :title="item.title" @click="handleEdit()"> </a-card-meta>
+          <a-card :body-style="{ paddingBottom: 20 }" hoverable @click="handleEdit(item)">
+            <a-card-meta :title="item.title"> </a-card-meta>
             <template slot="actions">
-              <a-tooltip title="作答">
+              <div>
                 <a-icon type="edit" />
-              </a-tooltip>
-              <a-tooltip :title="item.stateText">
+                作答
+              </div>
+              <a-tooltip :title="item.stateDec">
                 <a-icon :type="item.stateType" />
+                {{ item.stateText }}
               </a-tooltip>
             </template>
             <div class="">
-              <card-info :qusNum="item.qusNum" :score="item.score"></card-info>
+              <card-info :qusNum="item.qusNum" :score="item.score" :sumScore="item.sumScore"></card-info>
             </div>
           </a-card>
         </a-list-item>
@@ -32,6 +34,8 @@
 import moment from 'moment'
 import { AvatarList } from '@/components'
 import CardInfo from './components/CardInfo'
+import { getChoiceList } from '@/api/manage'
+import notification from 'ant-design-vue/es/notification'
 const AvatarListItem = AvatarList.Item
 
 export default {
@@ -46,6 +50,7 @@ export default {
       form: this.$form.createForm(this),
       loading: true,
       lesson_No: this.$store.getters.lesson_No,
+      grade: this.$store.getters.userInfo.course.grade,
     }
   },
   filters: {
@@ -53,7 +58,7 @@ export default {
       return moment(date).fromNow()
     },
   },
-  mounted() {
+  beforeMount() {
     if (this.$route.params.lesson_No) {
       this.lesson_No = this.$route.params.lesson_No
     }
@@ -64,8 +69,8 @@ export default {
       console.log(`selected ${value}`)
     },
     // 跳转至对应练耳页面
-    handleEdit() {
-      this.$router.push({ name: 'choice', params: {} })
+    handleEdit(item) {
+      this.$router.push({ name: 'choice', params: { part_id: item.part_id } })
     },
     getList(lesson_No) {
       if (lesson_No) {
@@ -73,11 +78,21 @@ export default {
       }
       this.loading = true
       console.log('练耳选择题列表获取')
-      this.$http.get('/study/choiceList', { params: { lesson_No: this.lesson_No } }).then((res) => {
-        console.log('res', res)
-        this.itemList = res.result
-        this.loading = false
-      })
+      const parameter = { lesson_No: this.lesson_No, grade: this.grade }
+      getChoiceList(parameter)
+        .then((res) => {
+          console.log('练耳选择题列表',res.result)
+          this.itemList = res.result
+          this.loading = false
+        })
+        .catch((e) => {
+          console.error('获取选择题列表失败', e)
+          notification.error({
+            message: '获取选择题列表失败',
+            description: e,
+          })
+          
+        })
     },
   },
 }

@@ -9,6 +9,22 @@ export function welcome() {
   const index = Math.floor(Math.random() * arr.length)
   return arr[index]
 }
+/**
+ * @function 返回part_id
+ * @description 根据信息返回part_id
+ * @param mode 学习模式{视唱:'0',练耳选择题:'3',练耳听写题:'4'}
+ * @param type 一级分类{视唱:单声部精唱:'01',单声部视谱即唱:'02',双声部:'03'}{练耳:音阶:'01'...}
+ * @param voice_part 声部{低声部:'01',高声部:'02',不分声部:'00'}
+ * @param grade 等级{基础级:'01',一级:'02'...}
+ * @param lesson_No 课次{课次一:'1'...}
+ * @param num 题目序号{第一题:'01'...}
+ * @return part_id
+ * @author Jimmy 2022/07/12
+ */
+export function getPartId(mode, type, voice_part = '00', grade, lesson_No, num = '01') {
+  const part_id = mode + type + '00000000' + voice_part + '00' + grade + +'0' + lesson_No + num
+  return part_id
+}
 
 /**
  * 触发 window.resize
