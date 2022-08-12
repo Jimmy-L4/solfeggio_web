@@ -1,13 +1,5 @@
 <template>
   <page-header-wrapper :tab-list="tabList" :tab-active-key="tabActiveKey" :tab-change="handleTabChange">
-    <template v-slot:content>
-      <div class="ant-pro-page-header-search">
-        <a-input-search size="large" style="width: 80%; max-width: 522px">
-          <template v-slot:enterButton> 搜索 </template>
-        </a-input-search>
-      </div>
-    </template>
-
     <a-card :bordered="false" class="ant-pro-components-tag-select">
       <a-form layout="inline">
         <standard-form-row title="选择课次" :last="true" style="padding-bottom: 0px">
@@ -62,10 +54,15 @@ export default {
       ],
       tabActiveKey: '1',
       search: true,
-      lesson_No: this.$store.getters.lesson_No,
+      lesson_No: '',
     }
   },
   created() {
+    if (this.$route.params.lesson_No) {
+      this.lesson_No = this.$route.params.lesson_No
+    } else {
+      this.lesson_No = this.$store.getters.lesson_No
+    }
     this.tabActiveKey = getActiveKey(this.$route.path)
     this.$watch('$route', (val) => {
       this.tabActiveKey = getActiveKey(val.path)

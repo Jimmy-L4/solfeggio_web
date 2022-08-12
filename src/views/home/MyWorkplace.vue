@@ -19,16 +19,15 @@
         <a-col :xl="16" :lg="24" :md="24" :sm="24" :xs="24">
           <a-card
             class="project-list"
-            :loading="loading"
             style="margin-bottom: 24px"
             :bordered="false"
-            title="当前课次题目"
+            :title="deadline"
             :body-style="{ padding: 0 }"
           >
             <div>
-              <a-card-grid class="project-card-grid" :key="i" v-for="(item, i) in projects">
-                <a href="/#/">
-                  <a-card :bordered="false" :body-style="{ padding: 0 }">
+              <a>
+                <a-card-grid class="project-card-grid" :key="i" v-for="(item, i) in projects">
+                  <a-card :bordered="false" :body-style="{ padding: 0 }" @click="handleEdit(i)">
                     <a-card-meta>
                       <div slot="title" class="card-title">
                         <a-avatar size="small" :src="item.cover" />
@@ -39,39 +38,34 @@
                       </div>
                     </a-card-meta>
                     <div class="project-item">
-                      <a href="/##/">{{ item.lesson_No }}</a>
-                      <span class="datetime">9小时前</span>
+                      <a>课次{{ lesson_text[lesson_No - 1] }}</a>
+                      <span class="datetime">{{ state_text[lesson_state] }}</span>
                     </div>
                   </a-card>
-                </a>
-              </a-card-grid>
+                </a-card-grid>
+              </a>
             </div>
           </a-card>
 
-          <a-card :loading="loading" title="动态" :bordered="false">
+          <a-card :loading="loading" title="本课次动态" :bordered="false">
             <a-list>
               <a-list-item :key="index" v-for="(item, index) in activities">
                 <a-list-item-meta>
-                  <a-avatar slot="avatar" size="small" :src="item.user.avatar" />
+                  <a-avatar slot="avatar" size="small" :src="avatar" />
                   <div slot="title">
-                    成功在&nbsp;<a href="#">{{ item.project.name }}</a
-                    >&nbsp; <span>{{ item.project.action }}</span
-                    >&nbsp;
-                    <a href="#">{{ item.project.event }}</a>
+                    成功在&nbsp;
+                    <a @click="handleTabChange(lesson_No)">课次{{ lesson_text[item.lesson_No - 1] }}</a
+                    >&nbsp; <span>提交了</span>&nbsp;
+                    <a>{{ item.group_title }}</a>
                   </div>
-                  <div slot="description">{{ item.time }}</div>
+                  <div slot="description">{{ item.record_time.replace('T', ' ').substring(0, 19) }}</div>
                 </a-list-item-meta>
               </a-list-item>
             </a-list>
           </a-card>
         </a-col>
         <a-col style="padding: 0 12px" :xl="8" :lg="24" :md="24" :sm="24" :xs="24">
-          <a-card
-            title="快速开始 / 便捷导航"
-            style="margin-bottom: 24px"
-            :bordered="false"
-            :body-style="{ padding: 0 }"
-          >
+          <a-card title="课次导航" style="margin-bottom: 24px" :bordered="false" :body-style="{ padding: 0 }">
             <div class="item-group">
               <a @click="handleTabChange('1')">课次一</a>
               <a @click="handleTabChange('2')">课次二</a>
@@ -117,11 +111,31 @@ import { mapState } from 'vuex'
 import { PageHeaderWrapper } from '@ant-design-vue/pro-layout'
 import { Radar } from '@/components'
 
-import { getNoticeList } from '@/api/manage'
+import { getNoticeList, getQuesGroupList } from '@/api/manage'
+import notification from 'ant-design-vue/es/notification'
 
-import { TOGGLE_LESSON_No } from '@/store/mutation-types'
-
-const DataSet = require('@antv/data-set')
+const projects = [
+  {
+    id: 1,
+    cover: '/api/media/image/sightsinging.png',
+    title: '视唱',
+    description: '视唱作业',
+  },
+  {
+    id: 2,
+    cover: '/api/media/image/choice.png',
+    title: '练耳选择题',
+    description: '练耳选择题作业',
+  },
+  {
+    id: 3,
+    cover: '/api/media/image/dictation.png',
+    title: '练耳听写题',
+    description: '练耳听写题作业',
+  },
+]
+const lesson_text = ['一', '二', '三', '四', '五', '六', '七', '八']
+const state_text = ['进行中', '已截止']
 
 export default {
   name: 'MyWorkplace',
@@ -134,12 +148,15 @@ export default {
       timeFix: timeFix(),
       avatar: '',
       user: {},
-
-      projects: [],
+      projects,
+      lesson_text,
+      state_text,
       loading: true,
       noteLoading: true,
       activities: [],
       notices: [],
+      lesson_No: this.$store.getters.lesson_No,
+      lesson_state: 0,
     }
   },
   computed: {
@@ -149,32 +166,47 @@ export default {
     userInfo() {
       return this.$store.getters.userInfo
     },
+    deadline() {
+      const deadline = this.userInfo.lesson_deadline.replace('T', ' ')
+      return '当前课次(截止时间:' + deadline + ')'
+    },
   },
   created() {
     this.user = this.userInfo
     this.avatar = this.userInfo.avatar
   },
   mounted() {
-    this.getProjects()
     this.getActivity()
     this.getNotices()
   },
   methods: {
     // 切换课次并跳转至对应视唱
     handleTabChange(key) {
-      this.$store.commit(TOGGLE_LESSON_No, key)
       this.$router.push({ name: 'sightsing-list', params: { lesson_No: key } })
     },
-    getProjects() {
-      this.$http.get('/list/search/projects').then((res) => {
-        this.projects = res.result && res.result.data
-        this.loading = false
-      })
+    // 跳转至对应学习空间
+    handleEdit(item) {
+      const nameList = ['sightsing-list', 'choice-list', 'dictation-list']
+      this.$router.push({ name: nameList[item] })
     },
     getActivity() {
-      this.$http.get('/workplace/activity').then((res) => {
-        this.activities = res.result
-      })
+      console.log('获取题组提交列表')
+      console.log(this.lesson_No)
+      const parameter = { lesson_No: this.lesson_No, userId: this.userInfo.user }
+      getQuesGroupList(parameter)
+        .then((res) => {
+          this.activities = res.result
+          console.log('本课次动态', this.activities)
+          this.loading = false
+        })
+        .catch((e) => {
+          console.error('获取题组提交列表失败', e)
+          this.loading = false
+          notification.error({
+            message: '获取题组提交列表失败',
+            description: e,
+          })
+        })
     },
     getNotices() {
       const parameter = { display: 'true' }
@@ -204,7 +236,7 @@ export default {
       height: 24px;
       display: inline-block;
       vertical-align: top;
-      font-size: 14px;
+      font-size: 18px;
 
       &:hover {
         color: #1890ff;
@@ -223,12 +255,12 @@ export default {
     display: flex;
     margin-top: 8px;
     overflow: hidden;
-    font-size: 12px;
-    height: 20px;
-    line-height: 20px;
+    font-size: 16px;
+    height: 22px;
+    line-height: 22px;
 
     a {
-      color: rgba(0, 0, 0, 0.45);
+      color: rgba(0, 0, 0, 0.6);
       display: inline-block;
       flex: 1 1 0;
 
@@ -238,7 +270,7 @@ export default {
     }
 
     .datetime {
-      color: rgba(0, 0, 0, 0.25);
+      color: rgba(0, 0, 0, 0.45);
       flex: 0 0 auto;
       float: right;
     }
@@ -262,6 +294,10 @@ export default {
     font-size: 14px;
     margin-bottom: 13px;
     width: 25%;
+
+    &:hover {
+      color: #1890ff;
+    }
   }
 }
 

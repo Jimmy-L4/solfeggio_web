@@ -4,9 +4,7 @@
       <a-list size="large" rowKey="id" :loading="loading" itemLayout="vertical" :dataSource="itemList">
         <a-list-item :key="item.id" slot="renderItem" slot-scope="item">
           <template slot="actions">
-            <icon-text type="robot" text="AI评分:" :score="item.AI_score" />
-            <icon-text type="solution" text="教师评分:" :score="item.score" />
-            <icon-text :type="item.stateType" :text="item.stateText" />
+            <a-badge :status="statusMap[item.state].status" :text="statusMap[item.state].text" />
           </template>
           <a-list-item-meta>
             <a slot="title" @click="handleEdit(item)">{{ item.part_name }}</a>
@@ -31,34 +29,47 @@
 
 <script>
 import { SightsingListContent } from '@/components'
-import IconText from './components/IconText'
 import { getSightsingingList } from '@/api/manage'
 import notification from 'ant-design-vue/es/notification'
+
+const statusMap = {
+  0: {
+    status: 'processing',
+    text: '待完成',
+  },
+  1: {
+    status: 'default',
+    text: '已完成',
+  },
+  2: {
+    status: 'error',
+    text: '已逾期',
+  },
+}
 
 export default {
   components: {
     SightsingListContent,
-    IconText,
   },
   data() {
     return {
+      statusMap,
       loading: true,
       itemList: [],
       form: this.$form.createForm(this),
-      lesson_No: this.$store.getters.lesson_No,
+      lesson_No: '',
       grade: this.$store.getters.userInfo.course.grade,
     }
   },
   beforeMount() {
     if (this.$route.params.lesson_No) {
       this.lesson_No = this.$route.params.lesson_No
+    } else {
+      this.lesson_No = this.$store.getters.lesson_No
     }
     this.getList()
   },
   methods: {
-    handleChange(value) {
-      console.log(`selected ${value}`)
-    },
     // 跳转至对应练耳页面
     handleEdit(item) {
       this.$router.push({ name: 'sightsing', params: { quesDetail: item } })

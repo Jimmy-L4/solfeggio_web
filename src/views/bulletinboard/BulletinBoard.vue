@@ -20,17 +20,19 @@
             <a slot="title">{{ item.project.title }}</a>
           </a-list-item-meta>
           <div slot="actions">
-            <a-button type="link" @click="post(item.id)">{{ item.project.type ? '下架' : '发布' }}</a-button>
+            <a-button type="link" @click="post(item.project, item.id)">{{
+              item.project.type ? '下架' : '发布'
+            }}</a-button>
           </div>
           <div slot="actions">
             <a-dropdown>
               <a-menu slot="overlay">
                 <a-menu-item>
-                  <a-popconfirm title="是否要删除此通知？" @confirm="remove(item.id)">
+                  <a-popconfirm title="是否要删除此通知？" @confirm="remove(item.project, item.id)">
                     <a>删除</a>
                   </a-popconfirm>
                 </a-menu-item>
-                <a-menu-item><a @click="handleEdit(item.project)">编辑</a></a-menu-item>
+                <a-menu-item><a @click="handleEdit(item.project, item.id)">编辑</a></a-menu-item>
               </a-menu>
               <a>更多<a-icon type="down" /></a>
             </a-dropdown>
@@ -42,7 +44,7 @@
             </div>
             <div class="list-content-item">
               <span>通知时间</span>
-              <p>{{ item.startAt }}</p>
+              <p>{{ item.startAt.replace('T', ' ').substring(0, 19) }}</p>
             </div>
             <div class="list-content-item">
               <a-badge :status="item.project.type | statusTypeFilter" :text="item.project.type | statusFilter" />
@@ -63,7 +65,8 @@
 </template>
 
 <script>
-import { getNoticeList } from '@/api/manage'
+import { getNoticeList, updateNotice, addNotice, deleteNotice } from '@/api/manage'
+import notification from 'ant-design-vue/es/notification'
 
 import CreateForm from './modules/CreateForm'
 
@@ -78,7 +81,6 @@ const statusMap = {
   },
 }
 
-const noticeList = []
 export default {
   name: 'BulletinBoard',
   components: {
@@ -86,13 +88,13 @@ export default {
   },
   data() {
     return {
-      noticeList,
+      noticeList: [],
       status: '2',
       iconLoading: false,
-      pageInfo: {},
       visible: false,
       confirmLoading: false,
       mdl: null,
+      userInfo: this.$store.getters.userInfo,
     }
   },
   mounted() {
@@ -103,9 +105,10 @@ export default {
       this.mdl = null
       this.visible = true
     },
-    handleEdit(record) {
+    handleEdit(record, id) {
       this.visible = true
-      this.mdl = { ...record }
+      this.mdl = { ...record, id: id }
+      console.log('md1', this.mdl)
     },
     handleOk() {
       const form = this.$refs.createModal.form
@@ -115,36 +118,64 @@ export default {
           console.log('values', values)
           if (values.id > 0) {
             // 修改 e.g.
-            new Promise((resolve, reject) => {
-              setTimeout(() => {
-                resolve()
-              }, 1000)
-            }).then((res) => {
-              this.visible = false
-              this.confirmLoading = false
-              // 重置表单数据
-              form.resetFields()
-              // 刷新表格
-              this.$refs.table.refresh()
-
-              this.$message.info('修改成功')
-            })
+            const parameter = {
+              id: values.id,
+              type: 1,
+              title: values.title,
+              content: values.content,
+              classes: values.class,
+            }
+            updateNotice(parameter)
+              .then((res) => {
+                this.visible = false
+                this.confirmLoading = false
+                // 重置表单数据
+                form.resetFields()
+                this.getNotices()
+                notification.success({
+                  message: '更新通知成功！',
+                  description: '',
+                })
+              })
+              .catch((err) => {
+                console.error('err', err)
+                notification.error({
+                  message: '更新通知失败！',
+                  description: err,
+                })
+                this.confirmLoading = false
+              })
           } else {
             // 新增
-            new Promise((resolve, reject) => {
-              setTimeout(() => {
-                resolve()
-              }, 1000)
-            }).then((res) => {
-              this.visible = false
-              this.confirmLoading = false
-              // 重置表单数据
-              form.resetFields()
-              // 刷新表格
-              this.$refs.table.refresh()
-
-              this.$message.info('新增成功')
-            })
+            const parameter = {
+              type: 1,
+              title: values.title,
+              content: values.content,
+              classes: values.class,
+              nickname: this.userInfo.name,
+              avatar: this.userInfo.avatar,
+              author: this.userInfo.user,
+            }
+            addNotice(parameter)
+              .then((res) => {
+                this.visible = false
+                this.confirmLoading = false
+                // 重置表单数据
+                form.resetFields()
+                this.getNotices()
+                notification.success({
+                  message: '添加通知成功！',
+                  description: '',
+                })
+              })
+              .catch((err) => {
+                console.error('err', err)
+                notification.error({
+                  message: '添加通知失败！',
+                  description: err,
+                })
+                this.confirmLoading = false
+              })
           }
         } else {
           this.confirmLoading = false
@@ -156,16 +187,60 @@ export default {
       const form = this.$refs.createModal.form
       form.resetFields() // 清理表单数据（可不做）
     },
-    post(record) {
+    post(record, id) {
       this.iconLoading = true
-      console.log('record', record)
-      setTimeout(() => {
-        this.iconLoading = false
-      }, 1000)
+      const parameter = {
+        id: id,
+        type: record.type ? 0 : 1,
+        title: record.title,
+        content: record.content,
+        classes: record.class,
+      }
+      console.log(parameter)
+      updateNotice(parameter)
+        .then((res) => {
+          console.log('res', res)
+          this.getNotices()
+          notification.success({
+            message: record.type ? '下架通知成功！' : '发布通知成功！',
+            description: '',
+          })
+        })
+        .catch((err) => {
+          console.error('err', err)
+          notification.error({
+            message: record.type ? '下架通知失败！' : '发布通知失败！',
+            description: err,
+          })
+          this.iconLoading = false
+        })
     },
-    remove(id) {
-      const newData = this.noticeList.filter((item) => item.id !== id)
-      this.noticeList = newData
+    remove(record, id) {
+      this.confirmLoading = false
+      const parameter = {
+        id: id,
+        type: -1,
+        title: record.title,
+        content: record.content,
+        classes: record.class,
+      }
+      deleteNotice(parameter)
+        .then((res) => {
+          console.log('res', res)
+          this.getNotices()
+          notification.success({
+            message: '删除通知成功！',
+            description: '',
+          })
+        })
+        .catch((err) => {
+          console.error('err', err)
+          notification.error({
+            message: '删除通知失败！',
+            description: err,
+          })
+          this.iconLoading = false
+        })
     },
     getNotices() {
       this.iconLoading = true

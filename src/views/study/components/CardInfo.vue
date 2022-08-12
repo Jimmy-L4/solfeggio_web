@@ -5,8 +5,8 @@
       <p>{{ qusNum }}</p>
     </div>
     <div>
-      <p>题目得分/总分</p>
-      <p>{{ score }}/{{ sumScore }}</p>
+      <p>题目总分</p>
+      <p>{{ sumScore }}</p>
     </div>
   </div>
 </template>
@@ -16,10 +16,6 @@ export default {
   name: 'CardInfo',
   props: {
     qusNum: {
-      type: [String, Number],
-      default: 0,
-    },
-    score: {
       type: [String, Number],
       default: 0,
     },

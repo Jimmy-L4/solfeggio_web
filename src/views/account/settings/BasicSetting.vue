@@ -1,10 +1,6 @@
 <template>
-  <div class="account-settings-info-view">
-    <a-form layout="vertical">
-      <a-form-item :label="$t('account.settings.basic.nickname')">
-        <a-input :placeholder="$t('account.settings.basic.nickname-message')" />
-      </a-form-item>
-
+  <div class="account-settings-info-view" style="width: 50%">
+    <a-list>
       <!-- 节拍器与标准音开关 -->
       <a-list-item>
         <a-list-item-meta>
@@ -22,8 +18,9 @@
             :defaultChecked="metronomeSwitch"
             @change="onChange"
           />
-        </template>
-      </a-list-item>
+        </template> </a-list-item
+    ></a-list>
+    <a-form layout="vertical" v-if="userInfo.is_superuser">
       <a-form-item label="管理员等级">
         <a-select
           placeholder="请选择要切换的等级"
@@ -56,6 +53,7 @@ export default {
       // cropper
       preview: {},
       metronomeSwitch: this.$store.getters.metronome,
+      userInfo: this.$store.getters.userInfo,
     }
   },
   mounted() {},

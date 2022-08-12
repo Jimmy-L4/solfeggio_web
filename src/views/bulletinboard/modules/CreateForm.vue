@@ -17,21 +17,27 @@
   >
     <a-spin :spinning="loading">
       <a-form :form="form" v-bind="formLayout">
-        <a-form-item label="通知名称" >
-          <a-input v-decorator="['name', { rules: [{ required: true, message: '请输入通知名称' }] }]" />
+        <!-- 检查是否有 id 并且大于0，大于0是修改。其他是新增，新增不显示主键ID -->
+        <a-form-item v-show="model && model.id > 0" label="通知ID">
+          <a-input v-decorator="['id', { initialValue: 0 }]" disabled />
         </a-form-item>
-        <a-form-item label="通知面向班级" >
+        <a-form-item label="通知名称">
+          <a-input v-decorator="['title', { rules: [{ required: true, message: '请输入通知名称' }] }]" />
+        </a-form-item>
+
+        <a-form-item label="通知面向班级">
           <a-select
             placeholder="请选择此通知面向班级"
             v-decorator="['class', { rules: [{ required: true, message: '请选择此通知面向班级' }] }]"
           >
-            <a-select-option value="0">所有班级</a-select-option>
-            <a-select-option value="1">21级管乐班</a-select-option>
-            <a-select-option value="2">21级弦乐班</a-select-option>
-            <a-select-option value="3">21级作曲班</a-select-option>
+            <a-select-option value="所有班级">所有班级</a-select-option>
+            <a-select-option value="21级管乐班">21级管乐班</a-select-option>
+            <a-select-option value="21级弦乐班">21级弦乐班</a-select-option>
+            <a-select-option value="21级作曲班">21级作曲班</a-select-option>
+            <a-select-option value="20英才器乐">20英才器乐</a-select-option>
           </a-select>
         </a-form-item>
-        <a-form-item label="通知内容" >
+        <a-form-item label="通知内容">
           <a-textarea
             v-decorator="['content', { rules: [{ required: true, message: '请输入通知内容' }] }]"
           ></a-textarea>
@@ -45,7 +51,7 @@
 import pick from 'lodash.pick'
 
 // 表单字段
-const fields = ['name', 'class', 'content']
+const fields = ['id', 'title', 'class', 'content']
 
 export default {
   props: {

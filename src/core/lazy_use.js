@@ -48,6 +48,7 @@ import {
   notification,
   Affix,
   Empty,
+  Pagination,
 } from 'ant-design-vue'
 import Viser from 'viser-vue'
 
@@ -103,6 +104,7 @@ Vue.use(Descriptions)
 Vue.use(Space)
 Vue.use(Affix)
 Vue.use(Empty)
+Vue.use(Pagination)
 
 Vue.prototype.$confirm = Modal.confirm
 Vue.prototype.$message = message

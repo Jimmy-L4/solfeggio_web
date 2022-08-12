@@ -16,12 +16,11 @@
                 作答
               </div>
               <a-tooltip :title="item.stateDec">
-                <a-icon :type="item.stateType" />
-                {{ item.stateText }}
+                <a-badge :status="statusMap[item.state].status" :text="statusMap[item.state].text" />
               </a-tooltip>
             </template>
             <div class="">
-              <card-info :qusNum="item.qusNum" :score="item.score" :sumScore="item.sumScore"></card-info>
+              <card-info :qusNum="item.qusNum" :sumScore="item.sumScore"></card-info>
             </div>
           </a-card>
         </a-list-item>
@@ -37,6 +36,20 @@ import CardInfo from './components/CardInfo'
 import { getChoiceList } from '@/api/manage'
 import notification from 'ant-design-vue/es/notification'
 const AvatarListItem = AvatarList.Item
+const statusMap = {
+  0: {
+    status: 'processing',
+    text: '待完成',
+  },
+  1: {
+    status: 'default',
+    text: '已完成',
+  },
+  2: {
+    status: 'error',
+    text: '已逾期',
+  },
+}
 
 export default {
   components: {
@@ -46,10 +59,11 @@ export default {
   },
   data() {
     return {
+      statusMap,
       itemList: [],
       form: this.$form.createForm(this),
       loading: true,
-      lesson_No: this.$store.getters.lesson_No,
+      lesson_No: '',
       grade: this.$store.getters.userInfo.course.grade,
     }
   },
@@ -61,6 +75,8 @@ export default {
   beforeMount() {
     if (this.$route.params.lesson_No) {
       this.lesson_No = this.$route.params.lesson_No
+    } else {
+      this.lesson_No = this.$store.getters.lesson_No
     }
     this.getList()
   },
@@ -70,7 +86,7 @@ export default {
     },
     // 跳转至对应练耳页面
     handleEdit(item) {
-      this.$router.push({ name: 'choice', params: { part_id: item.part_id } })
+      this.$router.push({ name: 'choice', params: { part_id: item.part_id,state:item.state } })
     },
     getList(lesson_No) {
       if (lesson_No) {
@@ -81,7 +97,7 @@ export default {
       const parameter = { lesson_No: this.lesson_No, grade: this.grade }
       getChoiceList(parameter)
         .then((res) => {
-          console.log('练耳选择题列表',res.result)
+          console.log('练耳选择题列表', res.result)
           this.itemList = res.result
           this.loading = false
         })
@@ -91,7 +107,6 @@ export default {
             message: '获取选择题列表失败',
             description: e,
           })
-          
         })
     },
   },

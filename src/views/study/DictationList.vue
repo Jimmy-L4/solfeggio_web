@@ -33,7 +33,7 @@ export default {
       itemList: [],
       form: this.$form.createForm(this),
       loading: true,
-      lesson_No: this.$store.getters.lesson_No,
+      lesson_No: '',
     }
   },
   filters: {
@@ -41,9 +41,11 @@ export default {
       return moment(date).fromNow()
     },
   },
-  mounted() {
+  beforeMount() {
     if (this.$route.params.lesson_No) {
       this.lesson_No = this.$route.params.lesson_No
+    }else{
+      this.lesson_No = this.$store.getters.lesson_No
     }
     this.getList()
   },

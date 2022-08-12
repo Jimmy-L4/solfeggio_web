@@ -18,16 +18,19 @@
         </a-card>
       </a-col>
       <a-col :md="24" :lg="17">
-        <a-card
-          style="width: 100%"
-          :bordered="false"
-          :tabList="tabListNoTitle"
-          :activeTabKey="noTitleKey"
-          @tabChange="(key) => handleTabChange(key, 'noTitleKey')"
-        >
-          <sightsing-list v-if="noTitleKey === 'sightsing'"></sightsing-list>
-          <choice-list v-else-if="noTitleKey === 'choice'"></choice-list>
-          <dictation-list v-else-if="noTitleKey === 'dictation'"></dictation-list>
+        <a-card style="width: 100%" title="作业提交详情" :bordered="false">
+          <a-form layout="inline">
+            <a-form-item>
+              <a-radio-group :defaultValue="lesson_No" v-model:value="lesson_No" @change="lessonChange">
+                <a-radio-button :value="item.key" v-for="(item, key) in tabListNoTitle" :key="key">
+                  {{ item.tab }}
+                </a-radio-button>
+              </a-radio-group>
+            </a-form-item>
+          </a-form>
+          <a-divider />
+
+          <ques-group-list ref="Childmain" :lesson_No="lesson_No"></ques-group-list>
         </a-card>
       </a-col>
     </a-row>
@@ -35,47 +38,60 @@
 </template>
 
 <script>
-import { PageView, RouteView } from '@/layouts'
-import { SightsingList, ChoiceList, DictationList } from './page'
+import QuesGroupList from './QuesGroupList'
 
 import { mapGetters } from 'vuex'
-
+const tabListNoTitle = [
+  {
+    key: '1',
+    tab: '课次一',
+  },
+  {
+    key: '2',
+    tab: '课次二',
+  },
+  {
+    key: '3',
+    tab: '课次三',
+  },
+  {
+    key: '4',
+    tab: '课次四',
+  },
+  {
+    key: '5',
+    tab: '课次五',
+  },
+  {
+    key: '6',
+    tab: '课次六',
+  },
+  {
+    key: '7',
+    tab: '课次七',
+  },
+  {
+    key: '8',
+    tab: '课次八',
+  },
+]
 export default {
   components: {
-    RouteView,
-    PageView,
-    SightsingList,
-    ChoiceList,
-    DictationList,
+    QuesGroupList,
   },
   data() {
     return {
-      tabListNoTitle: [
-        {
-          key: 'sightsing',
-          tab: '视唱',
-        },
-        {
-          key: 'choice',
-          tab: '练耳选择题',
-        },
-        {
-          key: 'dictation',
-          tab: '练耳听写题',
-        },
-      ],
-      noTitleKey: 'sightsing',
+      tabListNoTitle,
+      lesson_No: this.$store.getters.lesson_No,
     }
   },
   computed: {
     ...mapGetters(['nickname', 'avatar', 'userInfo']),
   },
-  created() {
-    console.log(avatar)
-  },
+  created() {},
   methods: {
-    handleTabChange(key, type) {
-      this[type] = key
+    lessonChange() {
+      console.log(this.lesson_No)
     },
   },
 }
@@ -87,6 +103,13 @@ export default {
   height: 100%;
   min-height: 100%;
   transition: 0.3s;
+  .ant-pro-components-tag-select {
+    /deep/ .ant-pro-tag-select .ant-tag {
+      margin-right: 24px;
+      padding: 0 8px;
+      font-size: 14px;
+    }
+  }
 
   .account-center-avatarHolder {
     text-align: center;

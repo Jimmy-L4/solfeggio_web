@@ -13,6 +13,10 @@ const api = {
   ChoiceQuesList: '/api/question/choice/',
   SightsingingList: '/api/question/sightsinging_list/',
   ChoiceList: '/api/question/choice_list/',
+  QuesGroupList: '/api/homework/quse_group/',
+  ChoiceRecord: '/api/homework/choice/',
+  SightsingingRecord: '/api/homework/sightsinging/',
+  UploadAudio: '/api/router/audio/',
 }
 
 export default api
@@ -97,6 +101,27 @@ export function getNoticeList(parameter) {
     params: parameter,
   })
 }
+export function updateNotice(parameter) {
+  return request({
+    url: api.noticeList,
+    method: 'put',
+    data: parameter,
+  })
+}
+export function addNotice(parameter) {
+  return request({
+    url: api.noticeList,
+    method: 'post',
+    data: parameter,
+  })
+}
+export function deleteNotice(parameter) {
+  return request({
+    url: api.noticeList,
+    method: 'delete',
+    data: parameter,
+  })
+}
 
 export function getChoiceQuesList(parameter) {
   return request({
@@ -118,5 +143,35 @@ export function getChoiceList(parameter) {
     url: api.ChoiceList,
     method: 'get',
     params: parameter,
+  })
+}
+export function getQuesGroupList(parameter) {
+  return request({
+    url: api.QuesGroupList,
+    method: 'get',
+    params: parameter,
+  })
+}
+
+export function uploadChoiceAnswer(parameter) {
+  return request({
+    url: api.ChoiceRecord,
+    method: 'post',
+    data: parameter,
+  })
+}
+export function uploadSightsingingAnswer(parameter) {
+  return request({
+    url: api.SightsingingRecord,
+    method: 'post',
+    data: parameter,
+  })
+}
+
+export function uploadAudio(parameter) {
+  return request({
+    url: api.UploadAudio,
+    method: 'post',
+    data: parameter,
   })
 }

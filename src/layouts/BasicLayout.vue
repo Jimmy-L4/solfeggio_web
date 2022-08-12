@@ -23,7 +23,7 @@
     -->
     <template v-slot:headerContentRender>
       <div>
-        <a-tooltip title="刷新页面">
+        <!-- <a-tooltip title="刷新页面">
           <a-icon
             type="reload"
             style="font-size: 18px; cursor: pointer"
@@ -33,7 +33,7 @@
               }
             "
           />
-        </a-tooltip>
+        </a-tooltip> -->
       </div>
     </template>
 

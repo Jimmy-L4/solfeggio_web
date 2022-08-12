@@ -9,9 +9,11 @@
           <a-descriptions-item label="乐器">{{ quesDetail.audio_detail.audio_instrument }}</a-descriptions-item>
           <a-descriptions-item label="名族">{{ quesDetail.audio_detail.audio_nation }}</a-descriptions-item>
           <a-descriptions-item></a-descriptions-item>
-          <a-descriptions-item label="范例音"> </a-descriptions-item>
         </a-descriptions>
-        <audio-player :src="global_url + quesDetail.audio_path" />
+        <div style="font-size: 14px; color: rgba(0, 0, 0, 0.85); margin-bottom: 16px; font-weight: 500">
+          <div style="margin-bottom: 16px">范例音:<audio-player :src="global_url + quesDetail.audio_path" /></div>
+          <div>节拍器:<audio-player :src="metroSrc" /></div>
+        </div>
 
         <a-card type="inner" title="曲谱信息" style="margin-top: 24px">
           <img :width="800" :src="global_url + quesDetail.pic_path" />
@@ -21,31 +23,57 @@
             <my-recorder
               ref="content"
               :class="dragToggle ? 'staticRecorder' : 'fiedRecorder'"
-              upload-url="/api/router/audio/"
               :attempts="5"
               :time="2"
-              :headers="headers"
-              :part_id="quesDetail.part_id"
-              :user_id="userInfo.user"
-              :start-record="callback"
-              :stop-record="callback"
-              :start-upload="callback"
-              :successful-upload="successUpload"
-              :failed-upload="failedUpload"
+              :start-record="startRecord"
+              :stop-record="stopRecord"
+              :getRecord="getRecord"
               :dragToggle="toggle"
             />
           </div>
         </a-card>
       </a-card>
     </a-card>
+    <!-- fixed footer toolbar -->
+    <footer-tool-bar>
+      <a-button type="default" @click="downloadAudio">下载音频</a-button>
+      <a-tooltip placement="topRight" v-if="statusMap[quesDetail.state].disabled">
+        <template #title>
+          <span>{{ statusMap[quesDetail.state].text }}</span>
+        </template>
+        <a-button :disabled="true" type="primary" :loading="loading" style="margin-left: 20px">提交</a-button>
+      </a-tooltip>
+      <a-popconfirm v-else title="确认提交作业吗？提交后将无法修改！" @confirm="startUpload">
+        <a-button type="primary" :loading="loading" style="margin-left: 20px">提交</a-button>
+      </a-popconfirm>
+    </footer-tool-bar>
   </page-header-wrapper>
 </template>
 
 <script>
 import notification from 'ant-design-vue/es/notification'
+import FooterToolBar from '@/components/FooterToolbar'
+import { uploadAudio, uploadSightsingingAnswer } from '@/api/manage'
+
+const statusMap = {
+  0: {
+    disabled: false,
+    text: '待完成',
+  },
+  1: {
+    disabled: true,
+    text: '作业已完成，无法再次提交！',
+  },
+  2: {
+    disabled: true,
+    text: '作业已逾期，无法再进行提交！',
+  },
+}
 export default {
   name: 'SightsingLayout',
-  components: {},
+  components: {
+    FooterToolBar,
+  },
   data() {
     return {
       global_url: 'https://musicmuc.chimusic.net/solfeggio/',
@@ -54,6 +82,8 @@ export default {
       token: this.$store.getters.token,
       userInfo: this.$store.getters.userInfo,
       quesDetail: {},
+      record: {},
+      statusMap,
     }
   },
   computed: {
@@ -62,11 +92,18 @@ export default {
         Authorization: 'Bearer ' + this.token,
       }
     },
-  },
-  beforeCreate() {
-    if (!this.$route.params.quesDetail) {
-      this.$router.push({ name: 'home', replace: true })
-    }
+    metroSrc() {
+      return (
+        this.global_url +
+        'library/metronome/' +
+        this.quesDetail.note +
+        '_' +
+        this.quesDetail.beat +
+        '_' +
+        this.quesDetail.bpm +
+        '.mp3'
+      )
+    },
   },
   beforeMount() {
     if (this.$route.params.quesDetail) {
@@ -80,30 +117,86 @@ export default {
     this.draggable(this.$refs.content.$el)
   },
   methods: {
-    // handler
-    handleSubmit(e) {
-      console.log(e)
-      this.loading = true
-      setTimeout(() => {
-        this.loading = false
-      }, 1000)
-    },
-    handleChange(e) {
-      console.log(this.questionList)
-    },
-    failedUpload(msg) {
-      console.log('uploadResult: ', msg)
-      notification.error({
-        message: '音频上传失败',
-        description: msg.content,
-      })
-    },
-    successUpload(msg) {
-      console.log('uploadResult: ', msg)
+    startRecord(e) {
       notification.success({
-        message: '音频上传成功',
-        description: msg.content,
+        message: '开始录制音频',
+        description: '',
       })
+    },
+    stopRecord(e) {
+      notification.success({
+        message: '结束录制音频',
+        description: '',
+      })
+    },
+    getRecord(record) {
+      this.record = record
+      console.log('被选中的音频为：', this.record)
+    },
+    startUpload() {
+      if (!this.record.url) {
+        notification.error({
+          message: '请选择音频后在进行上传！',
+        })
+        return
+      }
+      this.loading = true
+      let data = new FormData()
+      data.append('content', this.record.blob, this.quesDetail.part_id + '-' + this.userInfo.user.toString() + '.wav')
+      data.append('part_id', this.quesDetail.part_id)
+      data.append('user', this.userInfo.user)
+      uploadAudio(data)
+        .then((res) => {
+          console.log(res)
+          this.submitHomework(res)
+        })
+        .catch((err) => {
+          console.error(err)
+          notification.error({
+            message: '音频上传失败',
+          })
+          this.loading = false
+        })
+    },
+    submitHomework(res) {
+      const parameter = {
+        part_id: this.quesDetail.part_id,
+        audio: res.content.replace('http://127.0.0.1:8000/media/', ''),
+        user: this.userInfo.user,
+      }
+      uploadSightsingingAnswer(parameter)
+        .then((res) => {
+          notification.success({
+            message: '音频上传成功',
+            description: '在个人中心中查看提交详情！',
+          })
+          this.loading = false
+          this.$router.push({
+            name: 'sightsing-list',
+            replace: true,
+            params: { lesson_No: this.quesDetail.part_id.charAt(18) },
+          })
+        })
+        .catch((err) => {
+          console.error(err)
+          notification.error({
+            message: '音频上传失败',
+            description: err.response.data,
+          })
+          this.loading = false
+        })
+    },
+    downloadAudio() {
+      if (!this.record.url) {
+        notification.error({
+          message: '请选择音频后在进行下载！',
+        })
+        return
+      }
+      let link = document.createElement('a')
+      link.href = this.record.url
+      link.download = 'record.wav'
+      link.click()
     },
     callback(msg) {
       console.log('Event: ', msg)
