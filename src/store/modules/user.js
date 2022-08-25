@@ -14,7 +14,9 @@ const user = {
     // 练耳选择题节拍器开关
     metronome: false,
     // 课次
-    lesson_No: '2',
+    lesson_No: '1',
+    // 开放课次
+    validLessons: [],
   },
 
   mutations: {
@@ -36,6 +38,7 @@ const user = {
     },
     [TOGGLE_METRONOME]: (state, mode) => {
       state.metronome = mode
+      state.info.metronome = mode
     },
     [TOGGLE_LESSON_No]: (state, mode) => {
       state.lesson_No = mode

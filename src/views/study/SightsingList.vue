@@ -23,13 +23,43 @@
           />
         </a-list-item>
       </a-list>
+      <a-modal
+        v-model:visible="modelVisible"
+        title="双声部信息录入"
+        :confirm-loading="confirmLoading"
+        @ok="handleOk"
+        @cancel="handleCancel"
+        :destroyOnClose="true"
+      >
+        <p>请搜索输入双声部合作同学的学号</p>
+        <a-input-search
+          v-model:value="studentId"
+          placeholder="请输入学号后进行搜索"
+          enter-button
+          @search="onSearch"
+          :loading="searchLoading"
+        />
+        <a-list-item v-if="coopStudentInfo.id != ''">
+          <a-list-item-meta :description="coopStudentInfo.id">
+            <a-avatar slot="avatar" size="large" :src="coopStudentInfo.avatar" />
+            <div slot="title">
+              {{ coopStudentInfo.name }}
+            </div>
+          </a-list-item-meta>
+        </a-list-item>
+        <!-- 暂时不用选声部，进入哪个声部就唱哪个声部 -->
+        <!-- <p style="margin-top: 10px">请选择你将要演唱的声部</p>
+        <a-space direction="vertical">
+          <a-radio-group v-model:value="voicePart" option-type="button" :options="plainOptions" />
+        </a-space> -->
+      </a-modal>
     </a-card>
   </div>
 </template>
 
 <script>
 import { SightsingListContent } from '@/components'
-import { getSightsingingList } from '@/api/manage'
+import { getSightsingingList, getStudentInfo } from '@/api/manage'
 import notification from 'ant-design-vue/es/notification'
 
 const statusMap = {
@@ -38,14 +68,19 @@ const statusMap = {
     text: '待完成',
   },
   1: {
-    status: 'default',
+    status: 'success',
     text: '已完成',
   },
   2: {
     status: 'error',
     text: '已逾期',
   },
+  3: {
+    status: 'default',
+    text: '未开放',
+  },
 }
+const plainOptions = ['低声部', '高声部']
 
 export default {
   components: {
@@ -59,6 +94,18 @@ export default {
       form: this.$form.createForm(this),
       lesson_No: '',
       grade: this.$store.getters.userInfo.course.grade,
+      quesDetail: '',
+      modelVisible: false,
+      confirmLoading: false,
+      searchLoading: false,
+      studentId: '',
+      coopStudentInfo: {
+        id: '',
+        avater: '',
+        name: '',
+      },
+      voicePart: '低声部',
+      plainOptions,
     }
   },
   beforeMount() {
@@ -72,7 +119,19 @@ export default {
   methods: {
     // 跳转至对应练耳页面
     handleEdit(item) {
-      this.$router.push({ name: 'sightsing', params: { quesDetail: item } })
+      if (item.state == 3) {
+        notification.error({
+          message: '该题目尚未开放',
+          description: '',
+        })
+      } else {
+        if (item.part_id.charAt(2) == '3') {
+          this.quesDetail = item
+          this.modelVisible = true
+        } else {
+          this.$router.push({ name: 'sightsing', params: { quesDetail: item } })
+        }
+      }
     },
     getList(lesson_No) {
       if (lesson_No) {
@@ -94,6 +153,54 @@ export default {
             description: e,
           })
         })
+    },
+    handleOk() {
+      if (this.coopStudentInfo.id != '') {
+        this.$router.push({
+          name: 'sightsing',
+          params: { quesDetail: this.quesDetail, coopStudentInfo: this.coopStudentInfo },
+        })
+      } else {
+        notification.error({
+          message: '请搜索合作者后再进行作答！',
+          description: '未选择双声部合作同学',
+        })
+      }
+    },
+    handleCancel() {
+      this.confirmLoading = false
+      this.searchLoading = false
+      this.studentId = ''
+      this.coopStudentInfo = {
+        id: '',
+        avater: '',
+        name: '',
+      }
+    },
+    onSearch() {
+      if (this.studentId == '') {
+        notification.error({
+          message: '请输入学号后再进行搜索',
+          duration: 2,
+        })
+      } else {
+        this.searchLoading = true
+        const parameter = { studentId: this.studentId }
+        getStudentInfo(parameter)
+          .then((res) => {
+            this.searchLoading = false
+            console.log(res.result)
+            this.coopStudentInfo = res.result
+          })
+          .catch((e) => {
+            this.searchLoading = false
+            console.error('查询学生失败', e)
+            notification.error({
+              message: '查询学生失败',
+              description: e.response.data,
+            })
+          })
+      }
     },
   },
 }

@@ -9,14 +9,16 @@
           <a-descriptions-item label="乐器">{{ quesDetail.audio_detail.audio_instrument }}</a-descriptions-item>
           <a-descriptions-item label="名族">{{ quesDetail.audio_detail.audio_nation }}</a-descriptions-item>
           <a-descriptions-item></a-descriptions-item>
+          <a-descriptions-item v-if="quesType != 0" label="低声部">{{ lowPart }}</a-descriptions-item>
+          <a-descriptions-item v-if="quesType != 0" label="高声部">{{ highPart }}</a-descriptions-item>
         </a-descriptions>
         <div style="font-size: 14px; color: rgba(0, 0, 0, 0.85); margin-bottom: 16px; font-weight: 500">
-          <div style="margin-bottom: 16px">范例音:<audio-player :src="global_url + quesDetail.audio_path" /></div>
-          <div>节拍器:<audio-player :src="metroSrc" /></div>
+          <div>范例音:<audio-player style="margin-top: 12px" :src="quesDetail.audio_path" /></div>
+          <div style="margin-top: 16px">节拍器:<audio-player style="margin-top: 12px" :src="metroSrc" /></div>
         </div>
 
         <a-card type="inner" title="曲谱信息" style="margin-top: 24px">
-          <img :width="800" :src="global_url + quesDetail.pic_path" />
+          <img :width="800" :src="quesDetail.pic_path" />
         </a-card>
         <a-card>
           <div style="min-height: 250px">
@@ -83,6 +85,7 @@ export default {
       userInfo: this.$store.getters.userInfo,
       quesDetail: {},
       record: {},
+      coopStudentInfo: {},
       statusMap,
     }
   },
@@ -94,21 +97,29 @@ export default {
     },
     metroSrc() {
       return (
-        this.global_url +
-        'library/metronome/' +
-        this.quesDetail.note +
-        '_' +
-        this.quesDetail.beat +
-        '_' +
-        this.quesDetail.bpm +
-        '.mp3'
+        '/library/metronome/' + this.quesDetail.note + '_' + this.quesDetail.beat + '_' + this.quesDetail.bpm + '.mp3'
       )
+    },
+    // 单声部为0，低声部为1，高声部为2
+    quesType() {
+      console.log(this.quesDetail.part_id.charAt(12))
+      return this.quesDetail.part_id.charAt(12)
+    },
+
+    lowPart() {
+      return this.quesType == '1' ? this.userInfo.name : this.coopStudentInfo.name
+    },
+    highPart() {
+      return this.quesType == '2' ? this.userInfo.name : this.coopStudentInfo.name
     },
   },
   beforeMount() {
     if (this.$route.params.quesDetail) {
       this.quesDetail = this.$route.params.quesDetail
       console.log('题目信息：', this.quesDetail)
+      if ('coopStudentInfo' in this.$route.params) {
+        this.coopStudentInfo = this.$route.params.coopStudentInfo
+      }
     } else {
       this.$router.push({ name: 'home', replace: true })
     }
@@ -159,11 +170,16 @@ export default {
         })
     },
     submitHomework(res) {
-      const parameter = {
+      let parameter = {
         part_id: this.quesDetail.part_id,
         audio: res.content.replace('http://127.0.0.1:8000/media/', ''),
         user: this.userInfo.user,
       }
+      // 双声部有合作者
+      if (this.quesType != '0') {
+        parameter['coopStudentInfo'] = this.coopStudentInfo
+      }
+      console.log(parameter)
       uploadSightsingingAnswer(parameter)
         .then((res) => {
           notification.success({

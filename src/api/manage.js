@@ -9,14 +9,21 @@ const api = {
   orgTree: '/org/tree',
   studentList: '/manage/studentList',
   commitList: '/manage/commitList',
-  noticeList: '/api/notice/',
-  ChoiceQuesList: '/api/question/choice/',
-  SightsingingList: '/api/question/sightsinging_list/',
-  ChoiceList: '/api/question/choice_list/',
-  QuesGroupList: '/api/homework/quse_group/',
-  ChoiceRecord: '/api/homework/choice/',
-  SightsingingRecord: '/api/homework/sightsinging/',
-  UploadAudio: '/api/router/audio/',
+  noticeList: '/notice/',
+  ChoiceQuesList: '/question/choice/',
+  DictationQuesList: '/question/dictation/',
+  SightsingingQuesList: '/question/sightsinging/',
+  SightsingingList: '/question/sightsinging_list/',
+  ChoiceList: '/question/choice_list/',
+  DictationList: '/question/dictation_list/',
+  QuesGroupList: '/homework/quse_group/',
+  ChoiceRecord: '/homework/choice/',
+  SightsingingRecord: '/homework/sightsinging/',
+  DictationRecord: '/homework/dictation/',
+  UploadAudio: '/router/audio/',
+  UploadJson: '/router/json/',
+  UploadPNG: '/router/png/',
+  studentInfo: '/user/student_info/',
 }
 
 export default api
@@ -86,6 +93,14 @@ export function getStudentList(parameter) {
     params: parameter,
   })
 }
+// 获得学生信息
+export function getStudentInfo(parameter) {
+  return request({
+    url: api.studentInfo,
+    method: 'get',
+    params: parameter,
+  })
+}
 export function getCommitList(parameter) {
   return request({
     url: api.commitList,
@@ -130,6 +145,20 @@ export function getChoiceQuesList(parameter) {
     params: parameter,
   })
 }
+export function getDictationQuesList(parameter) {
+  return request({
+    url: api.DictationQuesList,
+    method: 'get',
+    params: parameter,
+  })
+}
+export function getSightsingingQuesList(parameter) {
+  return request({
+    url: api.SightsingingQuesList,
+    method: 'get',
+    params: parameter,
+  })
+}
 
 export function getSightsingingList(parameter) {
   return request({
@@ -141,6 +170,13 @@ export function getSightsingingList(parameter) {
 export function getChoiceList(parameter) {
   return request({
     url: api.ChoiceList,
+    method: 'get',
+    params: parameter,
+  })
+}
+export function getDictationList(parameter) {
+  return request({
+    url: api.DictationList,
     method: 'get',
     params: parameter,
   })
@@ -167,10 +203,34 @@ export function uploadSightsingingAnswer(parameter) {
     data: parameter,
   })
 }
+export function uploadDictionAnswer(parameter) {
+  return request({
+    url: api.DictationRecord,
+    method: 'post',
+    data: parameter,
+  })
+}
 
 export function uploadAudio(parameter) {
   return request({
     url: api.UploadAudio,
+    method: 'post',
+    data: parameter,
+  })
+}
+export function uploadJson(parameter) {
+  return request({
+    url: api.UploadJson,
+    method: 'post',
+    data: parameter,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+    },
+  })
+}
+export function uploadPNG(parameter) {
+  return request({
+    url: api.UploadPNG,
     method: 'post',
     data: parameter,
   })

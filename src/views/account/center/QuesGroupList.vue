@@ -1,7 +1,7 @@
 <template>
   <div>
     <a-list size="large" rowKey="id" :loading="loading" itemLayout="vertical" :dataSource="itemList">
-      <a-list-item :key="item.id" slot="renderItem" slot-scope="item">
+      <a-list-item :key="item.id" slot="renderItem" slot-scope="item" @click="handleEdit(item)">
         <template slot="actions">
           <icon-text type="robot" text="AI评分:" :score="item.computer_score" />
           <icon-text type="solution" text="教师评分:" :score="item.teacher_score" />
@@ -75,6 +75,30 @@ export default {
             description: e,
           })
         })
+    },
+    // 跳转至对应听写页面
+    handleEdit(item) {
+      console.log(item)
+      switch (item.group_part_id.charAt(0)) {
+        case '3':
+          this.$router.push({
+            name: 'choice-result',
+            params: { part_id: item.group_part_id + '01', sumScore: item.computer_score },
+          })
+          break
+        case '0':
+          this.$router.push({
+            name: 'sightsing-result',
+            params: { part_id: item.group_part_id + '01', sumScore: item.teacher_score },
+          })
+          break
+        case '4':
+          this.$router.push({
+            name: 'dictation-result',
+            params: { part_id: item.group_part_id + '01', sumScore: item.teacher_score },
+          })
+          break
+      }
     },
   },
 }

@@ -3,8 +3,7 @@ export default {
   'user.login.password': 'password',
   'user.login.username.placeholder': 'Account: admin',
   'user.login.password.placeholder': 'password: admin or ant.design',
-  'user.login.message-invalid-credentials':
-    'Invalid username or password（admin/ant.design）',
+  'user.login.message-invalid-credentials': 'Invalid username or password(admin/ant.design)',
   'user.login.message-invalid-verification-code': 'Invalid verification code',
   'user.login.tab-login-credentials': 'Credentials',
   'user.login.tab-login-mobile': 'Mobile number',
@@ -18,7 +17,8 @@ export default {
   'user.register.register': 'Register',
   'user.register.email.placeholder': 'Email',
   'user.register.password.placeholder': 'Password ',
-  'user.register.password.popover-message': 'Please enter at least 6 characters. Please do not use passwords that are easy to guess. ',
+  'user.register.password.popover-message':
+    'Please enter at least 6 characters. Please do not use passwords that are easy to guess. ',
   'user.register.confirm-password.placeholder': 'Confirm password',
   'user.register.get-verification-code': 'Get code',
   'user.register.sign-in': 'Already have an account?',
@@ -32,8 +32,7 @@ export default {
   'user.userName.required': 'Please enter account name or email address',
   'user.password.required': 'Please enter your password!',
   'user.password.twice.msg': 'The passwords entered twice do not match!',
-  'user.password.strength.msg':
-    'The password is not strong enough',
+  'user.password.strength.msg': 'The password is not strong enough',
   'user.password.strength.strong': 'Strength: strong',
   'user.password.strength.medium': 'Strength: medium',
   'user.password.strength.low': 'Strength: low',
@@ -41,5 +40,5 @@ export default {
   'user.confirm-password.required': 'Please confirm your password!',
   'user.phone-number.required': 'Please enter your phone number!',
   'user.phone-number.wrong-format': 'Please enter a valid phone number',
-  'user.verification-code.required': 'Please enter the verification code!'
+  'user.verification-code.required': 'Please enter the verification code!',
 }

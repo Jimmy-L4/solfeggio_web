@@ -31,13 +31,6 @@ define(function (require) {
   var $ = require('jquery')
   var LJS = require('LJS')
 
-  // console.log(LJS);
-
-  var testSongs = require('library/test-songs')
-
-  // var popIn = new LJS.PopIn.PopIn('Hello', 'Test<br />ok');
-  // popIn.render();
-
   var menuHTML = document.getElementById('menu-container')
   var viewerHTML = $('#canvas_container')[0]
   var playerHTML = $('#player_test')[0]
@@ -69,12 +62,6 @@ define(function (require) {
       autoload: false,
       progressBar: true,
     },
-    // audio: {
-    //   audioFile: '/tests/audio/solar.wav',
-    //   tempo: 170
-    //   audioFile: '/tests/audio/Solar_120_bpm.335',
-    //   tempo: 120,
-    // },
     midi: {
       soundfontUrl: soundfontUrl,
     },
@@ -82,67 +69,11 @@ define(function (require) {
 
   var params = {
     viewer: viewerOptions,
-    player: playerOptions,
-    edition: {
-      notes: true,
-      imgUrl: {
-        notes: '../../imgs/NoteEdition/img',
-        chords: '../../imgs/NoteEdition/img',
-        structure: '../../imgs/NoteEdition/img',
-      },
-      chords: true,
-      structure: true,
-      history: {
-        enable: false,
-        HTMLElement: historyHTML, // if not precised, then it doesn't display history but keyboard ctrl+z and y are working
-      },
-      menu: {
-        HTMLElement: menuHTML,
-      },
-      composerSuggestions: ['Miles Davis', 'John Coltrane', 'Bill Evans', 'Charlie Parker', 'Thelonious Monk'],
-      saveButton: true,
-      saveAsButton: true,
-      import: false,
-      saveFunction: saveFunction,
-    },
   }
 
-  // var myLeadsheet1 = LJS.easyBuild('viewer', testSongs.simpleLeadSheet, viewerHTML, viewerOptions);
-  // var myLeadsheet2 = LJS.easyBuild('player', testSongs.simpleLeadSheet, playerHTML, playerOptions);
-  var solar = require('library/songs/empty')
+  var solar = require(JSON.parse('http://localhost:8000/media/json/20220819/401000000000000020301-1.json'))
   var myLeadsheet = LJS.init(solar, params)
   //we need to draw again to take into account the new comments module.
 
   $.publish('ToViewer-draw', myLeadsheet.songModel)
-  function fnChild(arg) {
-    console.log(arg)
-  }
-  function saveFunction(JSONSong, songId, derivedId, callback) {
-    console.log(window.parent)
-    // 调用父类的方法
-    window.parent.updateModel(JSONSong, '')
-    // 向父vue页面发送信息
-    window.parent.postMessage(
-      {
-        cmd: 'submitWork',
-        params: {
-          JSONSong,
-          songId,
-          derivedId,
-        },
-      },
-      '*'
-    )
-    // 接受父页面发来的信息
-    window.addEventListener('message', function (event) {
-      var data = event.data
-      switch (data.cmd) {
-        case 'getFormJson':
-          // 处理业务逻辑
-          break
-      }
-    })
-    callback({ id: songId, error: false })
-    // console.log(JSONSong)
-  }
 })

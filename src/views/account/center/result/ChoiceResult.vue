@@ -1,0 +1,124 @@
+<template>
+  <page-header-wrapper title="选择题作业详情" content="选择题作业详情页面">
+    <a-card :body-style="{ padding: '24px 32px' }" :bordered="false">
+      <a-card :title="groupTitle" :bordered="false">
+        <a-card class="questionCard" v-for="(item, index) in questionList" :key="0 + index">
+          <div slot="title">
+            <p>{{ item.ques_txt }} {{ item.choice_ans }}</p>
+            <p>提交的答案为：{{ item.userAnswer.toUpperCase() }}</p>
+
+            <a-divider style="margin: 16px 0" />
+            <!-- 题目信息 -->
+            <img v-if="item.ques_pic_path" :width="500" :src=" item.ques_pic_path" />
+            <a-divider v-if="item.ques_pic_path" style="margin: 16px 0" />
+            <!-- 题目音频 -->
+            <my-player
+              :src=" item.ques_audio_path"
+              :metroSrc="metroSrc(item)"
+            />
+          </div>
+          <!-- 选项 -->
+          <a-radio-group v-model:value="item.userAnswer" buttonStyle="solid" :disabled="true">
+            <a-radio-button
+              class="radioStyle"
+              :value="inx"
+              v-for="(answer, inx) in item.answer"
+              :key="inx"
+              style="height: auto"
+              hoverable
+            >
+              <a-card style="width: 100%" hoverable>
+                <!-- 选项文字 -->
+                <a-card-meta :title="answer.txt ? inx.toUpperCase() + ':   ' + answer.txt : inx.toUpperCase() + ':   '">
+                </a-card-meta>
+                <!-- 选项图片 -->
+                <template #cover> <img alt="练耳选择题题目" :src=" answer.pic_path" /> </template>
+              </a-card>
+            </a-radio-button>
+          </a-radio-group>
+        </a-card>
+      </a-card>
+    </a-card>
+    <!-- fixed footer toolbar -->
+    <footer-tool-bar>
+      <p style="font-size: 10">本题组总得分为：{{ sumScore }}</p>
+    </footer-tool-bar>
+  </page-header-wrapper>
+</template>
+
+<script>
+import FooterToolBar from '@/components/FooterToolbar'
+import { getChoiceQuesList, uploadChoiceAnswer } from '@/api/manage'
+import notification from 'ant-design-vue/es/notification'
+
+export default {
+  name: 'ChoiceResult',
+  components: {
+    FooterToolBar,
+  },
+  data() {
+    return {
+      global_url: 'https://musicmuc.chimusic.net/solfeggio/',
+      metronome: this.$store.getters.metronome,
+      questionList: [],
+      part_id: '',
+      sumScore: 0,
+    }
+  },
+  beforeCreate() {
+    if (!this.$route.params.part_id) {
+      this.$router.push({ name: 'home', replace: true })
+    }
+  },
+  beforeMount() {
+    if (this.$route.params.part_id) {
+      this.part_id = this.$route.params.part_id
+      this.sumScore = this.$route.params.sumScore
+      console.log('首题part_id:', this.part_id)
+    } else {
+      this.$router.push({ name: 'home', replace: true })
+    }
+  },
+  mounted() {this.getQuestion()},
+  computed: {
+    groupTitle() {
+      return this.questionList.length ? this.questionList[0]['L_ques_txt'] : ''
+    },
+    metroSrc() {
+      return (item) => {
+        if (this.metronome) {
+          return '/library/metronome/' + item.note + '_' + item.beat + '_' + item.bpm + '.mp3'
+        } else {
+          return ''
+        }
+      }
+    },
+  },
+  methods: {
+    getQuestion() {
+      const parameter = { part_id: this.part_id, withAnswer: 1 }
+      getChoiceQuesList(parameter)
+        .then((res) => {
+          this.questionList = res
+          console.log('题目列表', this.questionList)
+        })
+        .catch((e) => {
+          console.error('获取选择题信息失败', e)
+          notification.error({
+            message: '获取选择题信息失败',
+            description: e.response.data,
+          })
+        })
+    },
+  },
+}
+</script>
+<style lang="less" scoped>
+.questionCard {
+  margin-top: 12px;
+}
+.radioStyle {
+  display: flex;
+  margin-top: 12px;
+}
+</style>

@@ -1,16 +1,16 @@
 import request from '@/utils/request'
 
 const userApi = {
-  Login: '/api/token/',
-  Logout: '/auth/logout',
+  Login: '/token/',
+  Logout: '/user/logout/',
   ForgePassword: '/auth/forge-password',
   Register: '/auth/register',
   twoStepCode: '/auth/2step-code',
   SendSms: '/account/sms',
   SendSmsErr: '/account/sms_err',
   // get my info
-  UserInfo: '/api/user/userinfo/',
-  UserMenu: '/api/user/nav/',
+  UserInfo: '/user/userinfo/',
+  UserMenu: '/user/nav/',
 }
 
 /**
@@ -47,6 +47,13 @@ export function getInfo() {
     headers: {
       'Content-Type': 'application/json;charset=UTF-8',
     },
+  })
+}
+export function updateUserInfo(parameter) {
+  return request({
+    url: userApi.UserInfo,
+    method: 'put',
+    data: parameter,
   })
 }
 

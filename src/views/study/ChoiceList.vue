@@ -42,12 +42,16 @@ const statusMap = {
     text: '待完成',
   },
   1: {
-    status: 'default',
+    status: 'success',
     text: '已完成',
   },
   2: {
     status: 'error',
     text: '已逾期',
+  },
+  3: {
+    status: 'default',
+    text: '未开放',
   },
 }
 
@@ -86,7 +90,15 @@ export default {
     },
     // 跳转至对应练耳页面
     handleEdit(item) {
-      this.$router.push({ name: 'choice', params: { part_id: item.part_id,state:item.state } })
+      if (item.state == 3) {
+        notification.error({
+            message: '该题目尚未开放',
+            description: '',
+          })
+      }else{
+        this.$router.push({ name: 'choice', params: { part_id: item.part_id, state: item.state } })
+      }
+      
     },
     getList(lesson_No) {
       if (lesson_No) {

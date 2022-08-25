@@ -1,15 +1,27 @@
 <template>
   <div>
-    <div class="ant-pro-pages-list-projects-cardList">
-      <a-list :loading="loading" :data-source="itemList" :grid="{ gutter: 24, xl: 4, lg: 3, md: 3, sm: 2, xs: 1 }">
+    <div class="ant-pro-pages-list-applications-filterCardList">
+      <a-list
+        :loading="loading"
+        :data-source="itemList"
+        :grid="{ gutter: 24, xl: 4, lg: 3, md: 3, sm: 2, xs: 1 }"
+        style="margin-top: 24px"
+      >
         <a-list-item slot="renderItem" slot-scope="item">
-          <a-card class="ant-pro-pages-list-projects-card" hoverable>
-            <img slot="cover" :src="item.cover" :alt="item.title" />
-            <a-card-meta :title="item.title" @click="handleEdit()">
-              <template slot="description">
-                <ellipsis :length="50">{{ item.description }}</ellipsis>
-              </template>
-            </a-card-meta>
+          <a-card :body-style="{ paddingBottom: 20 }" hoverable @click="handleEdit(item)">
+            <a-card-meta :title="item.title"> </a-card-meta>
+            <template slot="actions">
+              <div>
+                <a-icon type="edit" />
+                作答
+              </div>
+              <a-tooltip :title="item.stateDec">
+                <a-badge :status="statusMap[item.state].status" :text="statusMap[item.state].text" />
+              </a-tooltip>
+            </template>
+            <div class="">
+              <card-info :qusNum="item.qusNum" :sumScore="item.sumScore"></card-info>
+            </div>
           </a-card>
         </a-list-item>
       </a-list>
@@ -19,21 +31,44 @@
 
 <script>
 import moment from 'moment'
-import { AvatarList, Ellipsis } from '@/components'
+import { AvatarList } from '@/components'
+import CardInfo from './components/CardInfo'
+import { getDictationList } from '@/api/manage'
+import notification from 'ant-design-vue/es/notification'
 const AvatarListItem = AvatarList.Item
+const statusMap = {
+  0: {
+    status: 'processing',
+    text: '待完成',
+  },
+  1: {
+    status: 'success',
+    text: '已完成',
+  },
+  2: {
+    status: 'error',
+    text: '已逾期',
+  },
+  3: {
+    status: 'default',
+    text: '未开放',
+  },
+}
 
 export default {
   components: {
     AvatarList,
-    Ellipsis,
     AvatarListItem,
+    CardInfo,
   },
   data() {
     return {
+      statusMap,
       itemList: [],
       form: this.$form.createForm(this),
       loading: true,
       lesson_No: '',
+      grade: this.$store.getters.userInfo.course.grade,
     }
   },
   filters: {
@@ -44,7 +79,7 @@ export default {
   beforeMount() {
     if (this.$route.params.lesson_No) {
       this.lesson_No = this.$route.params.lesson_No
-    }else{
+    } else {
       this.lesson_No = this.$store.getters.lesson_No
     }
     this.getList()
@@ -53,9 +88,18 @@ export default {
     handleChange(value) {
       console.log(`selected ${value}`)
     },
-    // 跳转至对应听写题页面
-    handleEdit() {
-      this.$router.push({ name: 'dictation', params: {} })
+    // 跳转至对应听写页面
+    handleEdit(item) {
+      if (item.state == 3) {
+        notification.error({
+            message: '该题目尚未开放',
+            description: '',
+          })
+      }else{
+        this.$router.push({ name: 'dictation', params: { part_id: item.part_id, state: item.state } })
+
+      }
+      
     },
     getList(lesson_No) {
       if (lesson_No) {
@@ -63,11 +107,20 @@ export default {
       }
       this.loading = true
       console.log('练耳听写题列表获取')
-      this.$http.get('/study/dictationList', { params: { lesson_No: this.lesson_No } }).then((res) => {
-        console.log('res', res)
-        this.itemList = res.result
-        this.loading = false
-      })
+      const parameter = { lesson_No: this.lesson_No, grade: this.grade }
+      getDictationList(parameter)
+        .then((res) => {
+          console.log('练耳听写题列表', res.result)
+          this.itemList = res.result
+          this.loading = false
+        })
+        .catch((e) => {
+          console.error('获取听写题列表失败', e)
+          notification.error({
+            message: '获取听写题列表失败',
+            description: e,
+          })
+        })
     },
   },
 }

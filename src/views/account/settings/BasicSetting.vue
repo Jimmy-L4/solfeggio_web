@@ -44,6 +44,8 @@
 <script>
 import { baseMixin } from '@/store/app-mixin'
 import { TOGGLE_METRONOME } from '@/store/mutation-types'
+import { updateUserInfo } from '@/api/login'
+import notification from 'ant-design-vue/es/notification'
 
 export default {
   mixins: [baseMixin],
@@ -60,6 +62,21 @@ export default {
   methods: {
     onChange(checked) {
       this.$store.commit(TOGGLE_METRONOME, checked)
+      const paramter = { metronome: checked }
+      updateUserInfo(paramter)
+        .then((res) => {
+          notification.success({
+            message: '更新设置成功',
+            description: '节拍器和标准音开关：' + checked,
+          })
+        })
+        .catch((e) => {
+          console.error('更新设置失败', e)
+          notification.error({
+            message: '更新设置失败',
+            description: e,
+          })
+        })
     },
     validate() {},
   },

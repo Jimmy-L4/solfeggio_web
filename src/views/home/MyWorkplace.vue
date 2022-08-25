@@ -87,7 +87,7 @@
             <div>
               <a-empty v-if="!notices.length" description="暂无通知" />
               <a-list-item :key="index" v-for="(item, index) in notices">
-                <a-list-item-meta :description="item.startAt">
+                <a-list-item-meta :description="item.startAt.replace('T', ' ').substring(0, 19)">
                   <a-avatar slot="avatar" size="large" :src="item.user.avatar" />
                   <div slot="title">
                     {{ item.project.title }}
@@ -117,25 +117,25 @@ import notification from 'ant-design-vue/es/notification'
 const projects = [
   {
     id: 1,
-    cover: '/api/media/image/sightsinging.png',
+    cover: '/media/image/sightsinging.png',
     title: '视唱',
     description: '视唱作业',
   },
   {
     id: 2,
-    cover: '/api/media/image/choice.png',
+    cover: '/media/image/choice.png',
     title: '练耳选择题',
     description: '练耳选择题作业',
   },
   {
     id: 3,
-    cover: '/api/media/image/dictation.png',
+    cover: '/media/image/dictation.png',
     title: '练耳听写题',
     description: '练耳听写题作业',
   },
 ]
 const lesson_text = ['一', '二', '三', '四', '五', '六', '七', '八']
-const state_text = ['进行中', '已截止']
+const state_text = ['已截止', '未开放', '进行中']
 
 export default {
   name: 'MyWorkplace',
@@ -156,19 +156,22 @@ export default {
       activities: [],
       notices: [],
       lesson_No: this.$store.getters.lesson_No,
-      lesson_state: 0,
+      userInfo: this.$store.getters.userInfo,
     }
   },
   computed: {
     ...mapState({
       welcome: (state) => state.user.welcome,
     }),
-    userInfo() {
-      return this.$store.getters.userInfo
-    },
     deadline() {
       const deadline = this.userInfo.lesson_deadline.replace('T', ' ')
       return '当前课次(截止时间:' + deadline + ')'
+    },
+    lesson_state() {
+      const lesson_Number = Number(this.lesson_No)
+      const state = this.userInfo.vailLessons[lesson_Number - 1]
+      console.log(state)
+      return state + 1
     },
   },
   created() {

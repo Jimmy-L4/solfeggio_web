@@ -7,22 +7,10 @@
             {{ item.ques_txt }}
             <a-divider style="margin: 16px 0" />
             <!-- 题目信息 -->
-            <img v-if="item.ques_pic_path" :width="500" :src="global_url + item.ques_pic_path" />
+            <img v-if="item.ques_pic_path" :width="500" :src="item.ques_pic_path" />
             <a-divider v-if="item.ques_pic_path" style="margin: 16px 0" />
             <!-- 题目音频 -->
-            <my-player
-              :src="global_url + item.ques_audio_path"
-              :metroSrc="
-                global_url +
-                'library/metronome/' +
-                item.note +
-                '_' +
-                item.beat +
-                '_' +
-                item.bpm +
-                '.mp3'
-              "
-            />
+            <my-player :src="item.ques_audio_path" :metroSrc="metroSrc(item)" />
           </div>
           <!-- 选项 -->
           <a-radio-group v-model:value="item.userAnswer" @change="handleChange()" buttonStyle="solid">
@@ -39,7 +27,7 @@
                 <a-card-meta :title="answer.txt ? inx.toUpperCase() + ':   ' + answer.txt : inx.toUpperCase() + ':   '">
                 </a-card-meta>
                 <!-- 选项图片 -->
-                <template #cover> <img alt="练耳选择题题目" :src="global_url + answer.pic_path" /> </template>
+                <template #cover> <img alt="练耳选择题题目" :src="answer.pic_path" /> </template>
               </a-card>
             </a-radio-button>
           </a-radio-group>
@@ -95,6 +83,7 @@ export default {
       part_id: '',
       state: 0,
       userInfo: this.$store.getters.userInfo,
+      metronome: this.$store.getters.metronome,
     }
   },
   beforeCreate() {
@@ -116,6 +105,15 @@ export default {
   computed: {
     groupTitle() {
       return this.questionList.length ? this.questionList[0]['L_ques_txt'] : ''
+    },
+    metroSrc() {
+      return (item) => {
+        if (this.metronome) {
+          return '/library/metronome/' + item.note + '_' + item.beat + '_' + item.bpm + '.mp3'
+        } else {
+          return ''
+        }
+      }
     },
   },
   methods: {
@@ -181,7 +179,7 @@ export default {
       console.log(this.questionList)
     },
     getQuestion() {
-      const parameter = { part_id: this.part_id }
+      const parameter = { part_id: this.part_id, withAnswer: 0 }
       getChoiceQuesList(parameter)
         .then((res) => {
           this.questionList = res
