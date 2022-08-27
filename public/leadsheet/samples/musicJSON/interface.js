@@ -71,7 +71,7 @@ define(function (require) {
     viewer: viewerOptions,
   }
 
-  var solar = require(JSON.parse('http://localhost:8000/media/json/20220819/401000000000000020301-1.json'))
+  var solar = require()
   var myLeadsheet = LJS.init(solar, params)
   //we need to draw again to take into account the new comments module.
 

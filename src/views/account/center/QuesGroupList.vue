@@ -89,7 +89,7 @@ export default {
         case '0':
           this.$router.push({
             name: 'sightsing-result',
-            params: { part_id: item.group_part_id + '01', sumScore: item.teacher_score },
+            params: { part_id: item.group_part_id + '01', sumScore: item.teacher_score, recordId: item.record_id },
           })
           break
         case '4':

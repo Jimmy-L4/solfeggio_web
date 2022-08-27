@@ -22,12 +22,14 @@
               style="height: auto"
               hoverable
             >
-              <a-card style="width: 100%" hoverable>
+              <a-card hoverable>
                 <!-- 选项文字 -->
-                <a-card-meta :title="answer.txt ? inx.toUpperCase() + ':   ' + answer.txt : inx.toUpperCase() + ':   '">
-                </a-card-meta>
+                <!-- <a-card-meta :title="answer.txt ? inx.toUpperCase() + ':   ' + answer.txt : inx.toUpperCase() + ':   '">
+                </a-card-meta> -->
                 <!-- 选项图片 -->
-                <template #cover> <img alt="练耳选择题题目" :src="answer.pic_path" /> </template>
+                <template #cover>
+                  <img style="margin: 0 auto; text-align: center" alt="练耳选择题题目" :src="answer.pic_path" />
+                </template>
               </a-card>
             </a-radio-button>
           </a-radio-group>

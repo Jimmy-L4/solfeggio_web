@@ -86,6 +86,7 @@ export default {
       quesDetail: {},
       record: {},
       coopStudentInfo: {},
+      voicePart: '',
       statusMap,
     }
   },
@@ -102,8 +103,13 @@ export default {
     },
     // 单声部为0，低声部为1，高声部为2
     quesType() {
-      console.log(this.quesDetail.part_id.charAt(12))
-      return this.quesDetail.part_id.charAt(12)
+      const typeMap = {
+        '': 0,
+        低声部: 1,
+        高声部: 2,
+      }
+      console.log(typeMap[this.voicePart])
+      return typeMap[this.voicePart]
     },
 
     lowPart() {
@@ -119,6 +125,7 @@ export default {
       console.log('题目信息：', this.quesDetail)
       if ('coopStudentInfo' in this.$route.params) {
         this.coopStudentInfo = this.$route.params.coopStudentInfo
+        this.voicePart = this.$route.params.voicePart
       }
     } else {
       this.$router.push({ name: 'home', replace: true })
@@ -147,7 +154,7 @@ export default {
     startUpload() {
       if (!this.record.url) {
         notification.error({
-          message: '请选择音频后在进行上传！',
+          message: '请选择音频后再进行上传！',
         })
         return
       }
@@ -172,8 +179,9 @@ export default {
     submitHomework(res) {
       let parameter = {
         part_id: this.quesDetail.part_id,
-        audio: res.content.replace('http://127.0.0.1:8000/media/', ''),
+        audio: res.content.replace('http://127.0.0.1:8000', ''),
         user: this.userInfo.user,
+        quesType: this.quesType,
       }
       // 双声部有合作者
       if (this.quesType != '0') {
@@ -205,7 +213,7 @@ export default {
     downloadAudio() {
       if (!this.record.url) {
         notification.error({
-          message: '请选择音频后在进行下载！',
+          message: '请选择音频后再进行下载！',
         })
         return
       }

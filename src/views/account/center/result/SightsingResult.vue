@@ -9,10 +9,12 @@
           <a-descriptions-item label="乐器">{{ quesDetail.audio_detail.audio_instrument }}</a-descriptions-item>
           <a-descriptions-item label="名族">{{ quesDetail.audio_detail.audio_nation }}</a-descriptions-item>
           <a-descriptions-item></a-descriptions-item>
+          <a-descriptions-item v-if="quesType != 0" label="低声部">{{ lowPart }}</a-descriptions-item>
+          <a-descriptions-item v-if="quesType != 0" label="高声部">{{ highPart }}</a-descriptions-item>
         </a-descriptions>
         <div style="font-size: 14px; color: rgba(0, 0, 0, 0.85); margin-bottom: 16px; font-weight: 500">
-          <div style="margin-bottom: 16px">范例音:<audio-player :src="quesDetail.audio_path" /></div>
-          <div>节拍器:<audio-player :src="metroSrc" /></div>
+          <div>范例音:<audio-player style="margin-top: 12px" :src="quesDetail.audio_path" /></div>
+          <div style="margin-top: 16px">节拍器:<audio-player style="margin-top: 12px" :src="metroSrc" /></div>
         </div>
 
         <a-card type="inner" title="曲谱信息" style="margin-top: 24px">
@@ -42,12 +44,12 @@ export default {
   },
   data() {
     return {
-      global_url: 'https://musicmuc.chimusic.net/solfeggio/',
-      baseFile_url: 'http://localhost:8000/media/',
       dragToggle: true,
       quesDetail: {},
       sumScore: 0,
       cardLoad: true,
+      quesType: 0,
+      recordId: 0,
     }
   },
   computed: {
@@ -56,11 +58,18 @@ export default {
         '/library/metronome/' + this.quesDetail.note + '_' + this.quesDetail.beat + '_' + this.quesDetail.bpm + '.mp3'
       )
     },
+    lowPart() {
+      return this.quesType == '1' ? this.quesDetail.user : this.quesDetail.coop_user
+    },
+    highPart() {
+      return this.quesType == '2' ? this.quesDetail.user : this.quesDetail.coop_user
+    },
   },
   beforeMount() {
     if (this.$route.params.part_id) {
       this.part_id = this.$route.params.part_id
       this.sumScore = this.$route.params.sumScore
+      this.recordId = this.$route.params.recordId
     } else {
       this.$router.push({ name: 'home', replace: true })
     }
@@ -70,10 +79,11 @@ export default {
   },
   methods: {
     getQuestion() {
-      const parameter = { part_id: this.part_id }
+      const parameter = { part_id: this.part_id, recordId: this.recordId }
       getSightsingingQuesList(parameter)
         .then((res) => {
           this.quesDetail = res.result
+          this.quesType = res.result['quesType']
           this.cardLoad = false
           console.log('题目信息', this.quesDetail)
         })

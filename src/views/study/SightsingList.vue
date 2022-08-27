@@ -48,10 +48,10 @@
           </a-list-item-meta>
         </a-list-item>
         <!-- 暂时不用选声部，进入哪个声部就唱哪个声部 -->
-        <!-- <p style="margin-top: 10px">请选择你将要演唱的声部</p>
+        <p style="margin-top: 10px">请选择你将要演唱的声部</p>
         <a-space direction="vertical">
           <a-radio-group v-model:value="voicePart" option-type="button" :options="plainOptions" />
-        </a-space> -->
+        </a-space>
       </a-modal>
     </a-card>
   </div>
@@ -94,6 +94,7 @@ export default {
       form: this.$form.createForm(this),
       lesson_No: '',
       grade: this.$store.getters.userInfo.course.grade,
+      userInfo: this.$store.getters.userInfo,
       quesDetail: '',
       modelVisible: false,
       confirmLoading: false,
@@ -158,7 +159,7 @@ export default {
       if (this.coopStudentInfo.id != '') {
         this.$router.push({
           name: 'sightsing',
-          params: { quesDetail: this.quesDetail, coopStudentInfo: this.coopStudentInfo },
+          params: { quesDetail: this.quesDetail, coopStudentInfo: this.coopStudentInfo, voicePart: this.voicePart },
         })
       } else {
         notification.error({
@@ -183,9 +184,14 @@ export default {
           message: '请输入学号后再进行搜索',
           duration: 2,
         })
+      } else if (this.studentId == this.userInfo.id) {
+        notification.error({
+          message: '无法与本人进行合作，请搜索同课程其他同学',
+          duration: 2,
+        })
       } else {
         this.searchLoading = true
-        const parameter = { studentId: this.studentId }
+        const parameter = { studentId: this.studentId, courseId: this.userInfo.course.id }
         getStudentInfo(parameter)
           .then((res) => {
             this.searchLoading = false
@@ -194,6 +200,7 @@ export default {
           })
           .catch((e) => {
             this.searchLoading = false
+            this.coopStudentInfo = { id: '', avater: '', name: '' }
             console.error('查询学生失败', e)
             notification.error({
               message: '查询学生失败',
