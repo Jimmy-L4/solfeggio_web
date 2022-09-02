@@ -24,6 +24,7 @@ const api = {
   UploadJson: '/router/json/',
   UploadPNG: '/router/png/',
   studentInfo: '/user/student_info/',
+  changePass:'/user/change_pass/'
 }
 
 export default api
@@ -101,6 +102,15 @@ export function getStudentInfo(parameter) {
     params: parameter,
   })
 }
+// 修改登录密码
+export function changePass(parameter) {
+  return request({
+    url: api.changePass,
+    method: 'post',
+    data: parameter,
+  })
+}
+
 export function getCommitList(parameter) {
   return request({
     url: api.commitList,
