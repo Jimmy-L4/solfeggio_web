@@ -141,7 +141,7 @@ export default {
                 console.error('err', err)
                 notification.error({
                   message: '更新通知失败！',
-                  description: err,
+                  description: '',
                 })
                 this.confirmLoading = false
               })
@@ -172,7 +172,7 @@ export default {
                 console.error('err', err)
                 notification.error({
                   message: '添加通知失败！',
-                  description: err,
+                  description: '',
                 })
                 this.confirmLoading = false
               })
@@ -210,7 +210,7 @@ export default {
           console.error('err', err)
           notification.error({
             message: record.type ? '下架通知失败！' : '发布通知失败！',
-            description: err,
+            description: '',
           })
           this.iconLoading = false
         })
@@ -237,7 +237,7 @@ export default {
           console.error('err', err)
           notification.error({
             message: '删除通知失败！',
-            description: err,
+            description: '',
           })
           this.iconLoading = false
         })

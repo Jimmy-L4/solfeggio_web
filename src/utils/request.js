@@ -30,11 +30,10 @@ const errorHandler = (error) => {
         description: 'Authorization verification failed',
       })
       if (token) {
-        store.dispatch('Logout').then(() => {
-          setTimeout(() => {
-            window.location.reload()
-          }, 1500)
-        })
+        store.dispatch('ClearToken')
+        setTimeout(() => {
+          window.location.reload()
+        }, 1500)
       }
     }
   }

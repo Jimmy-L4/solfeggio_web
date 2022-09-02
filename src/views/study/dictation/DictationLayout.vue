@@ -2,7 +2,7 @@
   <page-header-wrapper title="听写题答题卡" content="听写题答题卡">
     <a-card :title="groupTitle" :bordered="false">
       <a-card
-        :body-style="{ padding: '24px 32px', height: '700px' }"
+        :body-style="{ padding: '24px 2px', height: '800px' }"
         v-for="(item, index) in questionList.slice(current - 1, current)"
         :key="0 + index"
       >
@@ -21,6 +21,7 @@
         </div>
         <!-- 选项 -->
         <iframe
+          id="subBut"
           v-if="fresh"
           class="iframe_box"
           name="myLeadsheet"
@@ -32,6 +33,7 @@
     </a-card>
 
     <footer-tool-bar>
+      <a-button type="dashed" @click="showInfo">打开听写板教程</a-button>
       <a-tooltip placement="topRight" v-if="statusMap[state].disabled">
         <template #title>
           <span>{{ statusMap[state].text }}</span>
@@ -39,9 +41,31 @@
         <a-button :disabled="true" type="primary" :loading="loading" style="margin-left: 20px">提交</a-button>
       </a-tooltip>
       <a-popconfirm v-else title="确认切换下一题吗？切换后本题将提交！" @confirm="handleSubmit" @cancel="cancelSubmit">
-        <a-button type="primary" :loading="loading">{{ buttonText }}</a-button>
+        <a-button type="primary" :loading="loading" style="margin-left: 20px">{{ buttonText }}</a-button>
       </a-popconfirm>
     </footer-tool-bar>
+    <a-modal v-model:visible="InfoVaild" title="听写板教程" width="70%">
+      <h1>一、功能总览</h1>
+      <img width="100%" src="/media/image/intro1.jpg" alt="教程" />
+      <h3>
+        整个听写板分为菜单栏和输入栏两部分，在输入栏选中指定的音符后（单击音符选中或鼠标拖动多选），可以通过点击菜单栏对应功能按钮来实现音符输入。
+      </h3>
+      <h1>二、菜单栏</h1>
+      <img width="100%" src="/media/image/intro2.jpg" alt="教程" />
+      <h3>
+        菜单栏包括改变音高、升降符号、时值、连音、单音和复制粘贴等功能。在输入栏选中音符后，再点击对应按钮来实现功能；当鼠标悬停在功能按钮上时，会显示功能名称和对应的键盘快捷键，可以通过键盘快捷键来快速执行。
+      </h3>
+      <h1>三、键盘快捷键</h1>
+      <h3>键盘快捷键可以通过键盘来快速实现指定功能,快捷键分为功能快捷键和基本快捷键。</h3>
+      <h2>功能快捷键</h2>
+      <h3>功能快捷键即为菜单栏中所有功能对应的快捷键，将鼠标悬停在功能按钮上即可查看；</h3>
+      <h2>基本快捷键</h2>
+      <p>ABCDEFG - 指定的八度</p>
+      <p>Ctrl+Z - 撤销</p>
+      <p>Ctrl+Y - 恢复</p>
+      <p>Ctrl+C - 复制</p>
+      <p>Ctrl+V - 粘贴</p>
+    </a-modal>
   </page-header-wrapper>
 </template>
 
@@ -50,6 +74,9 @@ import FooterToolBar from '@/components/FooterToolbar'
 import { getDictationQuesList, uploadJson, uploadPNG, uploadDictionAnswer } from '@/api/manage'
 import { timeFix } from '@/utils/util'
 import notification from 'ant-design-vue/es/notification'
+// 新人引导
+import Driver from 'driver.js'
+import 'driver.js/dist/driver.min.css'
 
 const statusMap = {
   0: {
@@ -73,7 +100,6 @@ export default {
   },
   data() {
     return {
-      global_url: 'https://musicmuc.chimusic.net/solfeggio/',
       userInfo: this.$store.getters.userInfo,
       metronome: this.$store.getters.metronome,
       loading: false,
@@ -87,6 +113,7 @@ export default {
       songList: [],
       fresh: true,
       statusMap,
+      InfoVaild: false,
     }
   },
   beforeMount() {
@@ -98,6 +125,10 @@ export default {
       this.$router.push({ name: 'home', replace: true })
     }
     this.getQuestion()
+  },
+  mounted() {
+    this.getQuestion()
+    window.updateModel = this.getModle
   },
   computed: {
     groupTitle() {
@@ -283,10 +314,40 @@ export default {
       this.viewer = viewer
       this.songModel = songModel
     },
-  },
-  mounted() {
-    this.getQuestion()
-    window.updateModel = this.getModle
+    // 打开引导页面
+    showDriver() {
+      console.log(
+        window.document.getElementById('subBut').contentWindow.document.getElementById('edit_pitch_container')
+      )
+      const steps = [
+        {
+          element: window.document
+            .getElementById('subBut')
+            .contentWindow.document.getElementById('edit_pitch_container'), //获取元素节点
+          popover: {
+            title: '我是标题1',
+            description: '我是描述文字1',
+            position: 'bottom-center', //提示框的位置
+          },
+        },
+      ]
+      const driver = new Driver({
+        //初始化引导页
+        doneBtnText: '知道了', // 结束按钮的文字
+        allowClose: false, // 是否可以通过点击遮罩层关闭指引
+        stageBackground: '#fff', // 突出显示元素的背景颜色
+        nextBtnText: '下一步', // 下一步按钮的文字
+        prevBtnText: '上一步', // 上一步按钮的文字
+        closeBtnText: '关闭', // 关闭按钮的文字
+        keyboardControl: false, // 是否允许键盘操控
+        xCloseButton: false, // 将关闭按钮作为X放在弹出
+      })
+      driver.defineSteps(steps)
+      driver.start()
+    },
+    showInfo() {
+      this.InfoVaild = true
+    },
   },
 }
 </script>

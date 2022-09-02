@@ -118,7 +118,7 @@ export default {
           console.error('获取听写题列表失败', e)
           notification.error({
             message: '获取听写题列表失败',
-            description: e,
+            description: '',
           })
         })
     },

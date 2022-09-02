@@ -72,7 +72,7 @@ export default {
           console.error('获取题组提交列表失败', e)
           notification.error({
             message: '获取题组提交列表失败',
-            description: e,
+            description: '',
           })
         })
     },

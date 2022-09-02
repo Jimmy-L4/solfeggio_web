@@ -83,31 +83,25 @@ define(function(){
        "keys": [
         "G\/4"
        ],
-       "duration": "8",
-       tuplet: 'start',
-       time_modification:'3/2'
-      },
-      {
-       "keys": [
-        "G\/4"
-       ],
-       "duration": "8",
-       time_modification:'3/2'
+       "duration": "16",
       },
       {
        "keys": [
         "G\/4"
        ],
        "duration": "16",
-       time_modification:'3/2'
       },
       {
        "keys": [
         "G\/4"
        ],
        "duration": "16",
-       tuplet: 'stop',
-       time_modification:'3/2'
+      },
+      {
+       "keys": [
+        "G\/4"
+       ],
+       "duration": "16",
       },
       {
        "keys": [

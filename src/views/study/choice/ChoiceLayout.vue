@@ -170,7 +170,7 @@ export default {
           console.error('错误', err)
           notification.error({
             message: '上传答案失败',
-            description: err.response.data,
+            description: '',
           })
         })
     },
@@ -191,7 +191,7 @@ export default {
           console.error('获取选择题信息失败', e)
           notification.error({
             message: '获取选择题信息失败',
-            description: e.response.data,
+            description: '',
           })
         })
     },

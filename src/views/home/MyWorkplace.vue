@@ -207,7 +207,7 @@ export default {
           this.loading = false
           notification.error({
             message: '获取题组提交列表失败',
-            description: e,
+            description: '',
           })
         })
     },

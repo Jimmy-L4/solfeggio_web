@@ -9,13 +9,10 @@
 
             <a-divider style="margin: 16px 0" />
             <!-- 题目信息 -->
-            <img v-if="item.ques_pic_path" :width="500" :src=" item.ques_pic_path" />
+            <img v-if="item.ques_pic_path" :width="500" :src="item.ques_pic_path" />
             <a-divider v-if="item.ques_pic_path" style="margin: 16px 0" />
             <!-- 题目音频 -->
-            <my-player
-              :src=" item.ques_audio_path"
-              :metroSrc="metroSrc(item)"
-            />
+            <my-player :src="item.ques_audio_path" :metroSrc="metroSrc(item)" />
           </div>
           <!-- 选项 -->
           <a-radio-group v-model:value="item.userAnswer" buttonStyle="solid" :disabled="true">
@@ -32,7 +29,7 @@
                 <a-card-meta :title="answer.txt ? inx.toUpperCase() + ':   ' + answer.txt : inx.toUpperCase() + ':   '">
                 </a-card-meta>
                 <!-- 选项图片 -->
-                <template #cover> <img alt="练耳选择题题目" :src=" answer.pic_path" /> </template>
+                <template #cover> <img alt="练耳选择题题目" :src="answer.pic_path" /> </template>
               </a-card>
             </a-radio-button>
           </a-radio-group>
@@ -79,7 +76,9 @@ export default {
       this.$router.push({ name: 'home', replace: true })
     }
   },
-  mounted() {this.getQuestion()},
+  mounted() {
+    this.getQuestion()
+  },
   computed: {
     groupTitle() {
       return this.questionList.length ? this.questionList[0]['L_ques_txt'] : ''
@@ -106,7 +105,7 @@ export default {
           console.error('获取选择题信息失败', e)
           notification.error({
             message: '获取选择题信息失败',
-            description: e.response.data,
+            description: '',
           })
         })
     },

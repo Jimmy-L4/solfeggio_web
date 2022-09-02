@@ -106,13 +106,21 @@ const vueConfig = {
       errors: false,
     },
     // development server port 8000
-    port: 8000,
+    port: 8001,
     // If you want to turn on the proxy, please remove the mockjs /src/main.jsL11
     proxy: {
-      '/': {
+      '/api': {
         target: `http://127.0.0.1:8000`,
         changeOrigin: true,
-        pathRewrite: {},
+      },
+      // 题库资源转至服务器访问
+      '/library': {
+        target: `https://musicmuc.chimusic.net`,
+        changeOrigin: true,
+      },
+      '/media': {
+        target: `https://musicmuc.chimusic.net`,
+        changeOrigin: true,
       },
     },
   },

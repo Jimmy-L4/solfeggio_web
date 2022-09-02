@@ -151,7 +151,7 @@ export default {
           console.error('获取视唱题列表失败', e)
           notification.error({
             message: '获取视唱题列表失败',
-            description: e,
+            description: '',
           })
         })
     },
@@ -204,7 +204,7 @@ export default {
             console.error('查询学生失败', e)
             notification.error({
               message: '查询学生失败',
-              description: e.response.data,
+              description: '未查询到学生，请仔细核对学号！',
             })
           })
       }

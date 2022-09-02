@@ -117,7 +117,7 @@ export default {
           console.error('获取选择题列表失败', e)
           notification.error({
             message: '获取选择题列表失败',
-            description: e,
+            description: '',
           })
         })
     },

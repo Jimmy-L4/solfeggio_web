@@ -88,7 +88,7 @@ export default {
           console.error('获取听写题信息失败', e)
           notification.error({
             message: '获取听写题信息失败',
-            description: e.response.data,
+            description: '',
           })
         })
     },

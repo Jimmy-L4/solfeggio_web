@@ -74,7 +74,7 @@ export default {
           console.error('更新设置失败', e)
           notification.error({
             message: '更新设置失败',
-            description: e,
+            description: '',
           })
         })
     },
