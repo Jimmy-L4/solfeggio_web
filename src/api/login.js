@@ -3,6 +3,7 @@ import request from '@/utils/request'
 const userApi = {
   Login: '/token/',
   Logout: '/user/logout/',
+  verifyCode: '/user/verify_code/',
   ForgePassword: '/auth/forge-password',
   Register: '/auth/register',
   twoStepCode: '/auth/2step-code',
@@ -31,6 +32,23 @@ export function login(parameter) {
     data: parameter,
   })
 }
+
+export function setPass(parameter) {
+  return request({
+    url: userApi.UserInfo,
+    method: 'post',
+    data: parameter,
+  })
+}
+
+export function verifyCode(parameter) {
+  return request({
+    url: userApi.verifyCode,
+    method: 'post',
+    data: parameter,
+  })
+}
+
 
 export function getSmsCaptcha(parameter) {
   return request({

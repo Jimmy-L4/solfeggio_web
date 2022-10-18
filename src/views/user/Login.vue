@@ -1,26 +1,26 @@
 <template>
   <div class="main">
-    <a-form id="formLogin" class="user-layout-login" ref="formLogin" :form="form" @submit="handleSubmit">
-      <a-tabs
-        :activeKey="customActiveKey"
-        :tabBarStyle="{ textAlign: 'center', borderBottom: 'unset' }"
-        @change="handleTabClick"
-      >
+    <a-form id="formLogin"
+            class="user-layout-login"
+            ref="formLogin"
+            :form="form"
+            @submit="handleSubmit">
+      <a-tabs :activeKey="customActiveKey"
+              :tabBarStyle="{ textAlign: 'center', borderBottom: 'unset' }"
+              @change="handleTabClick">
         <!-- 账号密码登录 -->
-        <a-tab-pane key="tab1" :tab="$t('user.login.tab-login-credentials')">
-          <a-alert
-            v-if="isLoginError"
-            type="error"
-            showIcon
-            style="margin-bottom: 24px"
-            :message="$t('user.login.message-invalid-credentials')"
-          />
+        <a-tab-pane key="tab1"
+                    :tab="$t('user.login.tab-login-credentials')">
+          <a-alert v-if="isLoginError"
+                   type="error"
+                   showIcon
+                   style="margin-bottom: 24px"
+                   :message="$t('user.login.message-invalid-credentials')" />
           <a-form-item>
-            <a-input
-              size="large"
-              type="text"
-              :placeholder="$t('user.login.username.placeholder')"
-              v-decorator="[
+            <a-input size="large"
+                     type="text"
+                     :placeholder="$t('user.login.username.placeholder')"
+                     v-decorator="[
                 'username',
                 {
                   rules: [
@@ -29,22 +29,23 @@
                   ],
                   validateTrigger: 'change',
                 },
-              ]"
-            >
-              <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }" />
+              ]">
+              <a-icon slot="prefix"
+                      type="user"
+                      :style="{ color: 'rgba(0,0,0,.25)' }" />
             </a-input>
           </a-form-item>
 
           <a-form-item>
-            <a-input-password
-              size="large"
-              :placeholder="$t('user.login.password.placeholder')"
-              v-decorator="[
+            <a-input-password size="large"
+                              :placeholder="$t('user.login.password.placeholder')"
+                              v-decorator="[
                 'password',
                 { rules: [{ required: true, message: $t('user.password.required') }], validateTrigger: 'blur' },
-              ]"
-            >
-              <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }" />
+              ]">
+              <a-icon slot="prefix"
+                      type="lock"
+                      :style="{ color: 'rgba(0,0,0,.25)' }" />
             </a-input-password>
           </a-form-item>
         </a-tab-pane>
@@ -94,15 +95,16 @@
       </a-form-item>
 
       <a-form-item style="margin-top: 24px">
-        <a-button
-          size="large"
-          type="primary"
-          htmlType="submit"
-          class="login-button"
-          :loading="state.loginBtn"
-          :disabled="state.loginBtn"
-          >{{ $t('user.login.login') }}</a-button
-        >
+        <a-button size="large"
+                  type="primary"
+                  htmlType="submit"
+                  class="login-button"
+                  :loading="state.loginBtn"
+                  :disabled="state.loginBtn"> 登录 </a-button>
+        <a-button size="large"
+                  type="primary"
+                  class="login-button"
+                  @click="activate"> 账号激活 </a-button>
       </a-form-item>
 
       <!-- modify by 李崇明 20220402 -->
@@ -122,12 +124,45 @@
       </div> -->
     </a-form>
 
-    <two-step-captcha
-      v-if="requiredTwoStepCaptcha"
-      :visible="stepCaptchaVisible"
-      @success="stepCaptchaSuccess"
-      @cancel="stepCaptchaCancel"
-    ></two-step-captcha>
+    <two-step-captcha v-if="requiredTwoStepCaptcha"
+                      :visible="stepCaptchaVisible"
+                      @success="stepCaptchaSuccess"
+                      @cancel="stepCaptchaCancel"></two-step-captcha>
+
+    <!-- 激活窗口 -->
+    <a-modal v-model:visible="modelVisible"
+             title="账户激活"
+             :confirm-loading="confirmLoading"
+             :okText="verifiable? '确定':'验证'"
+             @ok="handleOk"
+             @cancel="handleCancel"
+             :destroyOnClose="true">
+      <a-form>
+        <a-form-item style="width:88%"
+                     v-if="!verifiable"
+                     label="请输入你的学号及验证码">
+          <a-input v-model:value="studentId"
+                   placeholder="请输入学号" />
+          <a-input v-model:value="verificationCode"
+                   placeholder="请输入验证码,并进行验证">
+          </a-input>
+        </a-form-item>
+
+        <a-form-item v-if="verifiable"
+                     name="password"
+                     style="width:88%"
+                     label="设置密码">
+          <a-input-password v-model="password.newPassword"
+                            placeholder="请输入新密码"
+                            type="password"></a-input-password>
+          <div>重新输入新密码：</div>
+          <a-input-password v-model="password.checkPassword"
+                            placeholder="请再次输入新密码"
+                            type="password"></a-input-password>
+        </a-form-item>
+      </a-form>
+
+    </a-modal>
   </div>
 </template>
 
@@ -136,13 +171,14 @@ import md5 from 'md5'
 import TwoStepCaptcha from '@/components/tools/TwoStepCaptcha'
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
-import { getSmsCaptcha, get2step } from '@/api/login'
+import { setPass, verifyCode, getSmsCaptcha, get2step } from '@/api/login'
+import { notification } from 'ant-design-vue'
 
 export default {
   components: {
     TwoStepCaptcha,
   },
-  data() {
+  data () {
     return {
       customActiveKey: 'tab1',
       loginBtn: false,
@@ -159,9 +195,19 @@ export default {
         loginType: 0,
         smsSendBtn: false,
       },
+      modelVisible: false,
+      confirmLoading: false,
+      studentId: '',
+      verificationCode: '',
+      verifiable: false,
+      password: {
+        newPassword: '',
+        checkPassword: ''
+      }
+
     }
   },
-  created() {
+  created () {
     // get2step({})
     //   .then((res) => {
     //     this.requiredTwoStepCaptcha = res.result.stepCode
@@ -174,7 +220,7 @@ export default {
   methods: {
     ...mapActions(['Login', 'Logout']),
     // handler
-    handleUsernameOrEmail(rule, value, callback) {
+    handleUsernameOrEmail (rule, value, callback) {
       const { state } = this
       const regex = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/
       if (regex.test(value)) {
@@ -184,11 +230,11 @@ export default {
       }
       callback()
     },
-    handleTabClick(key) {
+    handleTabClick (key) {
       this.customActiveKey = key
       // this.form.resetFields()
     },
-    handleSubmit(e) {
+    handleSubmit (e) {
       e.preventDefault()
       const {
         form: { validateFields },
@@ -222,7 +268,7 @@ export default {
         }
       })
     },
-    getCaptcha(e) {
+    getCaptcha (e) {
       e.preventDefault()
       const {
         form: { validateFields },
@@ -261,16 +307,16 @@ export default {
         }
       })
     },
-    stepCaptchaSuccess() {
+    stepCaptchaSuccess () {
       this.loginSuccess()
     },
-    stepCaptchaCancel() {
+    stepCaptchaCancel () {
       this.Logout().then(() => {
         this.loginBtn = false
         this.stepCaptchaVisible = false
       })
     },
-    loginSuccess(res) {
+    loginSuccess (res) {
       console.log(res)
       // check res.homePage define, set $router.push name res.homePage
       // Why not enter onComplete
@@ -293,13 +339,111 @@ export default {
       }, 1000)
       this.isLoginError = false
     },
-    requestFailed(err) {
+    requestFailed (err) {
       this.isLoginError = true
       this.$notification['error']({
         message: '错误',
         description: ((err.response || {}).data || {}).message || '请求出现错误，请稍后再试',
         duration: 4,
       })
+    },
+    activate () {
+      console.log("激活账户");
+      this.modelVisible = true;
+    },
+    handleOk () {
+      if (!this.verifiable) {
+        this.verify()
+      } else {
+        this.submitPassword()
+      }
+    },
+    handleCancel () {
+      // 清空状态
+      this.modelVisible = false
+      this.studentId = ''
+      this.verificationCode = ''
+      this.verifiable = false,
+        this.password = {
+          newPassword: '',
+          checkPassword: ''
+        }
+    },
+    verify () {
+      if (this.studentId == '') {
+        console.log("学号为空");
+        this.$notification['error']({
+          message: '错误',
+          description: '请先输入学号再进行验证！',
+          duration: 6,
+        })
+      } else if (this.verificationCode == '') {
+        console.log("验证码为空");
+        this.$notification['error']({
+          message: '错误',
+          description: '请先输入验证码再进行验证！',
+          duration: 6,
+        })
+      } else {
+        const parameter = { studentId: this.studentId, verificationCode: this.verificationCode }
+        verifyCode(parameter)
+          .then((res) => {
+            console.log(res)
+            console.log('验证码验证通过，请设置账号密码')
+            notification.success({
+              message: '验证通过',
+              description: res,
+            })
+            this.verifiable = true
+          })
+          .catch((e) => {
+            console.error('验证失败', e)
+            notification.error({
+              message: '验证失败',
+              description: e.response.data,
+            })
+          })
+      }
+    },
+    // 设置密码
+    submitPassword () {
+      if (this.password.checkPassword == '' || this.password.newPassword == '') {
+        notification.error({
+          message: '密码设置失败',
+          description: '请先输入密码！',
+        })
+
+      } else if (this.password.newPassword != this.password.checkPassword) {
+        notification.error({
+          message: '密码设置失败',
+          description: '两次输入的新密码不相同！',
+        })
+      } else if (this.password.newPassword.length < 8) {
+        notification.error({
+          message: '密码设置失败',
+          description: '密码至少包含8位！',
+        })
+      } else {
+        console.log(this.password)
+        const parameter = { studentId: this.studentId, newPassword: this.password.newPassword }
+        setPass(parameter)
+          .then((res) => {
+            console.log(res)
+            notification.success({
+              message: '设置成功',
+              description: res,
+            })
+            this.handleCancel()
+
+          })
+          .catch((e) => {
+            console.error('设置密码失败', e)
+            notification.error({
+              message: '设置失败',
+              description: e,
+            })
+          })
+      }
     },
   },
 }
@@ -326,6 +470,7 @@ export default {
     font-size: 16px;
     height: 40px;
     width: 100%;
+    margin-top: 10px;
   }
 
   .user-login-other {
