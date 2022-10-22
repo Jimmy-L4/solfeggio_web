@@ -26,7 +26,7 @@
               ref="content"
               :class="dragToggle ? 'staticRecorder' : 'fiedRecorder'"
               :attempts="5"
-              :time="2"
+              :time="5"
               :start-record="startRecord"
               :stop-record="stopRecord"
               :getRecord="getRecord"

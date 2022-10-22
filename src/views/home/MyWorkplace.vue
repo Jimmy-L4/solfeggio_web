@@ -30,7 +30,7 @@
                   <a-card :bordered="false" :body-style="{ padding: 0 }" @click="handleEdit(i)">
                     <a-card-meta>
                       <div slot="title" class="card-title">
-                        <a-avatar size="small" :src="item.cover" />
+                        <a-avatar shape="square"  :src="item.cover" />
                         <a>{{ item.title }}</a>
                       </div>
                       <div slot="description" class="card-description">
@@ -127,12 +127,13 @@ const projects = [
     title: '练耳选择题',
     description: '练耳选择题作业',
   },
-  {
-    id: 3,
-    cover: '/media/image/dictation.png',
-    title: '练耳听写题',
-    description: '练耳听写题作业',
-  },
+  // 当前版本关闭听写题
+  // {
+  //   id: 3,
+  //   cover: '/media/image/dictation.png',
+  //   title: '练耳听写题',
+  //   description: '练耳听写题作业',
+  // },
 ]
 const lesson_text = ['一', '二', '三', '四', '五', '六', '七', '八']
 const state_text = ['已截止', '未开放', '进行中']

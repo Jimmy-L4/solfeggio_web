@@ -32,8 +32,9 @@ const getActiveKey = (path) => {
       return '1'
     case '/study/choice-list':
       return '2'
-    case '/study/dictation-list':
-      return '3'
+    // 当前版本关闭听写题
+    // case '/study/dictation-list':
+    //   return '3'
     default:
       return '1'
   }
@@ -50,7 +51,8 @@ export default {
       tabList: [
         { key: '1', tab: '视唱题目' },
         { key: '2', tab: '练耳选择题' },
-        { key: '3', tab: '练耳听写题' },
+        // 当前版本关闭听写题
+        // { key: '3', tab: '练耳听写题' },
       ],
       tabActiveKey: '1',
       search: true,
@@ -78,9 +80,10 @@ export default {
         case '2':
           this.$router.push({ name: 'choice-list', params: { lesson_No: this.lesson_No } })
           break
-        case '3':
-          this.$router.push({ name: 'dictation-list', params: { lesson_No: this.lesson_No } })
-          break
+        // 当前版本关闭听写题
+        // case '3':
+        //   this.$router.push({ name: 'dictation-list', params: { lesson_No: this.lesson_No } })
+        //   break
         default:
           this.$router.push('/home')
       }
