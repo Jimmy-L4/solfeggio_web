@@ -5,7 +5,7 @@
         <a-card class="questionCard" v-for="(item, index) in questionList" :key="0 + index">
           <div slot="title">
             <p>{{ item.ques_txt }} {{ item.choice_ans }}</p>
-            <p>提交的答案为：{{ item.userAnswer.toUpperCase() }}</p>
+            <p v-if="item.score==0" style="color:red">本题回答错误！你提交的答案是：{{ item.userAnswer.toUpperCase() }}</p>
 
             <a-divider style="margin: 16px 0" />
             <!-- 题目信息 -->
@@ -15,21 +15,15 @@
             <my-player :src="item.ques_audio_path" :metroSrc="metroSrc(item)" />
           </div>
           <!-- 选项 -->
-          <a-radio-group v-model:value="item.userAnswer" buttonStyle="solid" :disabled="true">
-            <a-radio-button
-              class="radioStyle"
-              :value="inx"
-              v-for="(answer, inx) in item.answer"
-              :key="inx"
-              style="height: auto"
-              hoverable
-            >
-              <a-card style="width: 100%" hoverable>
-                <!-- 选项文字 -->
-                <a-card-meta :title="answer.txt ? inx.toUpperCase() + ':   ' + answer.txt : inx.toUpperCase() + ':   '">
-                </a-card-meta>
+          <a-radio-group :value="item.choice_ans.toLowerCase()" buttonStyle="solid">
+            <a-radio-button class="radioStyle" :value="inx" v-for="(answer, inx) in item.answer" :key="inx" hoverable>
+              <!-- 选项文字 -->
+              {{answer.txt ? inx.toUpperCase() + ': ' + answer.txt : inx.toUpperCase()+'.'}}
+              <a-card style="margin-bottom:8px">
                 <!-- 选项图片 -->
-                <template #cover> <img alt="练耳选择题题目" :src="answer.pic_path" /> </template>
+                <template #cover>
+                  <img style="margin: 0 auto; text-align: center" alt="练耳选择题题目" :src="answer.pic_path" />
+                </template>
               </a-card>
             </a-radio-button>
           </a-radio-group>
@@ -53,7 +47,7 @@ export default {
   components: {
     FooterToolBar,
   },
-  data() {
+  data () {
     return {
       global_url: 'https://musicmuc.chimusic.net/solfeggio/',
       metronome: this.$store.getters.metronome,
@@ -62,12 +56,12 @@ export default {
       sumScore: 0,
     }
   },
-  beforeCreate() {
+  beforeCreate () {
     if (!this.$route.params.part_id) {
       this.$router.push({ name: 'home', replace: true })
     }
   },
-  beforeMount() {
+  beforeMount () {
     if (this.$route.params.part_id) {
       this.part_id = this.$route.params.part_id
       this.sumScore = this.$route.params.sumScore
@@ -76,14 +70,14 @@ export default {
       this.$router.push({ name: 'home', replace: true })
     }
   },
-  mounted() {
+  mounted () {
     this.getQuestion()
   },
   computed: {
-    groupTitle() {
+    groupTitle () {
       return this.questionList.length ? this.questionList[0]['L_ques_txt'] : ''
     },
-    metroSrc() {
+    metroSrc () {
       return (item) => {
         if (this.metronome) {
           return '/library/metronome/' + item.note + '_' + item.beat + '_' + item.bpm + '.mp3'
@@ -94,7 +88,7 @@ export default {
     },
   },
   methods: {
-    getQuestion() {
+    getQuestion () {
       const parameter = { part_id: this.part_id, withAnswer: 1 }
       getChoiceQuesList(parameter)
         .then((res) => {
@@ -116,8 +110,11 @@ export default {
 .questionCard {
   margin-top: 12px;
 }
+
 .radioStyle {
+  height: auto;
   display: flex;
   margin-top: 12px;
+  color: black;
 }
 </style>

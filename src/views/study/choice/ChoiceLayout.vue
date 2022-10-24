@@ -14,21 +14,13 @@
           </div>
           <!-- 选项 -->
           <a-radio-group v-model:value="item.userAnswer" @change="handleChange()" buttonStyle="solid">
-            <a-radio-button
-              class="radioStyle"
-              :value="inx"
-              v-for="(answer, inx) in item.answer"
-              :key="inx"
-              style="height: auto"
-              hoverable
-            >
-              <a-card hoverable>
-                <!-- 选项文字 -->
-                <!-- <a-card-meta :title="answer.txt ? inx.toUpperCase() + ':   ' + answer.txt : inx.toUpperCase() + ':   '">
-                </a-card-meta> -->
+            <a-radio-button class="radioStyle" :value="inx" v-for="(answer, inx) in item.answer" :key="inx" hoverable>
+              <!-- 选项文字 -->
+              {{answer.txt ? inx.toUpperCase() + ': ' + answer.txt : inx.toUpperCase()+'.'}}
+              <a-card style="margin-bottom:8px">
                 <!-- 选项图片 -->
                 <template #cover>
-                  <img style="margin: 0 auto; text-align: center" alt="练耳选择题题目" :src="answer.pic_path" />
+                  <img style=" text-align: center" alt="练耳选择题题目" :src="answer.pic_path" />
                 </template>
               </a-card>
             </a-radio-button>
@@ -76,7 +68,7 @@ export default {
   components: {
     FooterToolBar,
   },
-  data() {
+  data () {
     return {
       statusMap,
       global_url: 'https://musicmuc.chimusic.net/solfeggio/',
@@ -88,12 +80,12 @@ export default {
       metronome: this.$store.getters.metronome,
     }
   },
-  beforeCreate() {
+  beforeCreate () {
     if (!this.$route.params.part_id) {
       this.$router.push({ name: 'home', replace: true })
     }
   },
-  beforeMount() {
+  beforeMount () {
     if (this.$route.params.part_id) {
       this.part_id = this.$route.params.part_id
       this.state = this.$route.params.state
@@ -103,12 +95,12 @@ export default {
     }
     this.getQuestion()
   },
-  mounted() {},
+  mounted () { },
   computed: {
-    groupTitle() {
+    groupTitle () {
       return this.questionList.length ? this.questionList[0]['L_ques_txt'] : ''
     },
-    metroSrc() {
+    metroSrc () {
       return (item) => {
         if (this.metronome) {
           return '/library/metronome/' + item.note + '_' + item.beat + '_' + item.bpm + '.mp3'
@@ -120,7 +112,7 @@ export default {
   },
   methods: {
     // handler
-    handleSubmit(e) {
+    handleSubmit (e) {
       console.log(e)
       this.loading = true
       var inVaild = this.checkAnswer()
@@ -133,7 +125,7 @@ export default {
       }
       this.uploadAnswer()
     },
-    checkAnswer() {
+    checkAnswer () {
       var i = 0
       var inVaild = ''
       for (i = 0; i < this.questionList.length; i++) {
@@ -144,7 +136,7 @@ export default {
       console.log(inVaild)
       return inVaild
     },
-    uploadAnswer() {
+    uploadAnswer () {
       const answerInfo = []
       this.questionList.forEach((ques) => {
         var data = { part_id: ques.part_id, userAnswer: ques.userAnswer }
@@ -174,13 +166,13 @@ export default {
           })
         })
     },
-    cancelSubmit() {
+    cancelSubmit () {
       console.log('用户取消了提交作业')
     },
-    handleChange(e) {
+    handleChange (e) {
       console.log(this.questionList)
     },
-    getQuestion() {
+    getQuestion () {
       const parameter = { part_id: this.part_id, withAnswer: 0 }
       getChoiceQuesList(parameter)
         .then((res) => {
@@ -202,8 +194,10 @@ export default {
 .questionCard {
   margin-top: 12px;
 }
+
 .radioStyle {
   display: flex;
   margin-top: 12px;
+  height: auto;
 }
 </style>
