@@ -20,7 +20,7 @@
 
         <div class="footer">
           <div class="links">
-            <a href="/help">帮助</a>
+            <a href="https://musicmuc.chimusic.net/help/document.pdf">帮助</a>
             <a href="_self">隐私</a>
             <a href="_self">条款</a>
           </div>

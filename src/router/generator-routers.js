@@ -53,8 +53,6 @@ const constantRouterComponents = {
   Exception403: () => import(/* webpackChunkName: "fail" */ '@/views/exception/403'),
   Exception404: () => import(/* webpackChunkName: "fail" */ '@/views/exception/404'),
   Exception500: () => import(/* webpackChunkName: "fail" */ '@/views/exception/500'),
-  // help
-  Help: () => import('@/views/help/Help'),
 }
 
 // 前端未找到页面路由（固定不用改）
