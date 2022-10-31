@@ -6,7 +6,7 @@
         <a-form-item label="选择课次:" style="width:100%;">
           <a-radio-group :defaultValue="lesson_No" v-model:value="lesson_No" @change="lessonChange">
             <a-row type="flex" justify="space-between" align="bottom">
-              <a-col :span="6" v-for="btn in lessonBtn" style="margin-top:12px">
+              <a-col :span="6" v-for="btn in lessonBtn" :key="btn.key" style="margin-top:12px">
                 <a-radio-button :value="btn.key">{{ btn.tab }}</a-radio-button>
               </a-col>
             </a-row>
