@@ -186,12 +186,12 @@ export default {
         })
       } else if (this.studentId == this.userInfo.id) {
         notification.error({
-          message: '无法与本人进行合作，请搜索同课程其他同学',
+          message: '无法与本人进行合作，请搜索同班其他同学',
           duration: 2,
         })
       } else {
         this.searchLoading = true
-        const parameter = { studentId: this.studentId, courseId: this.userInfo.course.id }
+        const parameter = { studentId: this.studentId, classId: this.userInfo.my_class }
         getStudentInfo(parameter)
           .then((res) => {
             this.searchLoading = false
@@ -204,7 +204,7 @@ export default {
             console.error('查询学生失败', e)
             notification.error({
               message: '查询学生失败',
-              description: '未查询到学生，请仔细核对学号！',
+              description: e.response.data,
             })
           })
       }

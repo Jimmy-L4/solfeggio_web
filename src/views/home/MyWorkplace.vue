@@ -64,7 +64,7 @@
             </a-list>
           </a-card>
         </a-col>
-        <a-col style="padding: 0 12px" :xl="8" :lg="24" :md="24" :sm="24" :xs="24">
+        <a-col style="padding: 24px 12px" :xl="8" :lg="24" :md="24" :sm="24" :xs="24">
           <a-card title="课次导航" style="margin-bottom: 24px" :bordered="false" :body-style="{ padding: 0 }">
             <div class="item-group">
               <a @click="handleTabChange('1')">课次一</a>

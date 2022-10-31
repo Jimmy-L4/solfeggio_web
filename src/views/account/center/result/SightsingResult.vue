@@ -13,12 +13,16 @@
           <a-descriptions-item v-if="quesType != 0" label="高声部">{{ highPart }}</a-descriptions-item>
         </a-descriptions>
         <div style="font-size: 14px; color: rgba(0, 0, 0, 0.85); margin-bottom: 16px; font-weight: 500">
-          <div>范例音:<audio-player style="margin-top: 12px" :src="quesDetail.audio_path" /></div>
-          <div style="margin-top: 16px">节拍器:<audio-player style="margin-top: 12px" :src="metroSrc" /></div>
+          <div>范例音:
+            <audio-player style="margin-top: 12px" :src="quesDetail.audio_path" />
+          </div>
+          <div style="margin-top: 16px">节拍器:
+            <audio-player style="margin-top: 12px" :src="metroSrc" />
+          </div>
         </div>
 
         <a-card type="inner" title="曲谱信息" style="margin-top: 24px">
-          <img :width="800" :src="quesDetail.pic_path" />
+          <img style=" text-align: center" width="97%" :src="quesDetail.pic_path" />
         </a-card>
         <a-card type="inner" title="提交内容" style="margin-top: 24px">
           <audio-player :src="quesDetail.userAudio" />
@@ -98,4 +102,6 @@ export default {
   },
 }
 </script>
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+
+</style>

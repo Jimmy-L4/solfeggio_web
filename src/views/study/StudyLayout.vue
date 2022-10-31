@@ -1,21 +1,18 @@
 <template>
   <page-header-wrapper :tab-list="tabList" :tab-active-key="tabActiveKey" :tab-change="handleTabChange">
     <a-card :bordered="false" class="ant-pro-components-tag-select">
-      <a-form layout="inline">
-        <standard-form-row title="选择课次" :last="true" style="padding-bottom: 0px">
-          <a-form-item>
-            <a-radio-group :defaultValue="lesson_No" v-model:value="lesson_No" @change="lessonChange">
-              <a-radio-button value="1">课次一</a-radio-button>
-              <a-radio-button value="2">课次二</a-radio-button>
-              <a-radio-button value="3">课次三</a-radio-button>
-              <a-radio-button value="4">课次四</a-radio-button>
-              <a-radio-button value="5">课次五</a-radio-button>
-              <a-radio-button value="6">课次六</a-radio-button>
-              <a-radio-button value="7">课次七</a-radio-button>
-              <a-radio-button value="8">课次八</a-radio-button>
-            </a-radio-group>
-          </a-form-item>
-        </standard-form-row>
+      <a-form  label="选择课次">
+
+        <a-form-item label="选择课次:" style="width:100%;">
+          <a-radio-group :defaultValue="lesson_No" v-model:value="lesson_No" @change="lessonChange">
+            <a-row type="flex" justify="space-between" align="bottom">
+              <a-col :span="6" v-for="btn in lessonBtn" style="margin-top:12px">
+                <a-radio-button :value="btn.key">{{ btn.tab }}</a-radio-button>
+              </a-col>
+            </a-row>
+          </a-radio-group>
+        </a-form-item>
+
       </a-form>
     </a-card>
 
@@ -57,6 +54,16 @@ export default {
       tabActiveKey: '1',
       search: true,
       lesson_No: '',
+      lessonBtn: [
+        { key: '1', tab: '课次一' },
+        { key: '2', tab: '课次二' },
+        { key: '3', tab: '课次三' },
+        { key: '4', tab: '课次四' },
+        { key: '5', tab: '课次五' },
+        { key: '6', tab: '课次六' },
+        { key: '7', tab: '课次七' },
+        { key: '8', tab: '课次八' },
+      ]
     }
   },
   created() {
@@ -100,6 +107,7 @@ export default {
   text-align: center;
   margin-bottom: 16px;
 }
+
 .ant-pro-components-tag-select {
   /deep/ .ant-pro-tag-select .ant-tag {
     margin-right: 24px;

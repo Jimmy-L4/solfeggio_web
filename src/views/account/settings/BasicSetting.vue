@@ -1,5 +1,5 @@
 <template>
-  <div class="account-settings-info-view" style="width: 50%">
+  <div class="account-settings-info-view" style="width: 100%">
     <a-list>
       <!-- 节拍器与标准音开关 -->
       <a-list-item>

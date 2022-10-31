@@ -18,7 +18,7 @@
         </div>
 
         <a-card type="inner" title="曲谱信息" style="margin-top: 24px">
-          <img :width="800" :src="quesDetail.pic_path" />
+          <img style=" text-align: center" width="97%" :src="quesDetail.pic_path" />
         </a-card>
         <a-card>
           <div style="min-height: 250px">
@@ -78,7 +78,6 @@ export default {
   },
   data() {
     return {
-      global_url: 'https://musicmuc.chimusic.net/solfeggio/',
       loading: false,
       dragToggle: true,
       token: this.$store.getters.token,
@@ -204,7 +203,7 @@ export default {
         .catch((err) => {
           console.error(err)
           notification.error({
-            message: '音频上传失败',
+            message: '作业记录失败',
             description: err.response.data,
           })
           this.loading = false
@@ -235,15 +234,15 @@ export default {
     draggable(drag) {
       var startEvt, moveEvt, endEvt
       // 判断是否支持触摸事件
-      if ('ontouchstart' in window) {
-        startEvt = 'touchstart'
-        moveEvt = 'touchmove'
-        endEvt = 'touchend'
-      } else {
-        startEvt = 'mousedown'
-        moveEvt = 'mousemove'
-        endEvt = 'mouseup'
-      }
+      // if ('ontouchstart' in window) {
+      //   startEvt = 'touchstart'
+      //   moveEvt = 'touchmove'
+      //   endEvt = 'touchend'
+      // } else {
+      startEvt = 'mousedown'
+      moveEvt = 'mousemove'
+      endEvt = 'mouseup'
+      // }
       var disX, disY, left, top, starX, starY, oLeft, oTop
       drag.addEventListener(startEvt, startFun)
 

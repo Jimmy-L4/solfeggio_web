@@ -22,9 +22,11 @@
           <a-form layout="inline">
             <a-form-item>
               <a-radio-group :defaultValue="lesson_No" v-model:value="lesson_No" @change="lessonChange">
-                <a-radio-button :value="item.key" v-for="(item, key) in tabListNoTitle" :key="key">
-                  {{ item.tab }}
-                </a-radio-button>
+                <a-row type="flex" justify="space-between" align="middle">
+                  <a-col :span="6" v-for="btn in tabListNoTitle" style="margin-top:12px">
+                    <a-radio-button :value="btn.key">{{ btn.tab }}</a-radio-button>
+                  </a-col>
+                </a-row>
               </a-radio-group>
             </a-form-item>
           </a-form>
@@ -88,7 +90,7 @@ export default {
   computed: {
     ...mapGetters(['nickname', 'avatar', 'userInfo']),
   },
-  created() {},
+  created() { },
   methods: {
     lessonChange() {
       console.log(this.lesson_No)
@@ -103,6 +105,7 @@ export default {
   height: 100%;
   min-height: 100%;
   transition: 0.3s;
+
   .ant-pro-components-tag-select {
     /deep/ .ant-pro-tag-select .ant-tag {
       margin-right: 24px;
@@ -115,13 +118,14 @@ export default {
     text-align: center;
     margin-bottom: 24px;
 
-    & > .avatar {
+    &>.avatar {
       margin: 0 auto;
       width: 104px;
       height: 104px;
       margin-bottom: 20px;
       border-radius: 50%;
       overflow: hidden;
+
       img {
         height: 100%;
         width: 100%;
@@ -156,9 +160,11 @@ export default {
     .title {
       background-position: 0 0;
     }
+
     .group {
       background-position: 0 -22px;
     }
+
     .address {
       background-position: 0 -44px;
     }
