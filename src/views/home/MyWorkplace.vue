@@ -17,20 +17,15 @@
     <div>
       <a-row :gutter="24">
         <a-col :xl="16" :lg="24" :md="24" :sm="24" :xs="24">
-          <a-card
-            class="project-list"
-            style="margin-bottom: 24px"
-            :bordered="false"
-            :title="deadline"
-            :body-style="{ padding: 0 }"
-          >
+          <a-card class="project-list" style="margin-bottom: 24px" :bordered="false" :title="deadline"
+            :body-style="{ padding: 0 }">
             <div>
               <a>
                 <a-card-grid class="project-card-grid" :key="i" v-for="(item, i) in projects">
                   <a-card :bordered="false" :body-style="{ padding: 0 }" @click="handleEdit(i)">
                     <a-card-meta>
                       <div slot="title" class="card-title">
-                        <a-avatar shape="square"  :src="item.cover" />
+                        <a-avatar shape="square" :src="item.cover" />
                         <a>{{ item.title }}</a>
                       </div>
                       <div slot="description" class="card-description">
@@ -54,8 +49,8 @@
                   <a-avatar slot="avatar" size="small" :src="avatar" />
                   <div slot="title">
                     成功在&nbsp;
-                    <a @click="handleTabChange(lesson_No)">课次{{ lesson_text[item.lesson_No - 1] }}</a
-                    >&nbsp; <span>提交了</span>&nbsp;
+                    <a @click="handleTabChange(lesson_No)">课次{{ lesson_text[item.lesson_No - 1] }}</a>&nbsp;
+                    <span>提交了</span>&nbsp;
                     <a>{{ item.group_title }}</a>
                   </div>
                   <div slot="description">{{ item.record_time.replace('T', ' ').substring(0, 19) }}</div>
@@ -77,13 +72,8 @@
               <a @click="handleTabChange('8')">课次八</a>
             </div>
           </a-card>
-          <a-card
-            title="通知栏"
-            style="margin-bottom: 24px"
-            :loading="noteLoading"
-            :bordered="false"
-            :body-style="{ padding: 10 }"
-          >
+          <a-card title="通知栏" style="margin-bottom: 24px" :loading="noteLoading" :bordered="false"
+            :body-style="{ padding: 10 }">
             <div>
               <a-empty v-if="!notices.length" description="暂无通知" />
               <a-list-item :key="index" v-for="(item, index) in notices">
@@ -109,7 +99,6 @@
 import { timeFix } from '@/utils/util'
 import { mapState } from 'vuex'
 import { PageHeaderWrapper } from '@ant-design-vue/pro-layout'
-import { Radar } from '@/components'
 
 import { getNoticeList, getQuesGroupList } from '@/api/manage'
 import notification from 'ant-design-vue/es/notification'
@@ -142,7 +131,6 @@ export default {
   name: 'MyWorkplace',
   components: {
     PageHeaderWrapper,
-    Radar,
   },
   data() {
     return {
@@ -227,7 +215,41 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import './MyWorkplace.less';
+@import '~ant-design-vue/es/style/themes/default.less';
+
+
+.page-header-content {
+  display: flex;
+
+  .avatar {
+    flex: 0 1 72px;
+
+    & > span {
+      display: block;
+      width: 72px;
+      height: 72px;
+      border-radius: 72px;
+    }
+  }
+
+  .content {
+    position: relative;
+    top: 4px;
+    flex: 1 1 auto;
+    margin-left: 24px;
+    color: @text-color-secondary;
+    line-height: 22px;
+
+    .content-title {
+      margin-bottom: 12px;
+      color: @heading-color;
+      font-weight: 500;
+      font-size: 20px;
+      line-height: 28px;
+    }
+  }
+}
+
 
 .project-list {
   .card-title {
@@ -305,47 +327,4 @@ export default {
   }
 }
 
-.members {
-  a {
-    display: block;
-    margin: 12px 0;
-    line-height: 24px;
-    height: 24px;
-
-    .member {
-      font-size: 14px;
-      color: rgba(0, 0, 0, 0.65);
-      line-height: 24px;
-      max-width: 100px;
-      vertical-align: top;
-      margin-left: 12px;
-      transition: all 0.3s;
-      display: inline-block;
-    }
-
-    &:hover {
-      span {
-        color: #1890ff;
-      }
-    }
-  }
-}
-
-.mobile {
-  .project-list {
-    .project-card-grid {
-      width: 100%;
-    }
-  }
-
-  .more-info {
-    border: 0;
-    padding-top: 16px;
-    margin: 16px 0 16px;
-  }
-
-  .headerContent .title .welcome-text {
-    display: none;
-  }
-}
 </style>

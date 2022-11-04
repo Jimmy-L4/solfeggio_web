@@ -31,10 +31,7 @@
             v-decorator="['class', { rules: [{ required: true, message: '请选择此通知面向班级' }] }]"
           >
             <a-select-option value="所有班级">所有班级</a-select-option>
-            <a-select-option value="21级管乐班">21级管乐班</a-select-option>
-            <a-select-option value="21级弦乐班">21级弦乐班</a-select-option>
-            <a-select-option value="21级作曲班">21级作曲班</a-select-option>
-            <a-select-option value="20英才器乐">20英才器乐</a-select-option>
+            <a-select-option v-for="item in userInfo.class_list" :key="item.id" :value="item.name">{{item.name}}</a-select-option>
           </a-select>
         </a-form-item>
         <a-form-item label="通知内容">
@@ -81,6 +78,7 @@ export default {
     }
     return {
       form: this.$form.createForm(this),
+      userInfo: this.$store.getters.userInfo,
     }
   },
   created() {

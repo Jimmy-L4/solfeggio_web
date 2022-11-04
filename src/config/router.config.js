@@ -6,7 +6,7 @@ const RouteView = {
   name: 'RouteView',
   render: (h) => h('router-view'),
 }
-
+// 只在使用角色权限控制路由时才被调用,目前使用动态路由,所以这里不调用
 export const asyncRouterMap = [
   {
     path: '/',
@@ -20,7 +20,14 @@ export const asyncRouterMap = [
         path: '/home',
         name: 'home',
         component: () => import('@/views/home/MyWorkplace'),
-        meta: { title: '首页', keepAlive: true, icon: bxAnaalyse, permission: ['home'] },
+        meta: { title: '首页', keepAlive: true, icon: bxAnaalyse, permission: ['student'] },
+        children: [],
+      },
+      {
+        path: '/home',
+        name: 'home',
+        component: () => import('@/views/home/TeacherWorkplace'),
+        meta: { title: '首页', keepAlive: true, icon: bxAnaalyse, permission: ['teacher'] },
         children: [],
       },
       // 学习空间
@@ -29,25 +36,25 @@ export const asyncRouterMap = [
         name: 'StudyLayout',
         component: () => import('@/views/study/StudyLayout'),
         redirect: '/study/sightsing-list',
-        meta: { title: '学习空间', keepAlive: true, permission: ['home'] },
+        meta: { title: '学习空间', keepAlive: true, permission: ['student'] },
         children: [
           {
             path: '/study/sightsing-list',
             name: 'SightsingList',
             component: () => import('@/views/study/SightsingList'),
-            meta: { title: '练耳题目列表', permission: ['home'] },
+            meta: { title: '练耳题目列表', permission: ['student'] },
           },
           {
             path: '/study/dictation-list',
             name: 'DictationList',
             component: () => import('@/views/study/DictationList'),
-            meta: { title: '听写题目列表', permission: ['home'] },
+            meta: { title: '听写题目列表', permission: ['student'] },
           },
           {
             path: '/study/choice-list',
             name: 'ChoiceList',
             component: () => import('@/views/study/ChoiceList'),
-            meta: { title: '选择题列表', permission: ['home'] },
+            meta: { title: '选择题列表', permission: ['student'] },
           },
         ],
       },
@@ -57,28 +64,28 @@ export const asyncRouterMap = [
         name: 'AnswerSheet',
         component: RouteView,
         redirect: '/answer/choice-layout',
-        meta: { title: '答题空间', keepAlive: true, permission: ['home'] },
+        meta: { title: '答题空间', keepAlive: true, permission: ['student'] },
         children: [
           {
             path: '/answer/choice-layout',
             name: 'ChoiceLayout',
             // hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
             component: () => import('@/views/study/choice/ChoiceLayout'),
-            meta: { title: '选择题答题页', keepAlive: true, permission: ['home'] },
+            meta: { title: '选择题答题页', keepAlive: true, permission: ['student'] },
           },
           {
             path: '/answer/sightsing-layout',
             name: 'SightsingLayout',
             // hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
             component: () => import('@/views/study/sightsing/SightsingLayout'),
-            meta: { title: '练耳题答题页', keepAlive: true, permission: ['home'] },
+            meta: { title: '练耳题答题页', keepAlive: true, permission: ['student'] },
           },
           {
             path: '/answer/dictation-layout',
             name: 'DictationLayout',
             // hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
             component: () => import('@/views/study/dictation/DictationLayout'),
-            meta: { title: '听写题答题页', keepAlive: true, permission: ['home'] },
+            meta: { title: '听写题答题页', keepAlive: true, permission: ['student'] },
           },
         ],
       },
@@ -87,7 +94,7 @@ export const asyncRouterMap = [
         path: '/management',
         name: 'management',
         component: () => import('@/views/management/StudentList'),
-        meta: { title: '学生管理', keepAlive: true, icon: bxAnaalyse, permission: ['home'] },
+        meta: { title: '学生管理', keepAlive: true, icon: bxAnaalyse, permission: ['teacher'] },
         children: [],
       },
       // 作业空间
@@ -95,7 +102,7 @@ export const asyncRouterMap = [
         path: '/workbench',
         name: 'workbench',
         component: () => import('@/views/workbench/Workbench'),
-        meta: { title: '作业空间', keepAlive: true, icon: bxAnaalyse, permission: ['home'] },
+        meta: { title: '作业空间', keepAlive: true, icon: bxAnaalyse, permission: ['teacher'] },
         children: [],
       },
       {
@@ -103,14 +110,14 @@ export const asyncRouterMap = [
         name: 'correcting',
         // hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
         component: () => import('@/views/workbench/Correcting'),
-        meta: { title: '作业批改页面', keepAlive: true, permission: ['home'] },
+        meta: { title: '作业批改页面', keepAlive: true, permission: ['teacher'] },
       },
       // 通知管理
       {
         path: '/bulletinboard',
         name: 'bulletinboard',
         component: () => import('@/views/bulletinboard/BulletinBoard'),
-        meta: { title: '通知管理', keepAlive: true, icon: bxAnaalyse, permission: ['home'] },
+        meta: { title: '通知管理', keepAlive: true, icon: bxAnaalyse, permission: ['teacher'] },
         children: [],
       },
       // account
@@ -119,19 +126,19 @@ export const asyncRouterMap = [
         component: RouteView,
         redirect: '/account/center',
         name: 'account',
-        meta: { title: 'menu.account', icon: 'user', keepAlive: true, permission: ['user'] },
+        meta: { title: 'menu.account', icon: 'user', keepAlive: true, permission: ['student'] },
         children: [
           {
             path: '/account/center',
             name: 'center',
             component: () => import('@/views/account/center'),
-            meta: { title: 'menu.account.center', keepAlive: true, permission: ['user'] },
+            meta: { title: 'menu.account.center', keepAlive: true, permission: ['student'] },
           },
           {
             path: '/account/settings',
             name: 'settings',
             component: () => import('@/views/account/settings/Index'),
-            meta: { title: 'menu.account.settings', hideHeader: true, permission: ['user'] },
+            meta: { title: 'menu.account.settings', hideHeader: true, permission: ['student'] },
             redirect: '/account/settings/basic',
             hideChildrenInMenu: true,
             children: [
@@ -139,7 +146,7 @@ export const asyncRouterMap = [
                 path: '/account/settings/basic',
                 name: 'BasicSettings',
                 component: () => import('@/views/account/settings/BasicSetting'),
-                meta: { title: 'account.settings.menuMap.basic', hidden: true, permission: ['user'] },
+                meta: { title: 'account.settings.menuMap.basic', hidden: true, permission: ['student'] },
               },
               {
                 path: '/account/settings/notification',
@@ -149,7 +156,7 @@ export const asyncRouterMap = [
                   title: 'account.settings.menuMap.notification',
                   hidden: true,
                   keepAlive: true,
-                  permission: ['user'],
+                  permission: ['student'],
                 },
               },
             ],

@@ -7,7 +7,7 @@ const api = {
   permission: '/permission',
   permissionNoPager: '/permission/no-pager',
   orgTree: '/org/tree',
-  studentList: '/manage/studentList',
+  studentList: '/user/student_list/',
   commitList: '/manage/commitList',
   noticeList: '/notice/',
   ChoiceQuesList: '/question/choice/',

@@ -16,6 +16,7 @@ const constantRouterComponents = {
 
   // home
   MyWorkplace: () => import('@/views/home/MyWorkplace'),
+  TeacherWorkplace: () => import('@/views/home/TeacherWorkplace'),
 
   // 学习空间
   StudyLayout: () => import('@/views/study/StudyLayout'),

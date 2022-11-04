@@ -55,7 +55,7 @@ const studentList = (options) => {
       grade: Mock.mock('@integer(0, 5)'),
       status: Mock.mock('@integer(0, 2)'),
       courseName: '视唱练耳与音乐基础(' + pageNo + ')',
-      studyMode: '正常修读',
+      verificationCode: '96065',
       updatedAt: Mock.mock('@datetime'),
     })
   }

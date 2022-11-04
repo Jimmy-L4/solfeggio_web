@@ -54,7 +54,7 @@ const user = {
             const result = response
             storage.set(ACCESS_TOKEN, result.access, 7 * 24 * 60 * 60 * 1000)
             commit('SET_TOKEN', result.access)
-            resolve()
+            resolve('获取token成功')
           })
           .catch((error) => {
             reject(error)
@@ -110,6 +110,7 @@ const user = {
             commit('SET_TOKEN', '')
             commit('SET_ROLES', [])
             storage.remove(ACCESS_TOKEN)
+            location.reload()
             resolve()
           })
           .catch((err) => {
@@ -124,6 +125,7 @@ const user = {
       commit('SET_TOKEN', '')
       commit('SET_ROLES', [])
       storage.remove(ACCESS_TOKEN)
+      location.reload()
     },
   },
 }
