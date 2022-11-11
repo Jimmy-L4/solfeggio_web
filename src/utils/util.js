@@ -32,7 +32,7 @@ export function welcome() {
  * @author Jimmy 2022/07/12
  */
 export function getPartId(mode, type, voice_part = '00', grade, lesson_No, num = '01') {
-  const part_id = mode + type + '00000000' + voice_part + '00' + grade + +'0' + lesson_No + num
+  const part_id = mode + type + '00000000' + voice_part + '00' + grade +'0' + lesson_No + num
   return part_id
 }
 

@@ -1,55 +1,70 @@
 <template>
   <page-header-wrapper content="作业空间界面主要用于批改学生作业及查询题目内容">
     <a-card class="card" title="题目选择" :bordered="false">
-      <selection-box ref="selection" :showSubmit="true" />
+      <selection-box ref="selection" @info="getUpload" :showSubmit="true" />
     </a-card>
 
     <a-card class="card" :bordered="false" title="题目信息">
-      <a-descriptions title="基础信息">
-        <a-descriptions-item label="歌曲名称">《除草歌》</a-descriptions-item>
-        <a-descriptions-item label="演奏者">叶春雨</a-descriptions-item>
-        <a-descriptions-item></a-descriptions-item>
-        <a-descriptions-item label="乐器">声乐</a-descriptions-item>
-        <a-descriptions-item label="名族">高山族</a-descriptions-item>
-        <a-descriptions-item></a-descriptions-item>
-      </a-descriptions>
+      <div v-if="questionDetail.audio_detail">
+        <a-descriptions title="基础信息">
+          <a-descriptions-item label="歌曲名称">{{ questionDetail.audio_detail.audio_name }}</a-descriptions-item>
+          <a-descriptions-item label="演奏者">{{ questionDetail.audio_detail.audio_player }}</a-descriptions-item>
+          <a-descriptions-item></a-descriptions-item>
+          <a-descriptions-item label="乐器">{{ questionDetail.audio_detail.audio_instrument }}</a-descriptions-item>
+          <a-descriptions-item label="名族">{{ questionDetail.audio_detail.audio_nation }}</a-descriptions-item>
+          <a-descriptions-item></a-descriptions-item>
+        </a-descriptions>
 
-      <a-card type="inner" title="曲谱信息">
-        <img
-          :width="500"
-          src="https://musicmuc.chimusic.net/solfeggio/library/Autumn_semester_2024/13_%E8%AF%BE%E6%AC%A12_1_12_74.png"
-        />
-        <a-divider style="margin: 16px 0" />
-        <audio-player
-          src="https://musicmuc.chimusic.net/solfeggio/library/All_audio_test/lv4_/lesson_4/sing/RRRR4SR_104.mp3"
-        />
-      </a-card>
+        <div style="font-size: 14px; color: rgba(0, 0, 0, 0.85); margin-bottom: 16px; font-weight: 500">
+          <div>范例音:
+            <audio-player style="margin-top: 12px" :src="questionDetail.audio_path" />
+          </div>
+        </div>
+
+        <a-card type="inner" title="曲谱信息" style="margin-top: 24px">
+          <img style=" text-align: center" width="97%" :src="questionDetail.pic_path" />
+        </a-card>
+      </div>
+      <a-empty v-else description="暂无题目, 请先点击查询" />
     </a-card>
 
-    <a-card class="card" :bordered="false" title="作业提交详情">
-      <a-row>
+    <a-card class="card" :bordered="false" title="作业提交概况">
+      <a-row v-if="jobInfo.total_len">
         <a-col :sm="8" :xs="24">
-          <info title="应提交" value="35份" :bordered="true" />
+          <info title="应提交" :value="jobInfo.total_len + '份'" :bordered="true" />
         </a-col>
         <a-col :sm="8" :xs="24">
-          <info title="未提交" value="3份" :bordered="true" />
+          <info title="未提交" :value="jobInfo.uncommitted_len + '份'" :bordered="true" />
         </a-col>
         <a-col :sm="8" :xs="24">
-          <info title="已批改" value="24份" />
+          <info title="已批改" :value="jobInfo.marked_len + '份'" />
         </a-col>
       </a-row>
+      <a-empty v-else description="暂无提交概况, 请先点击查询" />
     </a-card>
 
     <!-- table -->
     <a-card title="学生提交">
-      <s-table ref="table" size="default" rowKey="key" :columns="columns" :data="loadData" showPagination="auto">
-        <span slot="action" slot-scope="text, record">
+      <s-table ref="commit" size="default" rowKey="key" :columns="columns" :data="loadData" showPagination="auto">
+        <span slot="AIscore" slot-scope="text">
           <template>
-            <a @click="handleEdit(record)">批改</a>
+            {{ text == null ? 0 : text }}
           </template>
         </span>
-      </s-table></a-card
-    >
+        <span slot="score" slot-scope="text">
+          <template>
+            {{ text == null ? 0 : text }}
+          </template>
+        </span>
+        <span slot="action" slot-scope="text, record, index">
+          <template>
+            <a-badge v-if="record.updatedAt == '未提交'" status="error" text="未提交" />
+            <a v-else-if="record.score == null" @click="handleEdit(record, index)" style="color:red;">批阅分数</a>
+            <a v-else @click="handleEdit(record, index)" style="color:green;">修改分数</a>
+          </template>
+        </span>
+      </s-table>
+    </a-card>
   </page-header-wrapper>
 </template>
 
@@ -59,11 +74,12 @@ import { STable } from '@/components'
 import { baseMixin } from '@/store/app-mixin'
 import Info from './components/Info'
 import { getCommitList } from '@/api/manage'
+import { getCommitInfo } from '@/api/manage'
+import { link } from 'fs'
 
 const columns = [
   {
     title: '学号',
-    sorter: true,
     dataIndex: 'studentId',
   },
   {
@@ -73,17 +89,16 @@ const columns = [
   {
     title: '提交时间',
     dataIndex: 'updatedAt',
-    sorter: true,
   },
   {
     title: '机器评分',
     dataIndex: 'AIscore',
-    sorter: true,
+    scopedSlots: { customRender: 'AIscore' },
   },
   {
     title: '分数',
     dataIndex: 'score',
-    sorter: true,
+    scopedSlots: { customRender: 'score' },
   },
 
   {
@@ -105,61 +120,52 @@ export default {
   data() {
     this.columns = columns
     return {
-      loading: false,
-      memberLoading: false,
-      errors: [],
-      queryParam: {},
+      part_id: '',
+      grade: '',
+      questionDetail: {},
+      userInfo: this.$store.getters.userInfo,
+      jobInfo: {},
+      commitList: [],
       // 加载数据方法 必须为 Promise 对象
       loadData: (parameter) => {
-        const requestParameters = Object.assign({}, parameter, this.queryParam)
-        console.log('loadData request parameters:', requestParameters)
-        return getCommitList(requestParameters).then((res) => {
-          console.log(res.result)
-          return res.result
+        const queryParam = { course_list: this.getRealCourse, part_id: this.part_id }
+        const requestParameters = Object.assign({}, parameter, queryParam)
+        return getCommitInfo(requestParameters).then((res) => {
+          this.commitList = res.data.filter(item => item.updatedAt != '未提交')
+          console.log(this.commitList);
+          this.jobInfo = { total_len: res.total_len, uncommitted_len: res.uncommitted_len, marked_len: res.marked_len }
+          return res
         })
       },
     }
   },
+  computed: {
+    getRealCourse() {
+      const realList = this.userInfo.course_list.filter(item => item.grade == this.grade)
+      let idList = realList.map(item => item.id)
+      console.log(idList);
+      return idList
+    }
+  },
+  mounted() {
+    if (this.$route.params.part_id) {
+      this.$refs.selection.handlePartId(this.$route.params.part_id)
+    }
+  },
   methods: {
-    handleSubmit(e) {
-      e.preventDefault()
-    },
     // 跳转至对应批改页面
-    handleEdit(e) {
-      console.log(e)
-      this.$router.push({ name: 'correcting', params: { } })
+    handleEdit(record, index) {
+      console.log(index);
+      const parameter = { questionDetail: this.questionDetail, index: index, part_id: this.part_id, commitList: this.commitList }
+      this.$router.push({ name: 'correcting', params: parameter })
     },
+    getUpload(quse, part_id, grade) {
+      this.questionDetail = quse
+      this.part_id = part_id
+      this.grade = grade
+      this.$refs.commit.refresh()
+    }
 
-    // 最终全页面提交
-    validate() {
-      const {
-        $refs: { selection },
-        $notification,
-      } = this
-      const selectionForm = new Promise((resolve, reject) => {
-        selection.form.validateFields((err, values) => {
-          if (err) {
-            reject(err)
-            return
-          }
-          resolve(values)
-        })
-      })
-
-      // clean this.errors
-      this.errors = []
-      Promise.all([selectionForm])
-        .then((values) => {
-          $notification['error']({
-            message: 'Received values of form:',
-            description: JSON.stringify(values),
-          })
-        })
-        .catch(() => {
-          const errors = Object.assign({}, selection.form.getFieldsError())
-          console.log(errors)
-        })
-    },
   },
 }
 </script>
@@ -168,6 +174,7 @@ export default {
 .card {
   margin-bottom: 24px;
 }
+
 .popover-wrapper {
   /deep/ .antd-pro-pages-forms-style-errorPopover .ant-popover-inner-content {
     min-width: 256px;
@@ -176,15 +183,18 @@ export default {
     overflow: auto;
   }
 }
+
 .antd-pro-pages-forms-style-errorIcon {
   user-select: none;
   margin-right: 24px;
   color: #f5222d;
   cursor: pointer;
+
   i {
     margin-right: 4px;
   }
 }
+
 .antd-pro-pages-forms-style-errorListItem {
   padding: 8px 16px;
   list-style: none;
@@ -195,6 +205,7 @@ export default {
   &:hover {
     background: #e6f7ff;
   }
+
   .antd-pro-pages-forms-style-errorIcon {
     float: left;
     margin-top: 4px;
@@ -202,6 +213,7 @@ export default {
     padding-bottom: 22px;
     color: #f5222d;
   }
+
   .antd-pro-pages-forms-style-errorField {
     margin-top: 2px;
     color: rgba(0, 0, 0, 0.45);

@@ -7,24 +7,33 @@ const api = {
   permission: '/permission',
   permissionNoPager: '/permission/no-pager',
   orgTree: '/org/tree',
-  studentList: '/user/student_list/',
+
   commitList: '/manage/commitList',
   noticeList: '/notice/',
+
   ChoiceQuesList: '/question/choice/',
   DictationQuesList: '/question/dictation/',
   SightsingingQuesList: '/question/sightsinging/',
   SightsingingList: '/question/sightsinging_list/',
   ChoiceList: '/question/choice_list/',
   DictationList: '/question/dictation_list/',
+
   QuesGroupList: '/homework/quse_group/',
   ChoiceRecord: '/homework/choice/',
   SightsingingRecord: '/homework/sightsinging/',
   DictationRecord: '/homework/dictation/',
+
   UploadAudio: '/router/audio/',
   UploadJson: '/router/json/',
   UploadPNG: '/router/png/',
+
   studentInfo: '/user/student_info/',
-  changePass:'/user/change_pass/'
+  changePass:'/user/change_pass/',
+  studentList: '/user/student_list/',
+  // 教师批阅(workbench)
+  SingDetail:'/workbench/sing_detail/', 
+  CommitInfo:'/workbench/commit_info/',
+  SingRecord:'/workbench/sing_record/'
 }
 
 export default api
@@ -245,3 +254,36 @@ export function uploadPNG(parameter) {
     data: parameter,
   })
 }
+// 教师获取视唱题目
+export function getSingDetail(parameter) {
+  return request({
+    url: api.SingDetail,
+    method: 'get',
+    params: parameter,
+  })
+}
+// 教师获取指定part_id提交信息
+export function getCommitInfo(parameter) {
+  return request({
+    url: api.CommitInfo,
+    method: 'get',
+    params: parameter,
+  })
+}
+// 教师获取指定学生的提交信息
+export function getSingRecord(parameter) {
+  return request({
+    url: api.SingRecord,
+    method: 'get',
+    params: parameter,
+  })
+}
+// 教师提交视唱成绩
+export function putSingRecord(parameter) {
+  return request({
+    url: api.SingRecord,
+    method: 'put',
+    data: parameter,
+  })
+}
+
