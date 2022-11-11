@@ -9,8 +9,8 @@
           <img style=" text-align: center" width="97%" :src="questionDetail.pic_path" />
         </a-card>
       </a-card>
-      <a-card type="inner" :title="'学生提交(' + (index + 1) + '/' + commitList.length + ')'" style="margin-top: 24px"
-        v-if="recordCard.audio">
+      <a-card type="inner" :title="'学生提交(' + (index + 1) + '/' + commitList.length + ')'" style="margin-top: 24px  "
+        :loading="recordLoading" v-if="recordCard.audio">
         <a-descriptions title="学生信息">
           <a-descriptions-item label="姓名">{{ record.studentName }}</a-descriptions-item>
           <a-descriptions-item label="学号">{{ record.studentId }}</a-descriptions-item>
@@ -84,6 +84,7 @@ export default {
       recordCard: {},
       part_id: '',
       userInfo: this.$store.getters.userInfo,
+      recordLoading: false
     }
   },
   computed: {
@@ -175,9 +176,11 @@ export default {
       }
     },
     getRecord() {
+      this.recordLoading = true
       const parameter = { record_id: this.record.key }
       getSingRecord(parameter)
         .then((res) => {
+          this.recordLoading = false
           console.log(res.result);
           this.recordCard = res.result
           this.quesType = res.result.ques_type
@@ -188,6 +191,7 @@ export default {
           this.setForm(res.result)
         })
         .catch((e) => {
+          this.recordLoading = false
           console.error('获取视唱记录失败', e)
           notification.error({
             message: '获取视唱记录失败',
